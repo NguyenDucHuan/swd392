@@ -1,0 +1,5 @@
+E:\TERM7\swd392\swd392\swd392_BE\BBSS.Repository\obj\Debug\net8.0\BBSS.Repository.csproj.AssemblyReference.cache
+E:\TERM7\swd392\swd392\swd392_BE\BBSS.Repository\obj\Debug\net8.0\BBSS.Repository.GeneratedMSBuildEditorConfig.editorconfig
+E:\TERM7\swd392\swd392\swd392_BE\BBSS.Repository\obj\Debug\net8.0\BBSS.Repository.AssemblyInfoInputs.cache
+E:\TERM7\swd392\swd392\swd392_BE\BBSS.Repository\obj\Debug\net8.0\BBSS.Repository.AssemblyInfo.cs
+E:\TERM7\swd392\swd392\swd392_BE\BBSS.Repository\obj\Debug\net8.0\BBSS.Repository.csproj.CoreCompileInputs.cache
