@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\BBSS.Repository.csproj": {}
+    "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\BBSS.Repository.csproj": {}
   },
   "projects": {
-    "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj": {
+    "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj",
+        "projectUniqueName": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj",
         "projectName": "BBSS.Domain",
-        "projectPath": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj",
-        "packagesPath": "C:\\Users\\subih\\.nuget\\packages\\",
-        "outputPath": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\obj\\",
+        "projectPath": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj",
+        "packagesPath": "C:\\Users\\minht\\.nuget\\packages\\",
+        "outputPath": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\subih\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\minht\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -44,8 +40,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -53,23 +48,35 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[9.0.1, )"
+              "version": "[8.0.2, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.1, )"
+              "version": "[8.0.2, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
+            "Microsoft.EntityFrameworkCore.Relational": {
               "target": "Package",
-              "version": "[9.0.1, )"
+              "version": "[8.0.2, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.1, )"
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[8.0.2, )"
             }
           },
           "imports": [
@@ -88,25 +95,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\BBSS.Repository.csproj": {
+    "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\BBSS.Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\BBSS.Repository.csproj",
+        "projectUniqueName": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\BBSS.Repository.csproj",
         "projectName": "BBSS.Repository",
-        "projectPath": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\BBSS.Repository.csproj",
-        "packagesPath": "C:\\Users\\subih\\.nuget\\packages\\",
-        "outputPath": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\obj\\",
+        "projectPath": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\BBSS.Repository.csproj",
+        "packagesPath": "C:\\Users\\minht\\.nuget\\packages\\",
+        "outputPath": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\subih\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\minht\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -121,8 +124,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj": {
-                "projectPath": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj"
+              "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj": {
+                "projectPath": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj"
               }
             }
           }
@@ -136,8 +139,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -158,7 +160,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
