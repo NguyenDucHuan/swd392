@@ -23,4 +23,8 @@
     <Folder Include="Services\Interfaces\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BBSS.Repository\BBSS.Repository.csproj" />
+  </ItemGroup>
+
 </Project>

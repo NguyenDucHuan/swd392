@@ -1,12 +1,11 @@
 {
   "Version": 1,
-  "Hash": "pnAtUKet6rup7Mv8t78PTNUlzl0tOcyAkYyYFEdG8kk=",
+  "Hash": "9a7tQa4KUviA388wx+Tsa/tLOYrhzOnmRNZcU0bUmmA=",
   "Source": "BBSS.Api",
   "BasePath": "_content/BBSS.Api",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "Assets": []
 }
