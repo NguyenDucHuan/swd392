@@ -7,28 +7,24 @@
       "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\extensions\\authenticationextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\extensions\\authenticationextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\extensions\\serviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\extensions\\serviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\bbss.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\bbss.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\implements\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\implements\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\paginate\\ipaginate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\paginate\\ipaginate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\implements\\authenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\implements\\authenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\implements\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\implements\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\implements\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\implements\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\interfaces\\igenericrepositoryfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -39,12 +35,132 @@
       "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\implements\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\implements\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\paginate\\paginateextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\paginate\\paginateextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\paginate\\ipaginate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\paginate\\ipaginate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\paginate\\paginate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\paginate\\paginate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\implements\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\implements\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\implements\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\implements\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\implements\\tokenvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\implements\\tokenvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\implements\\tokengenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\implements\\tokengenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\bbss.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\bbss.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\interfaces\\iauthenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\interfaces\\iauthenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\bbss.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
       "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\bbss.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\controllers\\authenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\controllers\\authenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\models\\configurations\\authenticationconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\models\\configurations\\authenticationconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\models\\authenticationmodel\\signuprequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\models\\authenticationmodel\\signuprequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\viewmodels\\signinviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\viewmodels\\signinviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\interfaces\\itokengenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\interfaces\\itokengenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\models\\authenticationmodel\\refreshtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\models\\authenticationmodel\\refreshtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\models\\authenticationmodel\\accesstoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\models\\authenticationmodel\\accesstoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\models\\authenticationmodel\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\models\\authenticationmodel\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\interfaces\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\interfaces\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\helper\\emailtemplates.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\helper\\emailtemplates.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\helper\\methodresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\helper\\methodresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\models\\authenticationmodel\\maildata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\models\\authenticationmodel\\maildata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\models\\configurations\\mailconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\models\\configurations\\mailconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\mapper\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\mapper\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\constants\\userconstant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\constants\\userconstant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\interfaces\\itokenvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\interfaces\\itokenvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\bbss.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\bbss.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,11 +170,392 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 35,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Paginate.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\Paginate.cs",
+              "RelativeDocumentMoniker": "BBSS.Domain\\Paginate\\Paginate.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\Paginate.cs",
+              "RelativeToolTip": "BBSS.Domain\\Paginate\\Paginate.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T21:37:46.8Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "PaginateExtension.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\PaginateExtension.cs",
+              "RelativeDocumentMoniker": "BBSS.Domain\\Paginate\\PaginateExtension.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\PaginateExtension.cs",
+              "RelativeToolTip": "BBSS.Domain\\Paginate\\PaginateExtension.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T21:37:44.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "AuthenticationController.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Controllers\\AuthenticationController.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Controllers\\AuthenticationController.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Controllers\\AuthenticationController.cs",
+              "RelativeToolTip": "BBSS.Api\\Controllers\\AuthenticationController.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABoAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T21:14:07.646Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "SignInViewModel.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\ViewModels\\SignInViewModel.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\ViewModels\\SignInViewModel.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\ViewModels\\SignInViewModel.cs",
+              "RelativeToolTip": "BBSS.Api\\ViewModels\\SignInViewModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T21:10:14.575Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "RefreshToken.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\AuthenticationModel\\RefreshToken.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Models\\AuthenticationModel\\RefreshToken.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\AuthenticationModel\\RefreshToken.cs",
+              "RelativeToolTip": "BBSS.Api\\Models\\AuthenticationModel\\RefreshToken.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T21:04:29.517Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "LoginRequest.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\AuthenticationModel\\LoginRequest.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Models\\AuthenticationModel\\LoginRequest.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\AuthenticationModel\\LoginRequest.cs",
+              "RelativeToolTip": "BBSS.Api\\Models\\AuthenticationModel\\LoginRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T20:48:43.572Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "IAuthenticationService.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IAuthenticationService.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\IAuthenticationService.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IAuthenticationService.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Interfaces\\IAuthenticationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T20:46:46.235Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IUserService.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\IUserService.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IUserService.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Interfaces\\IUserService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T20:46:09.02Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AuthenticationService.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\AuthenticationService.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\AuthenticationService.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\AuthenticationService.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Implements\\AuthenticationService.cs",
+              "ViewState": "AQIAABwAAAAAAAAAAAAgwCcAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T20:44:49.587Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "IEmailService.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IEmailService.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\IEmailService.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IEmailService.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Interfaces\\IEmailService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T20:40:37.017Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "EmailTemplates.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Helper\\EmailTemplates.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Helper\\EmailTemplates.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Helper\\EmailTemplates.cs",
+              "RelativeToolTip": "BBSS.Api\\Helper\\EmailTemplates.cs",
+              "ViewState": "AQIAAFsCAAAAAAAAAAAAAGsCAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T20:32:36.735Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "MailData.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\AuthenticationModel\\MailData.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Models\\AuthenticationModel\\MailData.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\AuthenticationModel\\MailData.cs",
+              "RelativeToolTip": "BBSS.Api\\Models\\AuthenticationModel\\MailData.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T20:28:42.159Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "MailConfiguration.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\Configurations\\MailConfiguration.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Models\\Configurations\\MailConfiguration.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\Configurations\\MailConfiguration.cs",
+              "RelativeToolTip": "BBSS.Api\\Models\\Configurations\\MailConfiguration.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T20:26:54.8Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "EmailService.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\EmailService.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\EmailService.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\EmailService.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Implements\\EmailService.cs",
+              "ViewState": "AQIAABYAAAAAAAAAAAAYwCgAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T20:25:51.443Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "User.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\User.cs",
+              "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\User.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\User.cs",
+              "RelativeToolTip": "BBSS.Domain\\Entities\\User.cs",
+              "ViewState": "AQIAAAQAAAAAAAAAAAASwBUAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:50:16.706Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "UserConstant.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Constants\\UserConstant.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Constants\\UserConstant.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Constants\\UserConstant.cs",
+              "RelativeToolTip": "BBSS.Api\\Constants\\UserConstant.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:46:13.549Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "SignupRequest.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\AuthenticationModel\\SignupRequest.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Models\\AuthenticationModel\\SignupRequest.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\AuthenticationModel\\SignupRequest.cs",
+              "RelativeToolTip": "BBSS.Api\\Models\\AuthenticationModel\\SignupRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:34:47.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "UserProfile.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Mapper\\UserProfile.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Mapper\\UserProfile.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Mapper\\UserProfile.cs",
+              "RelativeToolTip": "BBSS.Api\\Mapper\\UserProfile.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:32:13.271Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\UserService.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\UserService.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\UserService.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Implements\\UserService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:27:40.191Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "ITokenValidator.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\ITokenValidator.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\ITokenValidator.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\ITokenValidator.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Interfaces\\ITokenValidator.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:14:35.015Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "TokenValidator.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\TokenValidator.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\TokenValidator.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\TokenValidator.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Implements\\TokenValidator.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:13:19.429Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "AccessToken.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\AuthenticationModel\\AccessToken.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Models\\AuthenticationModel\\AccessToken.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\AuthenticationModel\\AccessToken.cs",
+              "RelativeToolTip": "BBSS.Api\\Models\\AuthenticationModel\\AccessToken.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAsAAAA0AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:08:38.134Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "ITokenGenerator.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\ITokenGenerator.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\ITokenGenerator.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\ITokenGenerator.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Interfaces\\ITokenGenerator.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:02:49.737Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "TokenGenerator.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\TokenGenerator.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\TokenGenerator.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\TokenGenerator.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Implements\\TokenGenerator.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAFQAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:02:25.67Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "MethodResult.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Helper\\MethodResult.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Helper\\MethodResult.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Helper\\MethodResult.cs",
+              "RelativeToolTip": "BBSS.Api\\Helper\\MethodResult.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAmAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T19:01:42.713Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "ServiceExtension.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Extensions\\ServiceExtension.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Extensions\\ServiceExtension.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Extensions\\ServiceExtension.cs",
+              "RelativeToolTip": "BBSS.Api\\Extensions\\ServiceExtension.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAABEAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T18:54:15.652Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "AuthenticationConfiguration.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\Configurations\\AuthenticationConfiguration.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Models\\Configurations\\AuthenticationConfiguration.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\Configurations\\AuthenticationConfiguration.cs",
+              "RelativeToolTip": "BBSS.Api\\Models\\Configurations\\AuthenticationConfiguration.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAYAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T18:37:00.225Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "BBSS.Api",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\BBSS.Api.csproj",
+              "RelativeDocumentMoniker": "BBSS.Api\\BBSS.Api.csproj",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\BBSS.Api.csproj",
+              "RelativeToolTip": "BBSS.Api\\BBSS.Api.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-02-19T18:19:42.12Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AuthenticationExtension.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Extensions\\AuthenticationExtension.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Extensions\\AuthenticationExtension.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Extensions\\AuthenticationExtension.cs",
+              "RelativeToolTip": "BBSS.Api\\Extensions\\AuthenticationExtension.cs",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAAABUAAABFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T18:19:48.381Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
               "Title": "BlindboxDbContext.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\BlindboxDbContext.cs",
               "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\BlindboxDbContext.cs",
@@ -71,25 +568,21 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 32,
               "Title": "appsettings.json",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\appsettings.json",
               "RelativeDocumentMoniker": "BBSS.Api\\appsettings.json",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\appsettings.json",
               "RelativeToolTip": "BBSS.Api\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAZAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-02-18T14:49:53.297Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "BBSS.Domain",
+              "DocumentIndex": 39,
+              "Title": "BBSS.Domain.csproj",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj",
               "RelativeDocumentMoniker": "BBSS.Domain\\BBSS.Domain.csproj",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\BBSS.Domain.csproj",
@@ -101,7 +594,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 10,
               "Title": "IPaginate.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\IPaginate.cs",
               "RelativeDocumentMoniker": "BBSS.Domain\\Paginate\\IPaginate.cs",
@@ -114,7 +607,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 18,
               "Title": "BBSS.Api.http",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\BBSS.Api.http",
               "RelativeDocumentMoniker": "BBSS.Api\\BBSS.Api.http",
@@ -133,72 +626,72 @@
               "RelativeDocumentMoniker": "BBSS.Api\\Program.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Program.cs",
               "RelativeToolTip": "BBSS.Api\\Program.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABAAAAAAAAAA",
+              "ViewState": "AQIAAAsAAAAAAAAAAAA1wB4AAABxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-10T08:36:55.185Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 12,
               "Title": "UnitOfWork.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\UnitOfWork.cs",
               "RelativeDocumentMoniker": "BBSS.Repository\\Implements\\UnitOfWork.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\UnitOfWork.cs",
               "RelativeToolTip": "BBSS.Repository\\Implements\\UnitOfWork.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAqwBQAAAAJAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-10T08:33:17.272Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 5,
               "Title": "IGenericRepository.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IGenericRepository.cs",
               "RelativeDocumentMoniker": "BBSS.Repository\\Interfaces\\IGenericRepository.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IGenericRepository.cs",
               "RelativeToolTip": "BBSS.Repository\\Interfaces\\IGenericRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAIBJwAgAAAAIAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-10T08:31:55.607Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "IGenericRepositoryFactory.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IGenericRepositoryFactory.cs",
               "RelativeDocumentMoniker": "BBSS.Repository\\Interfaces\\IGenericRepositoryFactory.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IGenericRepositoryFactory.cs",
               "RelativeToolTip": "BBSS.Repository\\Interfaces\\IGenericRepositoryFactory.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-10T08:31:45.351Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 7,
               "Title": "IUnitOfWork.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
               "RelativeDocumentMoniker": "BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
               "RelativeToolTip": "BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-10T08:31:36.209Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "GenericRepository.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\GenericRepository.cs",
               "RelativeDocumentMoniker": "BBSS.Repository\\Implements\\GenericRepository.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\GenericRepository.cs",
               "RelativeToolTip": "BBSS.Repository\\Implements\\GenericRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAHIAAAAJAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-10T08:29:40.147Z",
               "EditorCaption": ""

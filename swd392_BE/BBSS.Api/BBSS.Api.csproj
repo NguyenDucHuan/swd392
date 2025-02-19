@@ -7,20 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="MailKit" Version="4.10.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Constants\" />
     <Folder Include="Enums\" />
-    <Folder Include="Helper\" />
-    <Folder Include="Mapper\" />
-    <Folder Include="Validator\" />
     <Folder Include="Utils\" />
     <Folder Include="PayLoad\" />
-    <Folder Include="Services\Implements\" />
-    <Folder Include="Services\Interfaces\" />
+    <Folder Include="Validator\" />
   </ItemGroup>
 
   <ItemGroup>
