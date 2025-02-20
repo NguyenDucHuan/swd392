@@ -62,6 +62,7 @@ public partial class BlindboxDbContext : DbContext
 
         return strConn;
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -76,9 +77,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.PackageId, "package_id");
 
-            entity.Property(e => e.BlindBoxId)
-                .ValueGeneratedNever()
-                .HasColumnName("blind_box_id");
+            entity.Property(e => e.BlindBoxId).HasColumnName("blind_box_id");
             entity.Property(e => e.Color)
                 .HasMaxLength(255)
                 .HasColumnName("color");
@@ -109,9 +108,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.FeatureId, "feature_id");
 
-            entity.Property(e => e.BlindBoxFeatureId)
-                .ValueGeneratedNever()
-                .HasColumnName("blind_box_feature_id");
+            entity.Property(e => e.BlindBoxFeatureId).HasColumnName("blind_box_feature_id");
             entity.Property(e => e.BlindBoxId).HasColumnName("blind_box_id");
             entity.Property(e => e.FeatureId).HasColumnName("feature_id");
 
@@ -134,9 +131,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.BlindBoxId, "blind_box_id");
 
-            entity.Property(e => e.BlindBoxImageId)
-                .ValueGeneratedNever()
-                .HasColumnName("blind_box_image_id");
+            entity.Property(e => e.BlindBoxImageId).HasColumnName("blind_box_image_id");
             entity.Property(e => e.BlindBoxId).HasColumnName("blind_box_id");
             entity.Property(e => e.Url)
                 .HasMaxLength(255)
@@ -154,9 +149,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.ToTable("category");
 
-            entity.Property(e => e.CategoryId)
-                .ValueGeneratedNever()
-                .HasColumnName("category_id");
+            entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
@@ -168,9 +161,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.ToTable("feature");
 
-            entity.Property(e => e.FeatureId)
-                .ValueGeneratedNever()
-                .HasColumnName("feature_id");
+            entity.Property(e => e.FeatureId).HasColumnName("feature_id");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
@@ -189,9 +180,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.UserId, "user_id");
 
-            entity.Property(e => e.FeedbackId)
-                .ValueGeneratedNever()
-                .HasColumnName("feedback_id");
+            entity.Property(e => e.FeedbackId).HasColumnName("feedback_id");
             entity.Property(e => e.BlindBoxId).HasColumnName("blind_box_id");
             entity.Property(e => e.Content)
                 .HasColumnType("text")
@@ -233,9 +222,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.UserId, "user_id");
 
-            entity.Property(e => e.VoteId)
-                .ValueGeneratedNever()
-                .HasColumnName("vote_id");
+            entity.Property(e => e.VoteId).HasColumnName("vote_id");
             entity.Property(e => e.FeedbackId).HasColumnName("feedback_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.VoteDate)
@@ -266,16 +253,14 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.UserId, "user_id");
 
-            entity.Property(e => e.InventoryItemId)
-                .ValueGeneratedNever()
-                .HasColumnName("inventory_item_id");
+            entity.Property(e => e.InventoryItemId).HasColumnName("inventory_item_id");
             entity.Property(e => e.AddDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("add_date");
             entity.Property(e => e.BlindBoxId).HasColumnName("blind_box_id");
             entity.Property(e => e.Status)
-                .HasColumnType("enum('Available','Used','etc.')")
+                .HasColumnType("enum('Available','Used','etc')")
                 .HasColumnName("status");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -300,9 +285,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.VoucherId, "voucher_id");
 
-            entity.Property(e => e.OrderId)
-                .ValueGeneratedNever()
-                .HasColumnName("order_id");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.DeliveryAddress)
                 .HasMaxLength(255)
                 .HasColumnName("delivery_address");
@@ -336,9 +319,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.OrderId, "order_id");
 
-            entity.Property(e => e.OrderDetailId)
-                .ValueGeneratedNever()
-                .HasColumnName("order_detail_id");
+            entity.Property(e => e.OrderDetailId).HasColumnName("order_detail_id");
             entity.Property(e => e.BlindBoxId).HasColumnName("blind_box_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
@@ -357,12 +338,13 @@ public partial class BlindboxDbContext : DbContext
 
         modelBuilder.Entity<OrderStatus>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("order_status");
+            entity.HasKey(e => e.OrderStatusId).HasName("PRIMARY");
+
+            entity.ToTable("order_status");
 
             entity.HasIndex(e => e.OrderId, "order_id");
 
+            entity.Property(e => e.OrderStatusId).HasColumnName("order_status_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.Status)
                 .HasColumnType("enum('InCart','Pending','Shipped','Completed','Canceled')")
@@ -371,7 +353,7 @@ public partial class BlindboxDbContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("update_time");
 
-            entity.HasOne(d => d.Order).WithMany()
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderStatuses)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("order_status_ibfk_1");
@@ -385,9 +367,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.CategoryId, "category_id");
 
-            entity.Property(e => e.PackageId)
-                .ValueGeneratedNever()
-                .HasColumnName("package_id");
+            entity.Property(e => e.PackageId).HasColumnName("package_id");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
@@ -420,9 +400,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.UserId, "user_id");
 
-            entity.Property(e => e.TransactionId)
-                .ValueGeneratedNever()
-                .HasColumnName("transaction_id");
+            entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
             entity.Property(e => e.Amount)
                 .HasPrecision(10, 2)
                 .HasColumnName("amount");
@@ -451,9 +429,8 @@ public partial class BlindboxDbContext : DbContext
 
             entity.ToTable("user");
 
-            entity.Property(e => e.UserId)
-                .ValueGeneratedNever()
-                .HasColumnName("user_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.ConfirmedEmail).HasColumnName("confirmed_email");
             entity.Property(e => e.DateOfBirth).HasColumnName("date_of_birth");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
@@ -493,9 +470,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.VoucherId, "voucher_id");
 
-            entity.Property(e => e.UserVoucherId)
-                .ValueGeneratedNever()
-                .HasColumnName("user_voucher_id");
+            entity.Property(e => e.UserVoucherId).HasColumnName("user_voucher_id");
             entity.Property(e => e.RedeemedDate).HasColumnName("redeemed_date");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.UserId).HasColumnName("user_id");
@@ -518,9 +493,7 @@ public partial class BlindboxDbContext : DbContext
 
             entity.ToTable("voucher");
 
-            entity.Property(e => e.VoucherId)
-                .ValueGeneratedNever()
-                .HasColumnName("voucher_id");
+            entity.Property(e => e.VoucherId).HasColumnName("voucher_id");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");

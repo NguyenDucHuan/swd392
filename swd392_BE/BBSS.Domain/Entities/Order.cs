@@ -19,6 +19,8 @@ public partial class Order
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
+    public virtual ICollection<OrderStatus> OrderStatuses { get; set; } = new List<OrderStatus>();
+
     public virtual User User { get; set; } = null!;
 
     public virtual Voucher Voucher { get; set; } = null!;

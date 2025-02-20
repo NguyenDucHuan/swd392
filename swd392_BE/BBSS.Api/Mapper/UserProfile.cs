@@ -15,6 +15,7 @@ namespace BBSS.Api.Mapper
                   .ForMember(dest => dest.Password, opt => opt.MapFrom(src => BCrypt.Net.BCrypt.HashPassword(src.Password)))
                   .ForMember(dest => dest.WalletBalance, opt => opt.MapFrom(src => 0))
                   .ForMember(dest => dest.Role, opt => opt.MapFrom(src => UserConstant.USER_ROLE_USER))
+                  .ForMember(dest => dest.ConfirmedEmail, opt => opt.MapFrom(src => UserConstant.USER_CONFIRMED_EMAIL_INACTIVE))
                   .ForMember(dest => dest.Status, opt => opt.MapFrom(src => UserConstant.USER_STATUS_ACTIVE));
         }
     }

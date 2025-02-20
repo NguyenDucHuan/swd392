@@ -8,6 +8,8 @@ using BBSS.Api.Services.Interfaces;
 using BBSS.Api.ViewModels;
 using BBSS.Domain.Entities;
 using BBSS.Repository.Interfaces;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Principal;
 
 namespace BBSS.Api.Services.Implements
@@ -19,24 +21,24 @@ namespace BBSS.Api.Services.Implements
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly ITokenValidator _tokenValidator;
 
         public AuthenticationService(IUnitOfWork uow, ITokenGenerator tokenGenerator,
-            IUserService userService, IMapper mapper, IEmailService emailService)
+            IUserService userService, IMapper mapper, IEmailService emailService, ITokenValidator tokenValidator)
         {
             _uow = uow;
             _tokenGenerator = tokenGenerator;
             _userService = userService;
             _mapper = mapper;
             _emailService = emailService;
+            _tokenValidator = tokenValidator;
         }
 
         public async Task<MethodResult<string>> SignUpAsync(SignupRequest request)
         {
             try
             {
-                var dupeEmailUser = await _uow.GetRepository<User>().SingleOrDefaultAsync(
-                    predicate: p => p.Email == request.Email
-                );
+                var dupeEmailUser = await GetUserByEmailAsync(request.Email);
                 if (dupeEmailUser != null)
                 {
                     return new MethodResult<string>.Failure("Email already in use", StatusCodes.Status400BadRequest);
@@ -65,9 +67,7 @@ namespace BBSS.Api.Services.Implements
 
         public async Task<MethodResult<SignInViewModel>> SigninAsync(LoginRequest request)
         {
-            var user = await _uow.GetRepository<User>().SingleOrDefaultAsync(
-                predicate: p => p.Email == request.Email
-            );
+            var user = await GetUserByEmailAsync(request.Email);
             if ( user == null )
             {
                 return new MethodResult<SignInViewModel>.Failure("Invalid email", StatusCodes.Status400BadRequest);
@@ -91,6 +91,31 @@ namespace BBSS.Api.Services.Implements
             };
 
             return new MethodResult<SignInViewModel>.Success(result);
-        }         
+        }
+
+        public async Task<MethodResult<string>> VerifyEmailAsync(string token) 
+        {
+            try
+            {
+                var email = await _tokenValidator.ValidateEmailVerificationToken(token);
+                var user = await GetUserByEmailAsync(email);
+                user.ConfirmedEmail = UserConstant.USER_CONFIRMED_EMAIL_ACTIVE;
+                _uow.GetRepository<User>().UpdateAsync(user);
+                await _uow.CommitAsync();
+                return new MethodResult<string>.Success("Verify email successfully");
+
+            }
+            catch (Exception e)
+            {
+                return new MethodResult<string>.Failure(e.ToString(), StatusCodes.Status500InternalServerError);
+            }            
+        }
+
+        private async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await _uow.GetRepository<User>().SingleOrDefaultAsync(
+                predicate: p => p.Email == email
+            );
+        }
     }
 }
