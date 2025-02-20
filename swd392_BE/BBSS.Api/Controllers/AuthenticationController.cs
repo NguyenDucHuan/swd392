@@ -34,5 +34,16 @@ namespace BBSS.Api.Controllers
                 Ok
             );
         }
+
+        [HttpPatch]
+        [Route("verify-email")]
+        public async Task<IActionResult> VerifyAccount(string token)
+        {
+            var result = await _authenticationService.VerifyEmailAsync(token);
+            return result.Match(
+                (errorMessage, statusCode) => Problem(detail: errorMessage, statusCode: statusCode),
+                successMessage => Ok(new { message = successMessage })
+            );
+        }
     }
 }

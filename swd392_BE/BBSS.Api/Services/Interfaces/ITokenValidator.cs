@@ -6,6 +6,6 @@ namespace BBSS.Api.Services.Interfaces
     {        
         MethodResult<string> GetEmailFromExpiredAccessToken(string token);
         bool ValidateRefreshToken(string token);
-        MethodResult<string> ValidateEmailVerificationToken(string token);
+        Task<string> ValidateEmailVerificationToken(string token);
     }
 }

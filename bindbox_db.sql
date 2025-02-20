@@ -3,7 +3,7 @@ CREATE DATABASE blindbox_db;
 USE blindbox_db;
 
 CREATE TABLE voucher (
-    voucher_id INT PRIMARY KEY,
+    voucher_id INT AUTO_INCREMENT PRIMARY KEY,
     voucher_code VARCHAR(255) NOT NULL,
     `description` VARCHAR(255),
     discount_amount DOUBLE,
@@ -15,20 +15,21 @@ CREATE TABLE voucher (
 );
 
 CREATE TABLE `user` (
-    user_id INT PRIMARY KEY,
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     wallet_balance DECIMAL(10, 2) DEFAULT 0,
     `role` ENUM('Admin', 'Staff', 'User'),
     date_of_birth DATE,
+    confirmed_email BOOLEAN NOT NULL DEFAULT 0,
     `status` BOOLEAN NOT NULL DEFAULT 1,
     phone VARCHAR(10),
     image VARCHAR(255)
 );
 
 CREATE TABLE user_voucher (
-    user_voucher_id INT PRIMARY KEY,
+    user_voucher_id INT AUTO_INCREMENT PRIMARY KEY,
     redeemed_date DATE,
     `status` BOOLEAN NOT NULL DEFAULT 0,
     user_id INT NOT NULL,
@@ -38,12 +39,12 @@ CREATE TABLE user_voucher (
 );
 
 CREATE TABLE category (
-    category_id INT PRIMARY KEY,
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE package (
-    package_id INT PRIMARY KEY,
+    package_id INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255),
     `description` VARCHAR(255),
     price DECIMAL(10, 2),
@@ -55,7 +56,7 @@ CREATE TABLE package (
 );
 
 CREATE TABLE blind_box (
-    blind_box_id INT PRIMARY KEY,
+    blind_box_id INT AUTO_INCREMENT PRIMARY KEY,
     unique_code VARCHAR(255) NOT NULL,
     color VARCHAR(255) NOT NULL,
     `status` BOOLEAN NOT NULL DEFAULT 1,
@@ -66,20 +67,20 @@ CREATE TABLE blind_box (
 );
 
 CREATE TABLE blind_box_image (
-    blind_box_image_id INT PRIMARY KEY,
+    blind_box_image_id INT AUTO_INCREMENT PRIMARY KEY,
     url VARCHAR(255) NOT NULL,
     blind_box_id INT NOT NULL,
     FOREIGN KEY (blind_box_id) REFERENCES blind_box(blind_box_id)
 );
 
 CREATE TABLE feature (
-    feature_id INT PRIMARY KEY,
+    feature_id INT AUTO_INCREMENT PRIMARY KEY,
     `description` VARCHAR(255) NOT NULL,
     `type` ENUM('Eye', 'Skin')
 );
 
 CREATE TABLE blind_box_feature (
-	blind_box_feature_id INT PRIMARY KEY,
+	blind_box_feature_id INT AUTO_INCREMENT PRIMARY KEY,
     blind_box_id INT NOT NULL,
     feature_id INT NOT NULL,
     FOREIGN KEY (blind_box_id) REFERENCES blind_box(blind_box_id),
@@ -87,7 +88,7 @@ CREATE TABLE blind_box_feature (
 );
 
 CREATE TABLE `order` (
-    order_id INT PRIMARY KEY,    
+    order_id INT AUTO_INCREMENT PRIMARY KEY,    
     order_date DATETIME,
     total_amount DECIMAL(10, 2),
     delivery_address VARCHAR(255),
@@ -98,6 +99,7 @@ CREATE TABLE `order` (
 );
 
 CREATE TABLE order_status (
+	order_status_id INT AUTO_INCREMENT PRIMARY KEY,
     `status` ENUM('InCart', 'Pending', 'Shipped', 'Completed', 'Canceled'),
     update_time DATETIME NOT NULL,
     order_id INT NOT NULL,
@@ -105,7 +107,7 @@ CREATE TABLE order_status (
 );
 
 CREATE TABLE order_detail (
-    order_detail_id INT PRIMARY KEY,
+    order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
     quantity INT NOT NULL,
     unit_price DOUBLE NOT NULL,
     order_id INT NOT NULL,
@@ -115,7 +117,7 @@ CREATE TABLE order_detail (
 );
 
 CREATE TABLE `transaction` (
-    transaction_id INT PRIMARY KEY,
+    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     `type` ENUM('Deposit', 'Deduction', 'BlindBoxOpen'),
     related_id INT NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
@@ -126,7 +128,7 @@ CREATE TABLE `transaction` (
 );
 
 CREATE TABLE feedback (
-    feedback_id INT PRIMARY KEY,       
+    feedback_id INT AUTO_INCREMENT PRIMARY KEY,       
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     image VARCHAR(255),
@@ -139,7 +141,7 @@ CREATE TABLE feedback (
 );
 
 CREATE TABLE feedback_vote (
-    vote_id INT PRIMARY KEY,
+    vote_id INT AUTO_INCREMENT PRIMARY KEY,
     feedback_id INT NOT NULL,
     user_id INT NOT NULL,
     vote_date DATETIME NOT NULL,
@@ -149,11 +151,11 @@ CREATE TABLE feedback_vote (
 );
 
 CREATE TABLE inventory_item (
-    inventory_item_id INT PRIMARY KEY,
+    inventory_item_id INT AUTO_INCREMENT PRIMARY KEY,
     add_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_id INT NOT NULL,
     blind_box_id INT NOT NULL,    
-    status ENUM('Available', 'Used', 'etc.'),
+    status ENUM('Available', 'Used', 'etc'),
     FOREIGN KEY (user_id) REFERENCES `user`(user_id),
     FOREIGN KEY (blind_box_id) REFERENCES blind_box(blind_box_id)
 );

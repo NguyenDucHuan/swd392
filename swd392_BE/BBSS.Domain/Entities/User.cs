@@ -19,6 +19,8 @@ public partial class User
 
     public DateOnly? DateOfBirth { get; set; }
 
+    public bool ConfirmedEmail { get; set; }
+
     public bool? Status { get; set; }
 
     public string? Phone { get; set; }

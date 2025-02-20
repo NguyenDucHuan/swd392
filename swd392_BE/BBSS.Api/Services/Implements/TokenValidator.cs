@@ -70,15 +70,15 @@ namespace BBSS.Api.Services.Implements
             return true;
         }
 
-        public MethodResult<string> ValidateEmailVerificationToken(string token)
+        public async Task<string> ValidateEmailVerificationToken(string token)
         {
             var cp = Validate(_configuration.EmailVerificationSecret, token, true);
             var email = cp?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            if (email == null)
-            {
-                return new MethodResult<string>.Failure("Invalid token", 400);
-            }
-            return new MethodResult<string>.Success(email);
+            //if (email == null)
+            //{
+            //    throw new Exception();
+            //}
+            return email;
         }
     }
 

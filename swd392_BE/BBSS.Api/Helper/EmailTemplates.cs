@@ -208,7 +208,7 @@ namespace BBSS.Api.Helper
     <table border=""0"" cellpadding=""0"" cellspacing=""0"" role=""presentation""><tr><td valign=""top"" style=""border-top: 1px solid #417CD6; border-right: 1px solid #417CD6; border-bottom: 1px solid #417CD6; border-left: 1px solid #417CD6;"">
 <![endif]-->
                    <a href=""http://localhost:3000"" style=""text-decoration: none;"">
-  <span style=""color: white; font-size: 60px; font-weight: bold;"">Cursus</span>
+  <span style=""color: white; font-size: 60px; font-weight: bold;"">Blind Box Store</span>
 </a>
                    <!--[if gte mso 12]>
     </td></tr></table>
@@ -810,7 +810,7 @@ namespace BBSS.Api.Helper
     <table border=""0"" cellpadding=""0"" cellspacing=""0"" role=""presentation""><tr><td valign=""top"" style=""border-top: 1px solid #417CD6; border-right: 1px solid #417CD6; border-bottom: 1px solid #417CD6; border-left: 1px solid #417CD6;"">
 <![endif]-->
                    <a href=""http://localhost:3000"" style=""text-decoration: none;"">
-  <span style=""color: white; font-size: 60px; font-weight: bold;"">Cursus</span>
+  <span style=""color: white; font-size: 60px; font-weight: bold;"">Blind Box Store</span>
 </a>
                    <!--[if gte mso 12]>
     </td></tr></table>

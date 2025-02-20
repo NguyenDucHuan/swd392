@@ -8,5 +8,6 @@ namespace BBSS.Api.Services.Interfaces
     {
         Task<MethodResult<string>> SignUpAsync(SignupRequest request);
         Task<MethodResult<SignInViewModel>> SigninAsync(LoginRequest request);
+        Task<MethodResult<string>> VerifyEmailAsync(string token);
     }
 }
