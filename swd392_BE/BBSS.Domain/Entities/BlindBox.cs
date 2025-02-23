@@ -7,13 +7,21 @@ public partial class BlindBox
 {
     public int BlindBoxId { get; set; }
 
-    public string UniqueCode { get; set; } = null!;
+    public string? UniqueCode { get; set; }
 
-    public string Color { get; set; } = null!;
+    public string? Color { get; set; }
 
     public bool? Status { get; set; }
 
-    public double Size { get; set; }
+    public double? Size { get; set; }
+
+    public decimal Price { get; set; }
+
+    public decimal Discount { get; set; }
+
+    public int Number { get; set; }
+
+    public bool IsKnowned { get; set; }
 
     public bool IsSpecial { get; set; }
 

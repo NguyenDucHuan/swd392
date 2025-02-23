@@ -7,15 +7,17 @@ public partial class Order
 {
     public int OrderId { get; set; }
 
-    public DateTime? OrderDate { get; set; }
+    public DateTime OrderDate { get; set; }
 
-    public decimal? TotalAmount { get; set; }
+    public decimal TotalAmount { get; set; }
 
-    public string? DeliveryAddress { get; set; }
+    public string Phone { get; set; } = null!;
+
+    public string Address { get; set; } = null!;
 
     public int UserId { get; set; }
 
-    public int VoucherId { get; set; }
+    public int? VoucherId { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
@@ -23,5 +25,5 @@ public partial class Order
 
     public virtual User User { get; set; } = null!;
 
-    public virtual Voucher Voucher { get; set; } = null!;
+    public virtual Voucher? Voucher { get; set; }
 }

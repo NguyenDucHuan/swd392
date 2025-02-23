@@ -15,7 +15,6 @@ namespace BBSS.Api.Extensions
         public static IServiceCollection AddService(this IServiceCollection service)
         {
             service.AddTransient<IUnitOfWork, UnitOfWork<BlindboxDbContext>>();
-            //service.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork<>));
             service.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             service.AddTransient<IAuthenticationService, AuthenticationService>();
@@ -24,7 +23,9 @@ namespace BBSS.Api.Extensions
             service.AddTransient<ITokenGenerator, TokenGenerator>();
             service.AddTransient<ITokenValidator, TokenValidator>();
             service.AddTransient<IUserService, UserService>();
-            
+            service.AddTransient<IOrderService, OrderService>();
+            service.AddTransient<IPaymentService, PaymentService>();
+            service.AddTransient<IExcelService, ExcelService>();
 
 
             return service;

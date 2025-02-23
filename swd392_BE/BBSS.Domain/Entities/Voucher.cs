@@ -11,15 +11,15 @@ public partial class Voucher
 
     public string? Description { get; set; }
 
-    public double? DiscountAmount { get; set; }
+    public decimal DiscountAmount { get; set; }
 
-    public DateOnly StartDate { get; set; }
+    public DateTime StartDate { get; set; }
 
-    public DateOnly EndDate { get; set; }
+    public DateTime EndDate { get; set; }
 
-    public double? MinimumPurchase { get; set; }
+    public decimal? MinimumPurchase { get; set; }
 
-    public double UsageLimit { get; set; }
+    public int UsageLimit { get; set; }
 
     public bool? Status { get; set; }
 

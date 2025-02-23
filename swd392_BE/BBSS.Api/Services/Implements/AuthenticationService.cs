@@ -103,7 +103,6 @@ namespace BBSS.Api.Services.Implements
                 _uow.GetRepository<User>().UpdateAsync(user);
                 await _uow.CommitAsync();
                 return new MethodResult<string>.Success("Verify email successfully");
-
             }
             catch (Exception e)
             {

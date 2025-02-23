@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
 namespace BBSS.Domain.Entities;
@@ -50,18 +49,8 @@ public partial class BlindboxDbContext : DbContext
     public virtual DbSet<Voucher> Vouchers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    => optionsBuilder.UseMySql(GetConnectionString(), Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.39-mysql"));
-
-    private string GetConnectionString()
-    {
-        IConfiguration config = new ConfigurationBuilder()
-             .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", true, true)
-                    .Build();
-        var strConn = config["ConnectionStrings:BlindBoxDbConnection"];
-
-        return strConn;
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=127.0.0.1;port=3306;database=blindbox_db;uid=root;pwd=Tan741852", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.39-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -81,8 +70,16 @@ public partial class BlindboxDbContext : DbContext
             entity.Property(e => e.Color)
                 .HasMaxLength(255)
                 .HasColumnName("color");
+            entity.Property(e => e.Discount)
+                .HasPrecision(2, 2)
+                .HasColumnName("discount");
+            entity.Property(e => e.IsKnowned).HasColumnName("is_knowned");
             entity.Property(e => e.IsSpecial).HasColumnName("is_special");
+            entity.Property(e => e.Number).HasColumnName("number");
             entity.Property(e => e.PackageId).HasColumnName("package_id");
+            entity.Property(e => e.Price)
+                .HasPrecision(10, 2)
+                .HasColumnName("price");
             entity.Property(e => e.Size).HasColumnName("size");
             entity.Property(e => e.Status)
                 .IsRequired()
@@ -286,12 +283,15 @@ public partial class BlindboxDbContext : DbContext
             entity.HasIndex(e => e.VoucherId, "voucher_id");
 
             entity.Property(e => e.OrderId).HasColumnName("order_id");
-            entity.Property(e => e.DeliveryAddress)
+            entity.Property(e => e.Address)
                 .HasMaxLength(255)
-                .HasColumnName("delivery_address");
+                .HasColumnName("address");
             entity.Property(e => e.OrderDate)
                 .HasColumnType("datetime")
                 .HasColumnName("order_date");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(10)
+                .HasColumnName("phone");
             entity.Property(e => e.TotalAmount)
                 .HasPrecision(10, 2)
                 .HasColumnName("total_amount");
@@ -305,7 +305,6 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasOne(d => d.Voucher).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.VoucherId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("order_ibfk_2");
         });
 
@@ -323,7 +322,9 @@ public partial class BlindboxDbContext : DbContext
             entity.Property(e => e.BlindBoxId).HasColumnName("blind_box_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
-            entity.Property(e => e.UnitPrice).HasColumnName("unit_price");
+            entity.Property(e => e.UnitPrice)
+                .HasPrecision(10, 2)
+                .HasColumnName("unit_price");
 
             entity.HasOne(d => d.BlindBox).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.BlindBoxId)
@@ -347,7 +348,7 @@ public partial class BlindboxDbContext : DbContext
             entity.Property(e => e.OrderStatusId).HasColumnName("order_status_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.Status)
-                .HasColumnType("enum('InCart','Pending','Shipped','Completed','Canceled')")
+                .HasColumnType("enum('Pending','Paid','Shipping','Completed','Canceled')")
                 .HasColumnName("status");
             entity.Property(e => e.UpdateTime)
                 .HasColumnType("datetime")
@@ -378,9 +379,6 @@ public partial class BlindboxDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
-            entity.Property(e => e.Price)
-                .HasPrecision(10, 2)
-                .HasColumnName("price");
             entity.Property(e => e.Stock).HasColumnName("stock");
             entity.Property(e => e.Themes)
                 .HasColumnType("text")
@@ -471,7 +469,9 @@ public partial class BlindboxDbContext : DbContext
             entity.HasIndex(e => e.VoucherId, "voucher_id");
 
             entity.Property(e => e.UserVoucherId).HasColumnName("user_voucher_id");
-            entity.Property(e => e.RedeemedDate).HasColumnName("redeemed_date");
+            entity.Property(e => e.RedeemedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("redeemed_date");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.VoucherId).HasColumnName("voucher_id");
@@ -497,10 +497,18 @@ public partial class BlindboxDbContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
-            entity.Property(e => e.DiscountAmount).HasColumnName("discount_amount");
-            entity.Property(e => e.EndDate).HasColumnName("end_date");
-            entity.Property(e => e.MinimumPurchase).HasColumnName("minimum_purchase");
-            entity.Property(e => e.StartDate).HasColumnName("start_date");
+            entity.Property(e => e.DiscountAmount)
+                .HasPrecision(10, 2)
+                .HasColumnName("discount_amount");
+            entity.Property(e => e.EndDate)
+                .HasColumnType("datetime")
+                .HasColumnName("end_date");
+            entity.Property(e => e.MinimumPurchase)
+                .HasPrecision(10, 2)
+                .HasColumnName("minimum_purchase");
+            entity.Property(e => e.StartDate)
+                .HasColumnType("datetime")
+                .HasColumnName("start_date");
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasDefaultValueSql("'1'")

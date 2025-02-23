@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BBSS.Api.Controllers
 {
-    public class AuthenticationController : Controller
+    public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
 

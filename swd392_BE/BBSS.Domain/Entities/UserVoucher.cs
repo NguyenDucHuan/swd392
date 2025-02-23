@@ -7,7 +7,7 @@ public partial class UserVoucher
 {
     public int UserVoucherId { get; set; }
 
-    public DateOnly? RedeemedDate { get; set; }
+    public DateTime? RedeemedDate { get; set; }
 
     public bool Status { get; set; }
 
