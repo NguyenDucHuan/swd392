@@ -30,11 +30,13 @@ namespace BBSS.Api
                 new MySqlServerVersion(new Version(8, 0, 37))));
             builder.Services.Configure<MailConfiguration>(builder.Configuration.GetSection("MailConfiguration"));
             builder.Services.Configure<AuthenticationConfiguration>(builder.Configuration.GetSection("AuthenticationConfiguration"));
+            builder.Services.Configure<VnPayConfig>(builder.Configuration.GetSection("VnPayConfig"));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSwaggerConfig();
 
             //CORS
             builder.Services.AddCors(options =>
@@ -67,8 +69,8 @@ namespace BBSS.Api
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

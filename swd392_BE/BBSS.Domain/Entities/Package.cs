@@ -11,8 +11,6 @@ public partial class Package
 
     public string? Description { get; set; }
 
-    public decimal? Price { get; set; }
-
     public string? Manufacturer { get; set; }
 
     public string? Themes { get; set; }
