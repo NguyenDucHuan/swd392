@@ -7,8 +7,6 @@ public partial class BlindBox
 {
     public int BlindBoxId { get; set; }
 
-    public string? UniqueCode { get; set; }
-
     public string? Color { get; set; }
 
     public bool? Status { get; set; }
@@ -24,6 +22,8 @@ public partial class BlindBox
     public bool IsKnowned { get; set; }
 
     public bool IsSpecial { get; set; }
+
+    public bool IsSold { get; set; }
 
     public int PackageId { get; set; }
 

@@ -41,6 +41,8 @@ public partial class BlindboxDbContext : DbContext
 
     public virtual DbSet<Package> Packages { get; set; }
 
+    public virtual DbSet<PackageImage> PackageImages { get; set; }
+
     public virtual DbSet<Transaction> Transactions { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -62,7 +64,6 @@ public partial class BlindboxDbContext : DbContext
 
         return strConn;
     }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -86,6 +87,7 @@ public partial class BlindboxDbContext : DbContext
                 .HasPrecision(2, 2)
                 .HasColumnName("discount");
             entity.Property(e => e.IsKnowned).HasColumnName("is_knowned");
+            entity.Property(e => e.IsSold).HasColumnName("is_sold");
             entity.Property(e => e.IsSpecial).HasColumnName("is_special");
             entity.Property(e => e.Number).HasColumnName("number");
             entity.Property(e => e.PackageId).HasColumnName("package_id");
@@ -97,9 +99,6 @@ public partial class BlindboxDbContext : DbContext
                 .IsRequired()
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("status");
-            entity.Property(e => e.UniqueCode)
-                .HasMaxLength(255)
-                .HasColumnName("unique_code");
 
             entity.HasOne(d => d.Package).WithMany(p => p.BlindBoxes)
                 .HasForeignKey(d => d.PackageId)
@@ -330,23 +329,28 @@ public partial class BlindboxDbContext : DbContext
 
             entity.HasIndex(e => e.OrderId, "order_id");
 
+            entity.HasIndex(e => e.PackageId, "package_id");
+
             entity.Property(e => e.OrderDetailId).HasColumnName("order_detail_id");
             entity.Property(e => e.BlindBoxId).HasColumnName("blind_box_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.PackageId).HasColumnName("package_id");
             entity.Property(e => e.UnitPrice)
                 .HasPrecision(10, 2)
                 .HasColumnName("unit_price");
 
             entity.HasOne(d => d.BlindBox).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.BlindBoxId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("order_detail_ibfk_2");
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("order_detail_ibfk_1");
+
+            entity.HasOne(d => d.Package).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.PackageId)
+                .HasConstraintName("order_detail_ibfk_3");
         });
 
         modelBuilder.Entity<OrderStatus>(entity =>
@@ -391,15 +395,34 @@ public partial class BlindboxDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
-            entity.Property(e => e.Stock).HasColumnName("stock");
-            entity.Property(e => e.Themes)
-                .HasColumnType("text")
-                .HasColumnName("themes");
+            entity.Property(e => e.PakageCode)
+                .HasMaxLength(255)
+                .HasColumnName("pakage_code");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Packages)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("package_ibfk_1");
+        });
+
+        modelBuilder.Entity<PackageImage>(entity =>
+        {
+            entity.HasKey(e => e.PackageImageId).HasName("PRIMARY");
+
+            entity.ToTable("package_image");
+
+            entity.HasIndex(e => e.PackageId, "package_id");
+
+            entity.Property(e => e.PackageImageId).HasColumnName("package_image_id");
+            entity.Property(e => e.PackageId).HasColumnName("package_id");
+            entity.Property(e => e.Url)
+                .HasMaxLength(255)
+                .HasColumnName("url");
+
+            entity.HasOne(d => d.Package).WithMany(p => p.PackageImages)
+                .HasForeignKey(d => d.PackageId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("package_image_ibfk_1");
         });
 
         modelBuilder.Entity<Transaction>(entity =>

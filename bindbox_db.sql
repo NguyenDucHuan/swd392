@@ -45,18 +45,23 @@ CREATE TABLE category (
 
 CREATE TABLE package (
     package_id INT AUTO_INCREMENT PRIMARY KEY,
+    pakage_code VARCHAR(255) NOT NULL,
     `name` VARCHAR(255),
     `description` VARCHAR(255),
     manufacturer VARCHAR(255),
-    themes TEXT,
-    stock INT,
     category_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES category(category_id)
 );
 
+CREATE TABLE package_image (
+    package_image_id INT AUTO_INCREMENT PRIMARY KEY,
+    url VARCHAR(255) NOT NULL,
+    package_id INT NOT NULL,
+    FOREIGN KEY (package_id) REFERENCES package(package_id)
+);
+
 CREATE TABLE blind_box (
     blind_box_id INT AUTO_INCREMENT PRIMARY KEY,
-    unique_code VARCHAR(255),
     color VARCHAR(255),
     `status` BOOLEAN NOT NULL DEFAULT 1,
     size DOUBLE,    
@@ -65,6 +70,7 @@ CREATE TABLE blind_box (
     `number` INT NOT NULL,
     is_knowned BOOLEAN NOT NULL,
     is_special BOOLEAN NOT NULL,
+    is_sold BOOLEAN NOT NULL DEFAULT 0,
     package_id INT NOT NULL,
     FOREIGN KEY (package_id) REFERENCES package(package_id)
 );
@@ -112,12 +118,13 @@ CREATE TABLE order_status (
 
 CREATE TABLE order_detail (
     order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
-    quantity INT NOT NULL,
     unit_price DECIMAL(10, 2) NOT NULL,
     order_id INT NOT NULL,
-    blind_box_id INT NOT NULL,
+    blind_box_id INT,
+    package_id INT,
     FOREIGN KEY (order_id) REFERENCES `order`(order_id),
-    FOREIGN KEY (blind_box_id) REFERENCES blind_box(blind_box_id)
+    FOREIGN KEY (blind_box_id) REFERENCES blind_box(blind_box_id),
+    FOREIGN KEY (package_id) REFERENCES package(package_id)
 );
 
 CREATE TABLE `transaction` (
@@ -169,18 +176,18 @@ INSERT INTO category (name) VALUES
 ('Collectibles'),
 ('Accessories');
 
-INSERT INTO package (name, description, manufacturer, themes, stock, category_id) VALUES
-('Super Hero Series', 'Blind box containing superhero-themed items.', 'HeroCraft Co.', 'Heroes, Marvel, DC', 100, 1),
-('Mystic Creatures', 'Mystical creatures from legends and folklore.', 'Fantasy Creations', 'Dragons, Unicorns', 200, 2),
-('Gadget Mystery', 'Blind box with tech and gadget accessories.', 'TechWorld', 'Gadgets, Tools', 150, 3);
+INSERT INTO package (pakage_code, name, description, manufacturer, category_id) VALUES
+('haha', 'Super Hero Series', 'Blind box containing superhero-themed items.', 'HeroCraft Co.', 1),
+('hihi', 'Mystic Creatures', 'Mystical creatures from legends and folklore.', 'Fantasy Creations', 2),
+('hoho', 'Gadget Mystery', 'Blind box with tech and gadget accessories.', 'TechWorld', 3);
 
-INSERT INTO blind_box (unique_code, color, status, size, price, discount, number, is_knowned, is_special, package_id) VALUES
-('BX001', 'Red', 1, 12.5, 19.99, 0.10, 1, 0, 0, 1),
-('BX002', 'Blue', 1, 10.0, 15.99, 0.05, 1, 0, 1, 1),
-('BX003', 'Green', 1, 8.0, 12.49, 0.00, 1, 1, 0, 2),
-('BX004', 'Yellow', 1, 11.0, 20.99, 0.20, 1, 0, 1, 2),
-('BX005', 'Black', 1, 9.5, 18.50, 0.15, 1, 1, 0, 3),
-('BX006', 'White', 1, 7.5, 10.99, 0.05, 1, 0, 0, 3);
+INSERT INTO blind_box (color, status, size, price, discount, number, is_knowned, is_special, package_id) VALUES
+('Red', 1, 12.5, 19.99, 0.10, 1, 0, 0, 1),
+('Blue', 1, 10.0, 15.99, 0.05, 1, 0, 1, 1),
+('Green', 1, 8.0, 12.49, 0.00, 1, 1, 0, 2),
+('Yellow', 1, 11.0, 20.99, 0.20, 1, 0, 1, 2),
+('Black', 1, 9.5, 18.50, 0.15, 1, 1, 0, 3),
+('White', 1, 7.5, 10.99, 0.05, 1, 0, 0, 3);
 
 INSERT INTO `user` (`name`, email, `password`, wallet_balance, `role`, date_of_birth, confirmed_email, `status`, phone, image)
 VALUES 

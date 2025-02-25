@@ -19,8 +19,8 @@ namespace BBSS.Api.Mapper
                 .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.OrderDetails.Select(x => new OrderDetailViewModel
                 {
                     OrderDetailId = x.OrderId,
-                    BlindBoxId = x.BlindBoxId,
-                    Quantity = x.Quantity,
+                    //BlindBoxId = x.BlindBoxId,
+                    //Quantity = x.Quantity,
                     Price = x.UnitPrice
                 })));
         }
