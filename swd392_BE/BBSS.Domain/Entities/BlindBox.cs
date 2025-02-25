@@ -23,6 +23,8 @@ public partial class BlindBox
 
     public bool IsSpecial { get; set; }
 
+    public bool IsSold { get; set; }
+
     public int PackageId { get; set; }
 
     public virtual ICollection<BlindBoxFeature> BlindBoxFeatures { get; set; } = new List<BlindBoxFeature>();

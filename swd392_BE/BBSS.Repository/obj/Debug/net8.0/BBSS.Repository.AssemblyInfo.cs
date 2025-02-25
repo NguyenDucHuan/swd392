@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BBSS.Repository")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+226616cfcd62c99349a3135a06e7687af5cd61bf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7be4108a2243984497b3911abbde37cb0a74d262")]
 [assembly: System.Reflection.AssemblyProductAttribute("BBSS.Repository")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BBSS.Repository")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

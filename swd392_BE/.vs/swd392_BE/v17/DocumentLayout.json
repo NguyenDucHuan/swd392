@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\implements\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\implements\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\interfaces\\iorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\interfaces\\iorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\blindbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -170,7 +170,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 39,
+          "SelectedChildIndex": 40,
           "Children": [
             {
               "$type": "Bookmark",
@@ -334,7 +334,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "IOrderService.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IOrderService.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\IOrderService.cs",
@@ -634,7 +634,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "OrderService.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\OrderService.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\OrderService.cs",
@@ -647,15 +647,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "BlindboxDbContext.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\BlindboxDbContext.cs",
               "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\BlindboxDbContext.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\BlindboxDbContext.cs",
               "RelativeToolTip": "BBSS.Domain\\Entities\\BlindboxDbContext.cs",
-              "ViewState": "AQIAACgAAAAAZmZmZmYmwDUAAAAAAAAA",
+              "ViewState": "AQIAACsAAAAAMzMzMzM8wEIAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-21T09:19:18.617Z"
+              "WhenOpened": "2025-02-21T09:19:18.617Z",
+              "EditorCaption": ""
             }
           ]
         }

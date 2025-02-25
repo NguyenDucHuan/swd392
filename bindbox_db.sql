@@ -70,6 +70,7 @@ CREATE TABLE blind_box (
     `number` INT NOT NULL,
     is_knowned BOOLEAN NOT NULL,
     is_special BOOLEAN NOT NULL,
+    is_sold BOOLEAN NOT NULL DEFAULT 0,
     package_id INT NOT NULL,
     FOREIGN KEY (package_id) REFERENCES package(package_id)
 );

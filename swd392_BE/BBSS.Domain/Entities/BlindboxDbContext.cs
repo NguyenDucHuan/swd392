@@ -52,7 +52,7 @@ public partial class BlindboxDbContext : DbContext
     public virtual DbSet<Voucher> Vouchers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-=> optionsBuilder.UseMySql(GetConnectionString(), Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.39-mysql"));
+        => optionsBuilder.UseMySql(GetConnectionString(), Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.39-mysql"));
 
     private string GetConnectionString()
     {
@@ -64,7 +64,6 @@ public partial class BlindboxDbContext : DbContext
 
         return strConn;
     }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -88,6 +87,7 @@ public partial class BlindboxDbContext : DbContext
                 .HasPrecision(2, 2)
                 .HasColumnName("discount");
             entity.Property(e => e.IsKnowned).HasColumnName("is_knowned");
+            entity.Property(e => e.IsSold).HasColumnName("is_sold");
             entity.Property(e => e.IsSpecial).HasColumnName("is_special");
             entity.Property(e => e.Number).HasColumnName("number");
             entity.Property(e => e.PackageId).HasColumnName("package_id");
