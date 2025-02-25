@@ -7,8 +7,6 @@ public partial class BlindBox
 {
     public int BlindBoxId { get; set; }
 
-    public string? UniqueCode { get; set; }
-
     public string? Color { get; set; }
 
     public bool? Status { get; set; }

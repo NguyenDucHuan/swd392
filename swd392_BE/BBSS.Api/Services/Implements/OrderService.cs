@@ -53,12 +53,12 @@ namespace BBSS.Api.Services.Implements
                     var orderDetail = new OrderDetail
                     {
                         OrderId = order.OrderId,
-                        Quantity = x.Quantity,
+                        //Quantity = x.Quantity,
                         BlindBoxId = blindBox.BlindBoxId,
                         UnitPrice = blindBox.Price * (1 - blindBox.Discount / 100)
                     };
 
-                    order.TotalAmount += orderDetail.UnitPrice * orderDetail.Quantity;
+                    //order.TotalAmount += orderDetail.UnitPrice * orderDetail.Quantity;
 
                     await _uow.GetRepository<OrderDetail>().InsertAsync(orderDetail);
                 }
