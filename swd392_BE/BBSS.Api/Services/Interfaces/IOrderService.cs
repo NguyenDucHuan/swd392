@@ -7,7 +7,7 @@ namespace BBSS.Api.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task<MethodResult<string>> CreateOrderAsync(string email, OrderCreateRequest request);
+        Task<MethodResult<string>> CreateOrderAsync(string email, int? voucherId, OrderCreateRequest request);
         Task<MethodResult<IPaginate<OrderViewModel>>> GetOrdersByUserAsync(int userId);
         Task<MethodResult<IPaginate<OrderViewModel>>> GetAllOrdersAsync();
         Task<MethodResult<string>> CompleteOrderAsync(int userId, int orderId);

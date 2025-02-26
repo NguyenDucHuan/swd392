@@ -17,12 +17,12 @@ namespace BBSS.Api.Controllers
 
         [HttpPost("create-order")]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
-        public async Task<ActionResult> CreateOrder(OrderCreateRequest request)
+        public async Task<ActionResult> CreateOrder(int? voucherId, [FromBody]OrderCreateRequest request)
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (email == null) return Unauthorized();
 
-            var result = await _orderService.CreateOrderAsync(email, request);
+            var result = await _orderService.CreateOrderAsync(email, voucherId, request);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok

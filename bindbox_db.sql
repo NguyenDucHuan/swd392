@@ -66,7 +66,7 @@ CREATE TABLE blind_box (
     `status` BOOLEAN NOT NULL DEFAULT 1,
     size DOUBLE,    
     price DECIMAL(10, 2) NOT NULL,
-    discount DECIMAL(2, 2) NOT NULL DEFAULT 0,
+    discount DECIMAL(4, 2) NOT NULL DEFAULT 0,
     `number` INT NOT NULL,
     is_knowned BOOLEAN NOT NULL,
     is_special BOOLEAN NOT NULL,
@@ -171,6 +171,24 @@ CREATE TABLE inventory_item (
     FOREIGN KEY (blind_box_id) REFERENCES blind_box(blind_box_id)
 );
 
+INSERT INTO `user` (`name`, email, `password`, wallet_balance, `role`, date_of_birth, confirmed_email, `status`, phone, image)
+VALUES 
+('string', 'tanlmse170587@fpt.edu.vn', '$2a$11$A46icdJigFN1XwpE2VFfs.bvFKBtF7go.zey13OZbEJ6yzu3JppHm', 0.00, 'User', '2024-01-01', 0, 1, 'string', NULL);
+
+INSERT INTO voucher (voucher_code, `description`, discount_amount, start_date, end_date, minimum_purchase, usage_limit, `status`) VALUES
+('SUMMER2025', 'Discount for summer season', 20000.00, '2025-01-01 00:00:00', '2025-06-30 23:59:59', 100000.00, 100, 1),
+('BLACKFRIDAY25', 'Black Friday Special Discount', 25000.00, '2025-11-24 00:00:00', '2025-11-25 23:59:59', 50000.00, 100, 1),
+('XMAS2025', 'Christmas Discount', 15000.00, '2025-12-20 00:00:00', '2025-12-25 23:59:59', 75000.00, 100, 1),
+('NEWYEAR2025', 'New Year Celebration Discount', 30000.00, '2025-01-01 00:00:00', '2025-01-05 23:59:59', 120000.00, 100, 1),
+('CLEARANCE10', 'Discount on clearance items', 10000.00, '2025-03-01 00:00:00', '2025-03-15 23:59:59', NULL, 100, 1);
+
+INSERT INTO user_voucher (user_id, voucher_id) VALUES 
+(1, 1), 
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5);
+
 INSERT INTO category (name) VALUES
 ('Toys'),
 ('Collectibles'),
@@ -179,19 +197,36 @@ INSERT INTO category (name) VALUES
 INSERT INTO package (pakage_code, name, description, manufacturer, category_id) VALUES
 ('haha', 'Super Hero Series', 'Blind box containing superhero-themed items.', 'HeroCraft Co.', 1),
 ('hihi', 'Mystic Creatures', 'Mystical creatures from legends and folklore.', 'Fantasy Creations', 2),
-('hoho', 'Gadget Mystery', 'Blind box with tech and gadget accessories.', 'TechWorld', 3);
+('hoho', 'Gadget Mystery', 'Blind box with tech and gadget accessories.', 'TechWorld', 3),
+
+('PKG001', 'Luxury Package', 'A luxurious collection of blind boxes', 'Premium Toys Co.', 1),
+('PKG001', 'Luxury Package', 'A luxurious collection of blind boxes', 'Premium Toys Co.', 1);
 
 INSERT INTO blind_box (color, status, size, price, discount, number, is_knowned, is_special, package_id) VALUES
-('Red', 1, 12.5, 19.99, 0.10, 1, 0, 0, 1),
-('Blue', 1, 10.0, 15.99, 0.05, 1, 0, 1, 1),
+('Red', 1, 12.5, 19.99, 10, 1, 0, 0, 1),
+('Blue', 1, 10.0, 15.99, 5, 1, 0, 1, 1),
 ('Green', 1, 8.0, 12.49, 0.00, 1, 1, 0, 2),
-('Yellow', 1, 11.0, 20.99, 0.20, 1, 0, 1, 2),
-('Black', 1, 9.5, 18.50, 0.15, 1, 1, 0, 3),
-('White', 1, 7.5, 10.99, 0.05, 1, 0, 0, 3);
+('Yellow', 1, 11.0, 20.99, 20, 1, 0, 1, 2),
+('Black', 1, 9.5, 18.50, 15, 1, 1, 0, 3),
+('White', 1, 7.5, 10.99, 5, 1, 0, 0, 3),
 
-INSERT INTO `user` (`name`, email, `password`, wallet_balance, `role`, date_of_birth, confirmed_email, `status`, phone, image)
-VALUES 
-('string', 'tanlmse170587@fpt.edu.vn', '$2a$11$A46icdJigFN1XwpE2VFfs.bvFKBtF7go.zey13OZbEJ6yzu3JppHm', 0.00, 'User', '2024-01-01', 0, 1, 'string', NULL);
+('Red', 1, 12.5, 19.99, 10, 1, 0, 0, 4),
+('Red', 1, 12.5, 19.99, 10, 2, 0, 0, 4),
+('Red', 1, 12.5, 19.99, 10, 3, 0, 0, 4),
+('Red', 1, 12.5, 19.99, 10, 4, 0, 0, 4),
+('Red', 1, 12.5, 19.99, 10, 5, 0, 0, 4),
+('Red', 1, 12.5, 19.99, 10, 6, 0, 0, 4),
+('Red', 1, 12.5, 19.99, 10, 7, 0, 0, 4),
+('Red', 1, 12.5, 19.99, 10, 8, 0, 0, 4),
+
+('Red', 1, 12.5, 19.99, 10, 1, 0, 0, 5),
+('Red', 1, 12.5, 19.99, 10, 2, 0, 0, 5),
+('Red', 1, 12.5, 19.99, 10, 3, 0, 0, 5),
+('Red', 1, 12.5, 19.99, 10, 4, 0, 0, 5),
+('Red', 1, 12.5, 19.99, 10, 5, 0, 0, 5),
+('Red', 1, 12.5, 19.99, 10, 6, 0, 0, 5),
+('Red', 1, 12.5, 19.99, 10, 7, 0, 0, 5),
+('Red', 1, 12.5, 19.99, 10, 8, 0, 0, 5);
 
 INSERT INTO `order` (order_date, total_amount, phone, address, user_id, voucher_id) 
 VALUES 

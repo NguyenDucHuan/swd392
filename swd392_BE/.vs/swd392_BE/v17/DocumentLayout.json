@@ -3,32 +3,60 @@
   "WorkspaceRootPath": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\implements\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\implements\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\interfaces\\iorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\interfaces\\iorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\blindbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\blindbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\implements\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\implements\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\controllers\\excelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\controllers\\excelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\implements\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\implements\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\blindboxdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\models\\ordermodel\\ordercreaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\models\\ordermodel\\ordercreaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\mapper\\orderprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\mapper\\orderprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\interfaces\\iorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\interfaces\\iorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\blindbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\blindbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\implements\\excelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\implements\\excelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\controllers\\excelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\controllers\\excelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\extensions\\serviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -55,18 +83,6 @@
       "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\extensions\\swaggerextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\mapper\\orderprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\mapper\\orderprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\models\\ordermodel\\ordercreaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\models\\ordermodel\\ordercreaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\services\\implements\\paymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\services\\implements\\paymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -85,10 +101,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|solutionrelative:bbss.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.repository\\implements\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\implements\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{28BF8D82-5371-4076-9462-2FA41A0C8833}|BBSS.Api\\BBSS.Api.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.api\\viewmodels\\orderviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -157,10 +169,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|g:\\educaion\\ki_7\\swd392_lamnn\\swd392\\swd392_be\\bbss.domain\\entities\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\entities\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -170,7 +178,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 40,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
@@ -178,43 +186,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "IExcelService.cs",
-              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IExcelService.cs",
-              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\IExcelService.cs",
-              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IExcelService.cs",
-              "RelativeToolTip": "BBSS.Api\\Services\\Interfaces\\IExcelService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
+              "DocumentIndex": 2,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "BBSS.Repository\\Implements\\UnitOfWork.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\UnitOfWork.cs",
+              "RelativeToolTip": "BBSS.Repository\\Implements\\UnitOfWork.cs",
+              "ViewState": "AQIAADUAAAAAAAAAAAAuwD4AAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T18:43:16.395Z"
+              "WhenOpened": "2025-02-26T03:08:40.874Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "RevenueViewModel.cs",
-              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\ViewModels\\RevenueViewModel.cs",
-              "RelativeDocumentMoniker": "BBSS.Api\\ViewModels\\RevenueViewModel.cs",
-              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\ViewModels\\RevenueViewModel.cs",
-              "RelativeToolTip": "BBSS.Api\\ViewModels\\RevenueViewModel.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAqAAAA",
+              "DocumentIndex": 1,
+              "Title": "IUnitOfWork.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
+              "RelativeDocumentMoniker": "BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
+              "RelativeToolTip": "BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T18:17:38.192Z"
+              "WhenOpened": "2025-02-26T03:08:18.851Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ExcelService.cs",
-              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\ExcelService.cs",
-              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\ExcelService.cs",
-              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\ExcelService.cs",
-              "RelativeToolTip": "BBSS.Api\\Services\\Implements\\ExcelService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwA4AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T17:51:16.735Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 13,
               "Title": "ExcelController.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Controllers\\ExcelController.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Controllers\\ExcelController.cs",
@@ -226,7 +224,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 19,
               "Title": "SwaggerExtension.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Extensions\\SwaggerExtension.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Extensions\\SwaggerExtension.cs",
@@ -238,7 +236,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 21,
               "Title": "Program.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Program.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Program.cs",
@@ -250,7 +248,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 24,
               "Title": "launchSettings.json",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "BBSS.Api\\Properties\\launchSettings.json",
@@ -262,31 +260,32 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 3,
               "Title": "GenericRepository.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\GenericRepository.cs",
               "RelativeDocumentMoniker": "BBSS.Repository\\Implements\\GenericRepository.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\GenericRepository.cs",
               "RelativeToolTip": "BBSS.Repository\\Implements\\GenericRepository.cs",
-              "ViewState": "AQIAAEIAAAAAAAAAAAAuwFoAAAApAAAA",
+              "ViewState": "AQIAAF0AAAAAAAAAAAAgwCQAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-22T03:41:37.533Z"
+              "WhenOpened": "2025-02-22T03:41:37.533Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 10,
               "Title": "BlindBox.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\BlindBox.cs",
               "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\BlindBox.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\BlindBox.cs",
               "RelativeToolTip": "BBSS.Domain\\Entities\\BlindBox.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAA0AAAAlAAAA",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAzwBkAAAAkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-22T03:21:55.739Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 25,
               "Title": "OrderViewModel.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\ViewModels\\OrderViewModel.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\ViewModels\\OrderViewModel.cs",
@@ -298,19 +297,81 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "OrderService.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\OrderService.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\OrderService.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\OrderService.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Implements\\OrderService.cs",
+              "ViewState": "AQIAAD0AAAAAAAAAAAAAAFMAAABzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-21T09:19:38.875Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 5,
               "Title": "OrderController.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Controllers\\OrderController.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Controllers\\OrderController.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Controllers\\OrderController.cs",
               "RelativeToolTip": "BBSS.Api\\Controllers\\OrderController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAxAAAA",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAjwBkAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-21T19:06:06.679Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
+              "Title": "BlindboxDbContext.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\BlindboxDbContext.cs",
+              "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\BlindboxDbContext.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\BlindboxDbContext.cs",
+              "RelativeToolTip": "BBSS.Domain\\Entities\\BlindboxDbContext.cs",
+              "ViewState": "AQIAAC4AAAAAZmZmZmYuwEMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-21T09:19:18.617Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ExcelService.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\ExcelService.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\ExcelService.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\ExcelService.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Implements\\ExcelService.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAAA4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-23T17:51:16.735Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "RevenueViewModel.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\ViewModels\\RevenueViewModel.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\ViewModels\\RevenueViewModel.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\ViewModels\\RevenueViewModel.cs",
+              "RelativeToolTip": "BBSS.Api\\ViewModels\\RevenueViewModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-23T18:17:38.192Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IExcelService.cs",
+              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IExcelService.cs",
+              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\IExcelService.cs",
+              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IExcelService.cs",
+              "RelativeToolTip": "BBSS.Api\\Services\\Interfaces\\IExcelService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-23T18:43:16.395Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
               "Title": "ServiceExtension.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Extensions\\ServiceExtension.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Extensions\\ServiceExtension.cs",
@@ -322,7 +383,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 23,
               "Title": "AuthenticationExtension.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Extensions\\AuthenticationExtension.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Extensions\\AuthenticationExtension.cs",
@@ -334,19 +395,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 8,
               "Title": "IOrderService.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IOrderService.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\IOrderService.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IOrderService.cs",
               "RelativeToolTip": "BBSS.Api\\Services\\Interfaces\\IOrderService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwA8AAAABAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAABuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-21T19:03:41.824Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 18,
               "Title": "PaymentController.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Controllers\\PaymentController.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Controllers\\PaymentController.cs",
@@ -358,7 +419,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 32,
               "Title": "OrderConstant.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Constants\\OrderConstant.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Constants\\OrderConstant.cs",
@@ -370,7 +431,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 33,
               "Title": "UserConstant.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Constants\\UserConstant.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Constants\\UserConstant.cs",
@@ -382,7 +443,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 17,
               "Title": "AuthenticationController.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Controllers\\AuthenticationController.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Controllers\\AuthenticationController.cs",
@@ -394,7 +455,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 36,
               "Title": "OrderStatus.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\OrderStatus.cs",
               "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\OrderStatus.cs",
@@ -406,7 +467,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 38,
               "Title": "User.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\User.cs",
               "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\User.cs",
@@ -418,7 +479,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 34,
               "Title": "AuthenticationService.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\AuthenticationService.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\AuthenticationService.cs",
@@ -430,7 +491,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 37,
               "Title": "TokenGenerator.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\TokenGenerator.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\TokenGenerator.cs",
@@ -442,7 +503,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 20,
               "Title": "PaymentService.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\PaymentService.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\PaymentService.cs",
@@ -454,7 +515,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 39,
               "Title": "VnPaymentResponseModel.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\VnPayModel\\VnPaymentResponseModel.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Models\\VnPayModel\\VnPaymentResponseModel.cs",
@@ -466,7 +527,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 27,
               "Title": "VnPaymentRequestModel.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\VnPayModel\\VnPaymentRequestModel.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Models\\VnPayModel\\VnPaymentRequestModel.cs",
@@ -478,7 +539,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 31,
               "Title": "IPaymentService.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IPaymentService.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\IPaymentService.cs",
@@ -490,7 +551,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 30,
               "Title": "IEmailService.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Interfaces\\IEmailService.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Services\\Interfaces\\IEmailService.cs",
@@ -502,7 +563,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 28,
               "Title": "VnPayConfig.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\Configurations\\VnPayConfig.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Models\\Configurations\\VnPayConfig.cs",
@@ -514,7 +575,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 29,
               "Title": "MailConfiguration.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\Configurations\\MailConfiguration.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Models\\Configurations\\MailConfiguration.cs",
@@ -526,7 +587,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 40,
               "Title": "MethodResult.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Helper\\MethodResult.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Helper\\MethodResult.cs",
@@ -538,7 +599,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 22,
               "Title": "VnPayLibrary.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Helper\\VnPayLibrary.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Helper\\VnPayLibrary.cs",
@@ -550,19 +611,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 9,
               "Title": "appsettings.json",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\appsettings.json",
               "RelativeDocumentMoniker": "BBSS.Api\\appsettings.json",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\appsettings.json",
               "RelativeToolTip": "BBSS.Api\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAIBJwA4AAAAgAAAA",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABQAAAAYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-02-21T17:02:25.162Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 26,
               "Title": "Order.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\Order.cs",
               "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\Order.cs",
@@ -574,7 +635,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 41,
               "Title": "OrderDetail.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\OrderDetail.cs",
               "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\OrderDetail.cs",
@@ -586,19 +647,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 11,
               "Title": "Package.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\Package.cs",
               "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\Package.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\Package.cs",
               "RelativeToolTip": "BBSS.Domain\\Entities\\Package.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-21T14:41:38.689Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 35,
               "Title": "UserProfile.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Mapper\\UserProfile.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Mapper\\UserProfile.cs",
@@ -610,53 +671,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 7,
               "Title": "OrderProfile.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Mapper\\OrderProfile.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Mapper\\OrderProfile.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Mapper\\OrderProfile.cs",
               "RelativeToolTip": "BBSS.Api\\Mapper\\OrderProfile.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAoAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAABbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-21T09:20:48.611Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 6,
               "Title": "OrderCreateRequest.cs",
               "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\OrderModel\\OrderCreateRequest.cs",
               "RelativeDocumentMoniker": "BBSS.Api\\Models\\OrderModel\\OrderCreateRequest.cs",
               "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Models\\OrderModel\\OrderCreateRequest.cs",
               "RelativeToolTip": "BBSS.Api\\Models\\OrderModel\\OrderCreateRequest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAcAAAAIAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBMAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-21T09:19:47.451Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "OrderService.cs",
-              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\OrderService.cs",
-              "RelativeDocumentMoniker": "BBSS.Api\\Services\\Implements\\OrderService.cs",
-              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Api\\Services\\Implements\\OrderService.cs",
-              "RelativeToolTip": "BBSS.Api\\Services\\Implements\\OrderService.cs",
-              "ViewState": "AQIAAKMAAAAAAAAAAAAswLUAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-21T09:19:38.875Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "BlindboxDbContext.cs",
-              "DocumentMoniker": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\BlindboxDbContext.cs",
-              "RelativeDocumentMoniker": "BBSS.Domain\\Entities\\BlindboxDbContext.cs",
-              "ToolTip": "G:\\Educaion\\Ki_7\\SWD392_LamNN\\swd392\\swd392_BE\\BBSS.Domain\\Entities\\BlindboxDbContext.cs",
-              "RelativeToolTip": "BBSS.Domain\\Entities\\BlindboxDbContext.cs",
-              "ViewState": "AQIAACsAAAAAMzMzMzM8wEIAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-21T09:19:18.617Z",
-              "EditorCaption": ""
             }
           ]
         }

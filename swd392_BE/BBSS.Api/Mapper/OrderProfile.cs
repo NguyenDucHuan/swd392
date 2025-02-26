@@ -11,7 +11,6 @@ namespace BBSS.Api.Mapper
         public OrderProfile()
         {
             CreateMap<OrderCreateRequest, Order>()
-                .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId ?? null))
                 .ForMember(dest => dest.OrderDate, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => 0));
 
