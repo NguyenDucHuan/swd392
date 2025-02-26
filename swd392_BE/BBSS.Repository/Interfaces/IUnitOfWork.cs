@@ -7,6 +7,12 @@ namespace BBSS.Repository.Interfaces
         int Commit();
 
         Task<int> CommitAsync();
+
+        Task BeginTransactionAsync();
+
+        Task CommitTransactionAsync();
+
+        Task RollbackTransactionAsync();
     }
 
     public interface IUnitOfWork<TContext> : IUnitOfWork where TContext : DbContext

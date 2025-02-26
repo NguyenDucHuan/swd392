@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using BBSS.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BBSS.Repository.Implement;
 
 public class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
 {
     public TContext Context { get; }
-    private Dictionary<Type, object> _repositories;
+    private Dictionary<Type, object> _repositories; 
+    private IDbContextTransaction? _transaction;
 
     public UnitOfWork(TContext context)
     {
@@ -55,6 +57,31 @@ public class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbCon
             var exceptionMessage = string.Join(Environment.NewLine,
                 validationErrors.Select(error => $"Properties {error.MemberNames} Error: {error.ErrorMessage}"));
             throw new Exception(exceptionMessage);
+        }
+    }
+
+    public async Task BeginTransactionAsync()
+    {
+        _transaction = await Context.Database.BeginTransactionAsync();
+    }
+
+    public async Task CommitTransactionAsync()
+    {
+        if (_transaction != null)
+        {
+            await _transaction.CommitAsync();
+            await _transaction.DisposeAsync();
+            _transaction = null;
+        }
+    }
+
+    public async Task RollbackTransactionAsync()
+    {
+        if (_transaction != null)
+        {
+            await _transaction.RollbackAsync();
+            await _transaction.DisposeAsync();
+            _transaction = null;
         }
     }
 }

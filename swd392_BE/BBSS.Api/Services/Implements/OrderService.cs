@@ -22,14 +22,11 @@ namespace BBSS.Api.Services.Implements
             _mapper = mapper;
         }
 
-        public async Task<MethodResult<string>> CreateOrderAsync(string email, OrderCreateRequest request)
+        public async Task<MethodResult<string>> CreateOrderAsync(string email, int? voucherId, OrderCreateRequest request)
         {
+            await _uow.BeginTransactionAsync();
             try
-            {
-                if (request.BlindBoxs == null || !request.BlindBoxs.Any())
-                {
-                    return new MethodResult<string>.Failure("vcl", StatusCodes.Status404NotFound);
-                }
+            {            
                 var user = await _uow.GetRepository<User>().SingleOrDefaultAsync(
                     predicate: p => p.Email == email
                 );
@@ -44,29 +41,28 @@ namespace BBSS.Api.Services.Implements
                 await _uow.GetRepository<Order>().InsertAsync(order);
                 await _uow.CommitAsync();
 
-                foreach (var x in request.BlindBoxs)
+                foreach (var product in request.Products)
                 {
-                    var blindBox = await _uow.GetRepository<BlindBox>().SingleOrDefaultAsync(
-                        predicate: p => p.PackageId == x.PackageId && p.Number == x.Number
-                    );
-
-                    var orderDetail = new OrderDetail
+                    if (product.Type == "Package")
                     {
-                        OrderId = order.OrderId,
-                        //Quantity = x.Quantity,
-                        BlindBoxId = blindBox.BlindBoxId,
-                        UnitPrice = blindBox.Price * (1 - blindBox.Discount / 100)
-                    };
-
-                    //order.TotalAmount += orderDetail.UnitPrice * orderDetail.Quantity;
-
-                    await _uow.GetRepository<OrderDetail>().InsertAsync(orderDetail);
+                        await HandlePackageProductAsync(product, order);
+                        await _uow.CommitAsync();
+                    }
+                    else if (product.Type == "BlindBox")
+                    {
+                        await HandleBlindBoxProductAsync(product, order);
+                        await _uow.CommitAsync();
+                    }
+                    else
+                    {
+                        return new MethodResult<string>.Failure("Invalid type product", StatusCodes.Status400BadRequest);
+                    }                    
                 }
 
-                if (request.VoucherId.HasValue)
+                if (voucherId.HasValue)
                 {
                     var voucher = await _uow.GetRepository<Voucher>().SingleOrDefaultAsync(
-                        predicate: p => p.VoucherId == request.VoucherId
+                        predicate: p => p.VoucherId == voucherId
                     );
                     if (voucher == null)
                     {
@@ -81,25 +77,254 @@ namespace BBSS.Api.Services.Implements
                         return new MethodResult<string>.Failure("Minimum purchase is not enough for voucher", StatusCodes.Status404NotFound);
                     }
                     var userVoucher = await _uow.GetRepository<UserVoucher>().SingleOrDefaultAsync(
-                            predicate: p => p.VoucherId == request.VoucherId && p.UserId == user.UserId
+                            predicate: p => p.VoucherId == voucherId && p.UserId == user.UserId
                         );
                     if (userVoucher == null)
                     {
                         return new MethodResult<string>.Failure("Out date voucher", StatusCodes.Status404NotFound);
                     }
 
-                    order.TotalAmount = order.TotalAmount - voucher.DiscountAmount;
+                    order.VoucherId = voucherId;
+                    order.TotalAmount = order.TotalAmount > voucher.DiscountAmount ? order.TotalAmount - voucher.DiscountAmount : 0;
+                    await UpdateUserVoucher(userVoucher);
                 }
 
                 _uow.GetRepository<Order>().UpdateAsync(order);
                 await CreateOrderStatusAsync(order);
+
                 await _uow.CommitAsync();
+                await _uow.CommitTransactionAsync();
                 return new MethodResult<string>.Success("Create order successfully");
             }
             catch (Exception e)
             {
+                await _uow.RollbackTransactionAsync();
                 return new MethodResult<string>.Failure(e.ToString(), StatusCodes.Status500InternalServerError);
             }
+        }
+
+        private async Task HandlePackageProductAsync(OrderDetailCreateRequest product, Order order)
+        {
+            var packages = await _uow.GetRepository<Package>().GetListAsync(
+                predicate: p => p.PakageCode == product.PakageCode && !p.BlindBoxes.Any(bb => bb.IsSold),
+                include: i => i.Include(x => x.BlindBoxes)
+            );
+
+            if (!packages.Any())
+            {
+                throw new Exception("Do not enough pakage");
+            }
+
+            var selectedPackages = packages.Take(product.Quantity);
+            foreach (var package in selectedPackages)
+            {
+                decimal packagePrice = 0;
+
+                foreach (var blindBox in package.BlindBoxes)
+                {
+                    blindBox.IsSold = true;
+                    packagePrice += blindBox.Price * (1 - blindBox.Discount / 100);
+                }
+
+                _uow.GetRepository<BlindBox>().UpdateRange(package.BlindBoxes);
+
+                var orderDetail = new OrderDetail
+                {
+                    OrderId = order.OrderId,
+                    PackageId = package.PackageId,
+                    UnitPrice = packagePrice
+                };
+
+                await _uow.GetRepository<OrderDetail>().InsertAsync(orderDetail);
+                order.TotalAmount += packagePrice;
+            }
+        }
+
+        private async Task HandleBlindBoxProductAsync(OrderDetailCreateRequest product, Order order)
+        {
+            var packageWithAtLeastBB = await _uow.GetRepository<Package>().SingleOrDefaultAsync(
+                            include: i => i.Include(x => x.BlindBoxes),
+                            predicate: p => p.PakageCode == product.PakageCode && p.BlindBoxes.Any(bb => !bb.IsSold),
+                            orderBy: o => o.OrderBy(x => x.BlindBoxes.Count(bb => !bb.IsSold))
+                        );
+
+
+            if (packageWithAtLeastBB == null)
+            {
+                throw new Exception("Do not enough blind box");
+            }
+
+            if (product.Quantity <= packageWithAtLeastBB.BlindBoxes.Count(bb => !bb.IsSold))
+            {
+                var blindBoxIds = packageWithAtLeastBB.BlindBoxes
+                                                                .Where(bb => !bb.IsSold)
+                                                                .Take(product.Quantity)
+                                                                .Select(bb => bb.BlindBoxId)
+                                                                .ToList();
+
+                var blindBoxs = await _uow.GetRepository<BlindBox>().GetListAsync(
+                    predicate: bb => blindBoxIds.Contains(bb.BlindBoxId)
+                );
+
+                foreach (var blindBox in blindBoxs)
+                {
+                    blindBox.IsSold = true;
+
+                    var orderDetail = new OrderDetail
+                    {
+                        OrderId = order.OrderId,
+                        BlindBoxId = blindBox.BlindBoxId,
+                        UnitPrice = blindBox.Price * (1 - blindBox.Discount / 100)
+                    };
+
+                    await _uow.GetRepository<OrderDetail>().InsertAsync(orderDetail);
+                    order.TotalAmount += orderDetail.UnitPrice;
+                }
+
+                _uow.GetRepository<BlindBox>().UpdateRange(blindBoxs);
+            }
+            else
+            {
+                var numOfBBLeft = product.Quantity - packageWithAtLeastBB.BlindBoxes.Count(bb => !bb.IsSold);
+                var numOfPackageNext = (numOfBBLeft / 8) + 1;
+
+                foreach (var blindBox in packageWithAtLeastBB.BlindBoxes)
+                {
+                    blindBox.IsSold = true;
+
+                    var orderDetail = new OrderDetail
+                    {
+                        OrderId = order.OrderId,
+                        BlindBoxId = blindBox.BlindBoxId,
+                        UnitPrice = blindBox.Price * (1 - blindBox.Discount / 100)
+                    };
+
+                    await _uow.GetRepository<OrderDetail>().InsertAsync(orderDetail);
+                    order.TotalAmount += orderDetail.UnitPrice;
+                }
+
+                _uow.GetRepository<BlindBox>().UpdateRange(packageWithAtLeastBB.BlindBoxes);                
+
+                if (numOfPackageNext == 1)
+                {
+                    var package = await _uow.GetRepository<Package>().SingleOrDefaultAsync(
+                        include: i => i.Include(x => x.BlindBoxes),
+                        predicate: p => p.PakageCode == product.PakageCode &&
+                                        !p.BlindBoxes.Any(bb => bb.IsSold)
+                    );
+
+                    if (package == null)
+                    {
+                        throw new Exception("Do not enough blind box");
+                    }
+
+                    var blindBoxIds = package.BlindBoxes                                                                
+                                                        .Take(numOfBBLeft)
+                                                        .Select(bb => bb.BlindBoxId)
+                                                        .ToList();
+
+                    var blindBoxs = await _uow.GetRepository<BlindBox>().GetListAsync(
+                        predicate: bb => blindBoxIds.Contains(bb.BlindBoxId)
+                    );
+
+                    foreach (var blindBox in blindBoxs)
+                    {
+                        blindBox.IsSold = true;
+
+                        var orderDetail = new OrderDetail
+                        {
+                            OrderId = order.OrderId,
+                            BlindBoxId = blindBox.BlindBoxId,
+                            UnitPrice = blindBox.Price * (1 - blindBox.Discount / 100)
+                        };
+
+                        await _uow.GetRepository<OrderDetail>().InsertAsync(orderDetail);
+                        order.TotalAmount += orderDetail.UnitPrice;
+                    }
+
+                    _uow.GetRepository<BlindBox>().UpdateRange(blindBoxs);
+                }
+                else
+                {
+                    var list = await _uow.GetRepository<Package>().GetListAsync(
+                        include: i => i.Include(x => x.BlindBoxes),
+                        predicate: p => p.PakageCode == product.PakageCode &&
+                                        !p.BlindBoxes.Any(bb => bb.IsSold)
+                    );
+
+                    if (!list.Any())
+                    {
+                        throw new Exception("Do not enough blind box");
+                    }
+
+                    var packageIds = list.Select(p => p.PackageId).Take(numOfPackageNext - 1).ToList();
+
+                    var packagesNext = await _uow.GetRepository<Package>().GetListAsync(
+                        include: i => i.Include(x => x.BlindBoxes),
+                        predicate: p => packageIds.Contains(p.PackageId)
+                    );
+                    foreach (var package in packagesNext)
+                    {
+                        foreach (var blindBox in package.BlindBoxes)
+                        {
+                            blindBox.IsSold = true;
+
+                            var orderDetail = new OrderDetail
+                            {
+                                OrderId = order.OrderId,
+                                BlindBoxId = blindBox.BlindBoxId,
+                                UnitPrice = blindBox.Price * (1 - blindBox.Discount / 100)
+                            };
+
+                            await _uow.GetRepository<OrderDetail>().InsertAsync(orderDetail);
+                            order.TotalAmount += orderDetail.UnitPrice;
+                        }
+
+                        _uow.GetRepository<BlindBox>().UpdateRange(package.BlindBoxes);
+                    }
+
+                    var packageLast = await _uow.GetRepository<Package>().SingleOrDefaultAsync(
+                        include: i => i.Include(x => x.BlindBoxes),
+                        predicate: p => p.PakageCode == product.PakageCode &&
+                                        !p.BlindBoxes.Any(bb => bb.IsSold)
+                    );
+
+                    if (packageLast == null)
+                    {
+                        throw new Exception("Do not enough blind box");
+                    }
+
+                    var numOfBBInLastPk = numOfBBLeft - ((numOfBBLeft - 1) * 8);
+
+                    var blindBoxs = packageLast.BlindBoxes
+                                                          .Take(numOfBBInLastPk)
+                                                          .ToList();
+
+                    foreach (var blindBox in blindBoxs)
+                    {
+                        blindBox.IsSold = true;
+
+                        var orderDetail = new OrderDetail
+                        {
+                            OrderId = order.OrderId,
+                            BlindBoxId = blindBox.BlindBoxId,
+                            UnitPrice = blindBox.Price * (1 - blindBox.Discount / 100)
+                        };
+
+                        await _uow.GetRepository<OrderDetail>().InsertAsync(orderDetail);
+                        order.TotalAmount += orderDetail.UnitPrice;
+                    }
+
+                    _uow.GetRepository<BlindBox>().UpdateRange(blindBoxs);
+                }
+            }
+        }
+
+        private async Task UpdateUserVoucher(UserVoucher userVoucher)
+        {
+            userVoucher.RedeemedDate = DateTime.Now;
+            userVoucher.Status = true;
+            _uow.GetRepository<UserVoucher>().UpdateAsync(userVoucher);
         }
 
         private async Task CreateOrderStatusAsync(Order order)
