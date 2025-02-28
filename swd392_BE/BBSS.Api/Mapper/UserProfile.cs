@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BBSS.Api.Constants;
 using BBSS.Api.Models.AuthenticationModel;
+using BBSS.Api.Models.UserModel;
+using BBSS.Api.ViewModels;
 using BBSS.Domain.Entities;
 using Microsoft.VisualBasic;
 using System.Security.Principal;
@@ -17,6 +19,8 @@ namespace BBSS.Api.Mapper
                   .ForMember(dest => dest.Role, opt => opt.MapFrom(src => UserConstant.USER_ROLE_USER))
                   .ForMember(dest => dest.ConfirmedEmail, opt => opt.MapFrom(src => UserConstant.USER_CONFIRMED_EMAIL_INACTIVE))
                   .ForMember(dest => dest.Status, opt => opt.MapFrom(src => UserConstant.USER_STATUS_ACTIVE));
+            CreateMap<User, ProfileViewModel>();
+            CreateMap<UpdateProfileRequest, User>();
         }
     }
 }
