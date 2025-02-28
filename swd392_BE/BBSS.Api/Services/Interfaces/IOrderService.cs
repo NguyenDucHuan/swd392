@@ -11,6 +11,7 @@ namespace BBSS.Api.Services.Interfaces
         Task<MethodResult<IPaginate<OrderViewModel>>> GetOrdersByUserAsync(int userId);
         Task<MethodResult<IPaginate<OrderViewModel>>> GetAllOrdersAsync();
         Task<MethodResult<string>> CompleteOrderAsync(int userId, int orderId);
-        Task<MethodResult<string>> CancelOrderAsync(int userId, int orderId);
+        Task<MethodResult<string>> CancelOrderAsync(int orderId);
+        Task<MethodResult<string>> ConfirmOrderAsync(int orderId);
     }
 }

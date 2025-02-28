@@ -37,7 +37,7 @@ namespace BBSS.Api.Extensions
                 {
                     Type = "string",
                     Format = "date",
-                    Example = new OpenApiString("2024-01-01")
+                    Example = new OpenApiString("2025-01-01")
                 });
             });
 

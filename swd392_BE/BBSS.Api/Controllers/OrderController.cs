@@ -42,11 +42,10 @@ namespace BBSS.Api.Controllers
         }
 
         [HttpPost("cancel-order")]
-        [Authorize(Roles = UserConstant.USER_ROLE_USER)]
+        [Authorize(Roles = $"{UserConstant.USER_ROLE_USER}, {UserConstant.USER_ROLE_STAFF}")]
         public async Task<ActionResult> CancelOrder(int orderId)
         {
-            var userId = Int32.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            var result = await _orderService.CancelOrderAsync(userId, orderId);
+            var result = await _orderService.CancelOrderAsync(orderId);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok
@@ -66,7 +65,7 @@ namespace BBSS.Api.Controllers
         }
 
         [HttpGet("get-all-order")]
-        [Authorize(Roles = UserConstant.USER_ROLE_USER)]
+        [Authorize(Roles = UserConstant.USER_ROLE_STAFF)]
         public async Task<ActionResult> GetAllOrders()
         {
             var result = await _orderService.GetAllOrdersAsync();

@@ -401,7 +401,7 @@ namespace BBSS.Api.Services.Implements
             }
         }
 
-        public async Task<MethodResult<string>> CancelOrderAsync(int userId, int orderId)
+        public async Task<MethodResult<string>> CancelOrderAsync(int orderId)
         {
             try
             {
@@ -412,11 +412,7 @@ namespace BBSS.Api.Services.Implements
                 {
                     return new MethodResult<string>.Failure("Order not found", StatusCodes.Status404NotFound);
                 }
-                if (order.UserId != userId)
-                {
-                    return new MethodResult<string>.Failure("User do not have this order", StatusCodes.Status404NotFound);
-                }
-
+                
                 var orderStatusCurrent = await _uow.GetRepository<OrderStatus>().SingleOrDefaultAsync(
                     predicate: p => p.OrderId == orderId,
                     orderBy: o => o.OrderByDescending(x => x.UpdateTime)
@@ -437,6 +433,45 @@ namespace BBSS.Api.Services.Implements
                 await _uow.CommitAsync();
 
                 return new MethodResult<string>.Success("Cancel order successfully");
+            }
+            catch (Exception e)
+            {
+                return new MethodResult<string>.Failure(e.ToString(), StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        public async Task<MethodResult<string>> ConfirmOrderAsync(int orderId)
+        {
+            try
+            {
+                var order = await _uow.GetRepository<Order>().SingleOrDefaultAsync(
+                    predicate: p => p.OrderId == orderId
+                );
+                if (order == null)
+                {
+                    return new MethodResult<string>.Failure("Order not found", StatusCodes.Status404NotFound);
+                }
+               
+                var orderStatusCurrent = await _uow.GetRepository<OrderStatus>().SingleOrDefaultAsync(
+                    predicate: p => p.OrderId == orderId,
+                    orderBy: o => o.OrderByDescending(x => x.UpdateTime)
+                );
+                if (orderStatusCurrent.Status != OrderConstant.ORDER_STATUS_PAID)
+                {
+                    return new MethodResult<string>.Failure($"Order status is {orderStatusCurrent.Status}", StatusCodes.Status400BadRequest);
+                }
+
+                var orderStatus = new OrderStatus
+                {
+                    OrderId = orderId,
+                    UpdateTime = DateTime.Now,
+                    Status = OrderConstant.ORDER_STATUS_SHIPPING,
+                };
+
+                await _uow.GetRepository<OrderStatus>().InsertAsync(orderStatus);
+                await _uow.CommitAsync();
+
+                return new MethodResult<string>.Success("Confirm order successfully");
             }
             catch (Exception e)
             {
