@@ -19,12 +19,25 @@ namespace BBSS.Api.Controllers
 
         [HttpPost("payment")]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
-        public async Task<ActionResult> Payment(int orderId)
+        public async Task<ActionResult> Payment(int orderId, string type)
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (email == null) return Unauthorized();
 
-            var result = await _paymentService.CreatePaymentAsync(email, orderId, HttpContext);
+            var result = await _paymentService.CreatePaymentAsync(email, orderId, type, HttpContext);
+            return result.Match(
+                (l, c) => Problem(detail: l, statusCode: c),
+                Ok
+            );
+        }
+        [HttpPost("add-to-wallet")]
+        [Authorize(Roles = UserConstant.USER_ROLE_USER)]
+        public async Task<ActionResult> AddToWallet(decimal amount)
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (email == null) return Unauthorized();
+
+            var result = await _paymentService.AddToWalletAsync(email, amount, HttpContext);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok
@@ -46,6 +59,6 @@ namespace BBSS.Api.Controllers
             }
 
             return Redirect($"{redirectUrl}/success");
-        }
+        }        
     }
 }

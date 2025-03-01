@@ -129,8 +129,8 @@ CREATE TABLE order_detail (
 
 CREATE TABLE `transaction` (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
-    `type` ENUM('Deposit', 'Deduction', 'BlindBoxOpen'),
-    related_id INT NOT NULL,
+    `type` ENUM('Wallet', 'Deposit', 'Deduction', 'BlindBoxOpen'),
+    related_id INT,
     amount DECIMAL(10, 2) NOT NULL,
     create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `description` VARCHAR(255),
@@ -203,30 +203,30 @@ INSERT INTO package (pakage_code, name, description, manufacturer, category_id) 
 ('PKG001', 'Luxury Package', 'A luxurious collection of blind boxes', 'Premium Toys Co.', 1);
 
 INSERT INTO blind_box (color, status, size, price, discount, number, is_knowned, is_special, package_id) VALUES
-('Red', 1, 12.5, 19.99, 10, 1, 0, 0, 1),
-('Blue', 1, 10.0, 15.99, 5, 1, 0, 1, 1),
-('Green', 1, 8.0, 12.49, 0.00, 1, 1, 0, 2),
-('Yellow', 1, 11.0, 20.99, 20, 1, 0, 1, 2),
-('Black', 1, 9.5, 18.50, 15, 1, 1, 0, 3),
-('White', 1, 7.5, 10.99, 5, 1, 0, 0, 3),
+('Red', 1, 12.5, 190000, 10, 1, 0, 0, 1),
+('Blue', 1, 10.0, 190000, 5, 2, 0, 1, 1),
+('Green', 1, 8.0, 190000, 0.00, 1, 1, 0, 2),
+('Yellow', 1, 11.0, 190000, 20, 1, 0, 1, 2),
+('Black', 1, 9.5, 190000, 15, 1, 1, 0, 3),
+('White', 1, 7.5, 190000, 5, 1, 0, 0, 3),
 
-('Red', 1, 12.5, 19.99, 10, 1, 0, 0, 4),
-('Red', 1, 12.5, 19.99, 10, 2, 0, 0, 4),
-('Red', 1, 12.5, 19.99, 10, 3, 0, 0, 4),
-('Red', 1, 12.5, 19.99, 10, 4, 0, 0, 4),
-('Red', 1, 12.5, 19.99, 10, 5, 0, 0, 4),
-('Red', 1, 12.5, 19.99, 10, 6, 0, 0, 4),
-('Red', 1, 12.5, 19.99, 10, 7, 0, 0, 4),
-('Red', 1, 12.5, 19.99, 10, 8, 0, 0, 4),
+('Red', 1, 12.5, 190000, 10, 1, 0, 0, 4),
+('Red', 1, 12.5, 190000, 10, 2, 0, 0, 4),
+('Red', 1, 12.5, 190000, 10, 3, 0, 0, 4),
+('Red', 1, 12.5, 190000, 10, 4, 0, 0, 4),
+('Red', 1, 12.5, 190000, 10, 5, 0, 0, 4),
+('Red', 1, 12.5, 190000, 10, 6, 0, 0, 4),
+('Red', 1, 12.5, 190000, 10, 7, 0, 0, 4),
+('Red', 1, 12.5, 190000, 10, 8, 0, 0, 4),
 
-('Red', 1, 12.5, 19.99, 10, 1, 0, 0, 5),
-('Red', 1, 12.5, 19.99, 10, 2, 0, 0, 5),
-('Red', 1, 12.5, 19.99, 10, 3, 0, 0, 5),
-('Red', 1, 12.5, 19.99, 10, 4, 0, 0, 5),
-('Red', 1, 12.5, 19.99, 10, 5, 0, 0, 5),
-('Red', 1, 12.5, 19.99, 10, 6, 0, 0, 5),
-('Red', 1, 12.5, 19.99, 10, 7, 0, 0, 5),
-('Red', 1, 12.5, 19.99, 10, 8, 0, 0, 5);
+('Red', 1, 12.5, 200000, 10, 1, 0, 0, 5),
+('Red', 1, 12.5, 200000, 10, 2, 0, 0, 5),
+('Red', 1, 12.5, 200000, 10, 3, 0, 0, 5),
+('Red', 1, 12.5, 200000, 10, 4, 0, 0, 5),
+('Red', 1, 12.5, 200000, 10, 5, 0, 0, 5),
+('Red', 1, 12.5, 200000, 10, 6, 0, 0, 5),
+('Red', 1, 12.5, 200000, 10, 7, 0, 0, 5),
+('Red', 1, 12.5, 200000, 10, 8, 0, 0, 5);
 
 INSERT INTO `order` (order_date, total_amount, phone, address, user_id, voucher_id) 
 VALUES 
