@@ -1,0 +1,6 @@
+@BBSS.Api_HostAddress = http://localhost:5114
+
+GET {{BBSS.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
