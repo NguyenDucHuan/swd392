@@ -3,8 +3,9 @@ namespace BBSS.Api.Models.VnPayModel
 {
     public class VnPaymentRequestModel
     {
-        public int OrderId { get; set; }
-        public float Amount { get; set; }
+        public int RelateId { get; set; }
+        public decimal Amount { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string Type { get; set; }
     }
 }
