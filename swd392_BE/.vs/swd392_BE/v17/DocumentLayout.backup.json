@@ -1,40 +1,7 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|e:\\term7\\swd392\\swd392\\swd392_be\\bbss.repository\\implements\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\implements\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|e:\\term7\\swd392\\swd392\\swd392_be\\bbss.repository\\implements\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\implements\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|e:\\term7\\swd392\\swd392\\swd392_be\\bbss.repository\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|e:\\term7\\swd392\\swd392\\swd392_be\\bbss.repository\\interfaces\\igenericrepositoryfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\interfaces\\igenericrepositoryfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|e:\\term7\\swd392\\swd392\\swd392_be\\bbss.repository\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0B56B09A-7316-470E-85BE-A938B57B490E}|BBSS.Repository\\BBSS.Repository.csproj|solutionrelative:bbss.repository\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|e:\\term7\\swd392\\swd392\\swd392_be\\bbss.domain\\paginate\\paginate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\paginate\\paginate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|e:\\term7\\swd392\\swd392\\swd392_be\\bbss.domain\\paginate\\ipaginate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\paginate\\ipaginate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|e:\\term7\\swd392\\swd392\\swd392_be\\bbss.domain\\paginate\\paginateextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C1A9A8E-185E-4D4F-A51F-88218B2AAFBC}|BBSS.Domain\\BBSS.Domain.csproj|solutionrelative:bbss.domain\\paginate\\paginateextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "WorkspaceRootPath": "E:\\TERM7\\New folder\\swd392\\swd392_BE\\",
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -42,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -55,110 +22,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UnitOfWork.cs",
-              "DocumentMoniker": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\UnitOfWork.cs",
-              "RelativeDocumentMoniker": "BBSS.Repository\\Implements\\UnitOfWork.cs",
-              "ToolTip": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\UnitOfWork.cs",
-              "RelativeToolTip": "BBSS.Repository\\Implements\\UnitOfWork.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T07:17:28.865Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "IUnitOfWork.cs",
-              "DocumentMoniker": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
-              "RelativeDocumentMoniker": "BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
-              "ToolTip": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
-              "RelativeToolTip": "BBSS.Repository\\Interfaces\\IUnitOfWork.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T07:15:25.058Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "IGenericRepositoryFactory.cs",
-              "DocumentMoniker": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IGenericRepositoryFactory.cs",
-              "RelativeDocumentMoniker": "BBSS.Repository\\Interfaces\\IGenericRepositoryFactory.cs",
-              "ToolTip": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IGenericRepositoryFactory.cs",
-              "RelativeToolTip": "BBSS.Repository\\Interfaces\\IGenericRepositoryFactory.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T07:14:52.666Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "IGenericRepository.cs",
-              "DocumentMoniker": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IGenericRepository.cs",
-              "RelativeDocumentMoniker": "BBSS.Repository\\Interfaces\\IGenericRepository.cs",
-              "ToolTip": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\Interfaces\\IGenericRepository.cs",
-              "RelativeToolTip": "BBSS.Repository\\Interfaces\\IGenericRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T07:14:10.631Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GenericRepository.cs",
-              "DocumentMoniker": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\GenericRepository.cs",
-              "RelativeDocumentMoniker": "BBSS.Repository\\Implements\\GenericRepository.cs",
-              "ToolTip": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Repository\\Implements\\GenericRepository.cs",
-              "RelativeToolTip": "BBSS.Repository\\Implements\\GenericRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T07:13:55.212Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Paginate.cs",
-              "DocumentMoniker": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\Paginate.cs",
-              "RelativeDocumentMoniker": "BBSS.Domain\\Paginate\\Paginate.cs",
-              "ToolTip": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\Paginate.cs",
-              "RelativeToolTip": "BBSS.Domain\\Paginate\\Paginate.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T07:11:46.581Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "IPaginate.cs",
-              "DocumentMoniker": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\IPaginate.cs",
-              "RelativeDocumentMoniker": "BBSS.Domain\\Paginate\\IPaginate.cs",
-              "ToolTip": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\IPaginate.cs",
-              "RelativeToolTip": "BBSS.Domain\\Paginate\\IPaginate.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T07:11:44.404Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "PaginateExtension.cs",
-              "DocumentMoniker": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\PaginateExtension.cs",
-              "RelativeDocumentMoniker": "BBSS.Domain\\Paginate\\PaginateExtension.cs",
-              "ToolTip": "E:\\TERM7\\swd392\\swd392\\swd392_BE\\BBSS.Domain\\Paginate\\PaginateExtension.cs",
-              "RelativeToolTip": "BBSS.Domain\\Paginate\\PaginateExtension.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T07:11:43.065Z",
-              "EditorCaption": ""
             }
           ]
         }

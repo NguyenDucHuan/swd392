@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BBSS.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a1eaf7e00137773aee37c5efced19a6246e9517e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+382c27a27dc6349cf616c18a6203b044076876fa")]
 [assembly: System.Reflection.AssemblyProductAttribute("BBSS.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BBSS.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
