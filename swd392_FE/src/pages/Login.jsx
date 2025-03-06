@@ -1,26 +1,45 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+// src/pages/Login.jsx
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useAuth } from '../contexts/AuthContext';
 
 function Login() {
-    const { login } = useAuth()
-    const navigate = useNavigate()
+    const { login, error } = useAuth();
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        // Simulate login
-        const body = {
-            email: email,
-            password: password,
-            role: 'Manager'
+        e.preventDefault();
+        setIsSubmitting(true);
+        
+        try {
+            const result = await login({
+                email,
+                password,
+                rememberMe
+            });
+            
+            if (result.success) {
+                toast.success('Đăng nhập thành công!');
+                
+                // Redirect based on user role
+                if (result.role === 'Admin') {
+                    navigate('/dashboard');
+                } else {
+                    navigate('/');
+                }
+            }
+        } catch (error) {
+            toast.error(error.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
+        } finally {
+            setIsSubmitting(false);
         }
-        await login(body)
-        navigate('/')
-    }
+    };
     
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#74ACFF]">
@@ -29,6 +48,13 @@ function Login() {
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">Đăng nhập tài khoản</h2>
                     <p className="text-gray-600 text-sm mb-4">Hãy nhập mật khẩu để tiếp tục</p>
                 </div>
+                
+                {error && (
+                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
+                        {error}
+                    </div>
+                )}
+                
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-4">
                         <div>
@@ -42,6 +68,7 @@ function Login() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="abc@gmail.com"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
                             />
                         </div>
 
@@ -50,12 +77,12 @@ function Login() {
                                 <label htmlFor="password" className="block text-sm font-bold text-gray-700">
                                     Mật khẩu
                                 </label>
-                                <a
-                                    href="#"
-                                    className="text-sm font-bold  opacity-60 hover:opacity-100 hover:text-blue-600 transition-all duration-200"
+                                <Link
+                                    to="/forgot-password"
+                                    className="text-sm font-bold opacity-60 hover:opacity-100 hover:text-blue-600 transition-all duration-200"
                                 >
                                     Quên mật khẩu?
-                                </a>
+                                </Link>
                             </div>
                             <input
                                 type="password"
@@ -64,6 +91,7 @@ function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="• • • • • • • •"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg tracking-widest placeholder:text-lg placeholder:tracking-[0.2em]"
+                                required
                             />
                         </div>
 
@@ -82,25 +110,26 @@ function Login() {
 
                         <button
                             type="submit"
-                            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            disabled={isSubmitting}
+                            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70"
                         >
-                            Đăng nhập
+                            {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
                         </button>
                     </div>
                 </form>
 
                 <div className="mt-6 text-center text-sm text-gray-600">
                     Bạn không có tài khoản?{' '}
-                    <a
-                        href="#"
+                    <Link
+                        to="/register"
                         className="text-blue-500 font-bold hover:text-blue-600 underline underline-offset-2 decoration-blue-500/30 hover:decoration-blue-600"
                     >
                         Tạo tài khoản
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
     );
 }
 
-export default Login
+export default Login;

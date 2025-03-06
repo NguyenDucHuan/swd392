@@ -1,21 +1,24 @@
+// src/components/ProtectedRoute.jsx
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
-import { jwtDecode } from "jwt-decode";
-import { useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-
-export const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("access_token");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!token) return;
-    const decodedData = jwtDecode(token);
-
-    if (!decodedData) return;
-
-  }, [token, navigate]);
-
-  if (!token) return <Navigate to="/login" replace />;
-
+export const ProtectedRoute = ({ children, requiredRoles = [] }) => {
+  const { user, isLoading, hasRole } = useAuth();
+  
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  }
+  
+  // Not logged in
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+  
+  // Check role requirements
+  if (requiredRoles.length > 0 && !hasRole(requiredRoles)) {
+    return <Navigate to="/about" />;
+  }
+  
+  // User is authenticated and authorized
   return children;
 };
