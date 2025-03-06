@@ -41,13 +41,15 @@ namespace BBSS.Api
             //CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowNextApp", policy =>
+                options.AddPolicy("AllowFrontend", policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000")
+                    policy.WithOrigins("http://localhost:5173") // Your frontend URL
                           .AllowAnyHeader()
-                          .AllowAnyMethod();
+                          .AllowAnyMethod()
+                          .AllowCredentials(); // Important for cookies/auth
                 });
             });
+
 
             // Load assemblies for auto mapper to scan
             var assemblies = AppDomain.CurrentDomain.GetAssemblies()
@@ -68,7 +70,7 @@ namespace BBSS.Api
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowFrontend");
             app.UseAuthentication();
             app.UseAuthorization();
 
