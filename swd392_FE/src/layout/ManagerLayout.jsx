@@ -1,8 +1,8 @@
 // src/components/Layout.jsx
-import NavBar from '../components/NavBar'
-import Sidebar from '../components/Sidebar'
+import NavBar from '../components/Manager/ManagerNavbar'
+import Sidebar from '../components/Manager/ManegerSidebar'
 
-export function Layout({ children }) {
+export function ManagerLayout({ children }) {
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar />

@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import GuestRoute from "../components/GuestRoute";
 import { ProtectedRoute } from "../components/ProtectedRoute";
-import { Layout } from "../layout/Layout";
+import { AdminRoute, StaffRoute } from "../components/RoleBasedRoute";
+import { CustomerLayout } from "../layout/CustomerLayout";
+import { ManagerLayout } from "../layout/ManagerLayout";
 
 // Import pages
-import About from "../pages/About";
 import AdvertisingCenter from "../pages/AdvertisingCenter";
 import Content from "../pages/Content";
 import Dashboard from "../pages/Dashboard";
@@ -12,107 +12,155 @@ import GoldUsers from "../pages/GoldUsers";
 import HelpCenter from "../pages/HelpCenter";
 import HelpCenterStart from "../pages/HelpCenterStart";
 import Login from "../pages/Login";
+import About from "../pages/MainPage/About";
+import BlogPage from "../pages/MainPage/BlogPage";
+import HomePage from "../pages/MainPage/HomePage";
 import Settings from "../pages/Settings";
+import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
+import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
 import Users from "../pages/Users";
-
 const AppRoutes = () => {
   return (
     <Routes>
       <Route
         path="/login"
         element={
-          <GuestRoute>
             <Login />
-          </GuestRoute>
         }
       />
+      {/* Geust */}
       <Route
         path="/"
         element={
-          <Layout>
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          </Layout>
+          <CustomerLayout>
+          <HomePage />
+          </CustomerLayout>
         }
+      
       />
       <Route
         path="/about"
         element={
-          <Layout>
-              <About />
-            
-          </Layout>
+          <CustomerLayout>
+            <About />
+          </CustomerLayout>
+        }
+      />
+      <Route
+        path = "/blog"
+        element = {
+          <CustomerLayout>
+            <BlogPage />
+          </CustomerLayout>
+        }
+      />
+      <Route 
+        path = "/shopping"
+        element = {
+          <CustomerLayout>
+            <ShoppingPage />
+          </CustomerLayout>
+        }
+      />
+      <Route
+        path="/lucky-wheel"
+        element={
+          <CustomerLayout>
+            <LuckyWheel/>
+          </CustomerLayout>
+        }
+      />
+
+      {/* Admin */}
+      <Route
+        path="/dashboard"
+        element={
+          <ManagerLayout>
+            <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+              <Dashboard />
+            </ProtectedRoute>
+          </ManagerLayout>
         }
       />
       <Route
         path="/settings"
         element={
-          <Layout>
-            <ProtectedRoute>
+          <ManagerLayout>
+            <AdminRoute>
               <Settings />
-            </ProtectedRoute>
-          </Layout>
+            </AdminRoute>
+          </ManagerLayout>
         }
       />
       <Route
         path="/help"
         element={
-          <Layout>
+          <ManagerLayout>
             <ProtectedRoute>
               <HelpCenter />
             </ProtectedRoute>
-          </Layout>
+          </ManagerLayout>
         }
       />
       <Route
         path="/starthelp"
         element={
-          <Layout>
+          <ManagerLayout>
             <ProtectedRoute>
               <HelpCenterStart />
             </ProtectedRoute>
-          </Layout>
+          </ManagerLayout>
         }
       />
       <Route
         path="/ads"
         element={
-          <Layout>
-            <ProtectedRoute>
+          <ManagerLayout>
+            <AdminRoute>
               <AdvertisingCenter />
-            </ProtectedRoute>
-          </Layout>
+            </AdminRoute>
+          </ManagerLayout>
         }
       />
       <Route
         path="/content"
         element={
-          <Layout>
-            <ProtectedRoute>
+          <ManagerLayout>
+            <StaffRoute>
               <Content />
-            </ProtectedRoute>
-          </Layout>
+            </StaffRoute>
+          </ManagerLayout>
         }
       />
       <Route
         path="/users"
         element={
-          <Layout>
-            <ProtectedRoute>
+          <ManagerLayout>
+            <AdminRoute>
               <Users />
-            </ProtectedRoute>
-          </Layout>
+            </AdminRoute>
+          </ManagerLayout>
         }
       />
       <Route
         path="/users/gold"
         element={
-          <Layout>
-            <ProtectedRoute>
+          <ManagerLayout>
+            <AdminRoute>
               <GoldUsers />
-            </ProtectedRoute>
-          </Layout>
+            </AdminRoute>
+          </ManagerLayout>
+        }
+      />
+      <Route
+        path="/unauthorized"
+        element={
+          <ManagerLayout>
+            <div className="p-8">
+              <h1 className="text-2xl font-bold text-red-500">Unauthorized Access</h1>
+              <p>You do not have permission to access this resource.</p>
+            </div>
+          </ManagerLayout>
         }
       />
     </Routes>

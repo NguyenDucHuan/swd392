@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { RiDashboardLine, RiFileTextLine, RiUserLine, RiAdvertisementLine, RiSettings4Line, RiLogoutBoxLine, RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 import { BsQuestionOctagon } from "react-icons/bs";
+import { RiAdvertisementLine, RiArrowLeftLine, RiArrowRightLine, RiDashboardLine, RiFileTextLine, RiLogoutBoxLine, RiSettings4Line, RiUserLine } from 'react-icons/ri';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-function Sidebar() {
+function ManegerSidebar() {
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
   
   const menuItems = [
-    { icon: RiDashboardLine, text: 'Tổng quan', path: '/' },
+    { icon: RiDashboardLine, text: 'Tổng quan', path: '/dashboard' },
     { icon: RiFileTextLine, text: 'Nội dung', path: '/content' },
     { icon: RiUserLine, text: 'Quản lí Người dùng', path: '/users' },
     { icon: RiAdvertisementLine, text: 'Trung tâm Quảng cáo', path: '/ads' },
@@ -18,7 +18,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -99,4 +99,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default ManegerSidebar;

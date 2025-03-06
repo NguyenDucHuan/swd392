@@ -7,7 +7,6 @@ let authorizedAxiosInstance = axios.create()
 authorizedAxiosInstance.defaults.timeout = 10 * 60 * 1000
 authorizedAxiosInstance.defaults.withCredentials = true
 
-// Add request interceptor
 authorizedAxiosInstance.interceptors.request.use((config) => {
     const token = localStorage.getItem("access_token");
     if (token) {

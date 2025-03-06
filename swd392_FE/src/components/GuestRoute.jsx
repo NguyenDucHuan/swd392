@@ -9,7 +9,7 @@ const GuestRoute = ({children}) => {
         if (token) {
             navigate('/');
         }
-    }, [token, navigate]); // Add dependencies to avoid React hooks warning
+    }, [token, navigate]); 
 
     if (token) return <Navigate to="/" />;
 
