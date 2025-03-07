@@ -19,13 +19,14 @@ import Settings from "../pages/Settings";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
 import Users from "../pages/Users";
+import Register from "../pages/Register";
 const AppRoutes = () => {
   return (
     <Routes>
       <Route
         path="/login"
         element={
-            <Login />
+          <Login />
         }
       />
       {/* Geust */}
@@ -33,10 +34,10 @@ const AppRoutes = () => {
         path="/"
         element={
           <CustomerLayout>
-          <HomePage />
+            <HomePage />
           </CustomerLayout>
         }
-      
+
       />
       <Route
         path="/about"
@@ -47,16 +48,16 @@ const AppRoutes = () => {
         }
       />
       <Route
-        path = "/blog"
-        element = {
+        path="/blog"
+        element={
           <CustomerLayout>
             <BlogPage />
           </CustomerLayout>
         }
       />
-      <Route 
-        path = "/shopping"
-        element = {
+      <Route
+        path="/shopping"
+        element={
           <CustomerLayout>
             <ShoppingPage />
           </CustomerLayout>
@@ -66,7 +67,7 @@ const AppRoutes = () => {
         path="/lucky-wheel"
         element={
           <CustomerLayout>
-            <LuckyWheel/>
+            <LuckyWheel />
           </CustomerLayout>
         }
       />
@@ -142,6 +143,12 @@ const AppRoutes = () => {
           </ManagerLayout>
         }
       />
+      <Route
+        path="/register"
+        element=
+        {<Register />}
+      />
+
       <Route
         path="/users/gold"
         element={
