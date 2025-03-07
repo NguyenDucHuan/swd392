@@ -200,33 +200,80 @@ INSERT INTO package (pakage_code, name, description, manufacturer, category_id) 
 ('hoho', 'Gadget Mystery', 'Blind box with tech and gadget accessories.', 'TechWorld', 3),
 
 ('PKG001', 'Luxury Package', 'A luxurious collection of blind boxes', 'Premium Toys Co.', 1),
-('PKG001', 'Luxury Package', 'A luxurious collection of blind boxes', 'Premium Toys Co.', 1);
+('PKG001', 'Luxury Package', 'A luxurious collection of blind boxes', 'Premium Toys Co.', 1),
 
-INSERT INTO blind_box (color, status, size, price, discount, number, is_knowned, is_special, package_id) VALUES
-('Red', 1, 12.5, 190000, 10, 1, 0, 0, 1),
-('Blue', 1, 10.0, 190000, 5, 2, 0, 1, 1),
-('Green', 1, 8.0, 190000, 0.00, 1, 1, 0, 2),
-('Yellow', 1, 11.0, 190000, 20, 1, 0, 1, 2),
-('Black', 1, 9.5, 190000, 15, 1, 1, 0, 3),
-('White', 1, 7.5, 190000, 5, 1, 0, 0, 3),
+('PKG002', 'Wheel Package', 'Wheel blind boxes', 'Premium Toys Co.', 1);
 
-('Red', 1, 12.5, 190000, 10, 1, 0, 0, 4),
-('Red', 1, 12.5, 190000, 10, 2, 0, 0, 4),
-('Red', 1, 12.5, 190000, 10, 3, 0, 0, 4),
-('Red', 1, 12.5, 190000, 10, 4, 0, 0, 4),
-('Red', 1, 12.5, 190000, 10, 5, 0, 0, 4),
-('Red', 1, 12.5, 190000, 10, 6, 0, 0, 4),
-('Red', 1, 12.5, 190000, 10, 7, 0, 0, 4),
-('Red', 1, 12.5, 190000, 10, 8, 0, 0, 4),
+-- INSERT INTO blind_box (color, status, size, price, discount, number, is_knowned, is_sold, is_special, package_id) VALUES
+-- ('Red', 1, 12.5, 190000, 10, 1, 0, 0, 0, 1),
+-- ('Blue', 1, 10.0, 190000, 5, 2, 0, 1, 0, 1),
+-- ('Green', 1, 8.0, 190000, 0.00, 1, 1, 0, 0, 2),
+-- ('Yellow', 1, 11.0, 190000, 20, 1, 0, 1, 0, 2),
+-- ('Black', 1, 9.5, 190000, 15, 1, 1, 0, 0, 3),
+-- ('White', 1, 7.5, 190000, 5, 1, 0, 0, 0, 3),
 
-('Red', 1, 12.5, 200000, 10, 1, 0, 0, 5),
-('Red', 1, 12.5, 200000, 10, 2, 0, 0, 5),
-('Red', 1, 12.5, 200000, 10, 3, 0, 0, 5),
-('Red', 1, 12.5, 200000, 10, 4, 0, 0, 5),
-('Red', 1, 12.5, 200000, 10, 5, 0, 0, 5),
-('Red', 1, 12.5, 200000, 10, 6, 0, 0, 5),
-('Red', 1, 12.5, 200000, 10, 7, 0, 0, 5),
-('Red', 1, 12.5, 200000, 10, 8, 0, 0, 5);
+-- ('Red', 1, 12.5, 190000, 10, 1, 0, 0, 0, 4),
+-- ('Red', 1, 12.5, 190000, 10, 2, 0, 0, 0, 4),
+-- ('Red', 1, 12.5, 190000, 10, 3, 0, 0, 0, 4),
+-- ('Red', 1, 12.5, 190000, 10, 4, 0, 0, 0, 4),
+-- ('Red', 1, 12.5, 190000, 10, 5, 0, 0, 0, 4),
+-- ('Red', 1, 12.5, 190000, 10, 6, 0, 0, 0, 4),
+-- ('Red', 1, 12.5, 190000, 10, 7, 0, 0, 0, 4),
+-- ('Red', 1, 12.5, 190000, 10, 8, 0, 0, 0, 4),
+
+-- ('Red', 1, 12.5, 200000, 10, 1, 0, 0, 0, 5),
+-- ('Red', 1, 12.5, 200000, 10, 2, 0, 0, 0, 5),
+-- ('Red', 1, 12.5, 200000, 10, 3, 0, 0, 0, 5),
+-- ('Red', 1, 12.5, 200000, 10, 4, 0, 0, 0, 5),
+-- ('Red', 1, 12.5, 200000, 10, 5, 0, 0, 0, 5),
+-- ('Red', 1, 12.5, 200000, 10, 6, 0, 0, 0, 5),
+-- ('Red', 1, 12.5, 200000, 10, 7, 0, 0, 0, 5),
+-- ('Red', 1, 12.5, 200000, 10, 8, 0, 0, 5),
+
+-- ('Red', 1, 10.0, 200000, 0.00, 1, 1, 0, 0, 6),
+-- ('Blue', 1, 11.0, 200000, 0.00, 2, 1, 0, 0, 6),
+-- ('Green', 1, 12.0, 200000, 0.00, 3, 1, 0, 0, 6),
+-- ('Yellow', 1, 13.0, 200000, 0.00, 4, 1, 0, 0, 6),
+-- ('Purple', 1, 14.0, 200000, 0.00, 5, 1, 0, 0, 6),
+-- ('Orange', 1, 15.0, 200000, 0.00, 6, 1, 0, 0, 6),
+-- ('Black', 1, 16.0, 200000, 0.00, 7, 1, 0, 0, 6),
+-- ('White', 1, 17.0, 200000, 0.00, 8, 1, 0, 0, 6);
+INSERT INTO blind_box (color, status, size, price, discount, number, is_knowned, is_sold, is_special, package_id) VALUES
+('Red', 1, 12.5, 190000, 10, 1, false, false, false, 1),
+('Blue', 1, 10.0, 190000, 5, 2, false, true, false, 1),
+('Green', 1, 8.0, 190000, 0.00, 1, true, false, false, 2),
+('Yellow', 1, 11.0, 190000, 20, 1, false, true, false, 2),
+('Black', 1, 9.5, 190000, 15, 1, true, false, false, 3),
+('White', 1, 7.5, 190000, 5, 1, false, false, false, 3),
+
+('Red', 1, 12.5, 190000, 10, 1, false, false, false, 4),
+('Red', 1, 12.5, 190000, 10, 2, false, false, false, 4),
+('Red', 1, 12.5, 190000, 10, 3, false, false, false, 4),
+('Red', 1, 12.5, 190000, 10, 4, false, false, false, 4),
+('Red', 1, 12.5, 190000, 10, 5, false, false, false, 4),
+('Red', 1, 12.5, 190000, 10, 6, false, false, false, 4),
+('Red', 1, 12.5, 190000, 10, 7, false, false, false, 4),
+('Red', 1, 12.5, 190000, 10, 8, false, false, false, 4),
+
+('Red', 1, 12.5, 200000, 10, 1, false, false, false, 5),
+('Red', 1, 12.5, 200000, 10, 2, false, false, false, 5),
+('Red', 1, 12.5, 200000, 10, 3, false, false, false, 5),
+('Red', 1, 12.5, 200000, 10, 4, false, false, false, 5),
+('Red', 1, 12.5, 200000, 10, 5, false, false, false, 5),
+('Red', 1, 12.5, 200000, 10, 6, false, false, false, 5),
+('Red', 1, 12.5, 200000, 10, 7, false, false, false, 5),
+('Red', 1, 12.5, 200000, 10, 8, false, false, false, 5),
+
+('Red', 1, 10.0, 200000, 0.00, 1, true, false, false, 6),
+('Blue', 1, 11.0, 200000, 0.00, 2, true, false, false, 6),
+('Green', 1, 12.0, 200000, 0.00, 3, true, false, false, 6),
+('Yellow', 1, 13.0, 200000, 0.00, 4, true, false, false, 6),
+('Purple', 1, 14.0, 200000, 0.00, 5, true, false, false, 6),
+('Orange', 1, 15.0, 200000, 0.00, 6, true, false, false, 6),
+('Black', 1, 16.0, 200000, 0.00, 7, true, false, false, 6),
+('White', 1, 17.0, 200000, 0.00, 8, true, false, false, 6);
+
+
 
 INSERT INTO `order` (order_date, total_amount, phone, address, user_id, voucher_id) 
 VALUES 
