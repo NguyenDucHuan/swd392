@@ -26,6 +26,7 @@ namespace BBSS.Api.Extensions
             service.AddTransient<IOrderService, OrderService>();
             service.AddTransient<IPaymentService, PaymentService>();
             service.AddTransient<IExcelService, ExcelService>();
+            service.AddTransient<IWheelService, WheelService>();
 
 
             return service;

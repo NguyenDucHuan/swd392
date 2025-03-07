@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using BBSS.Api.Services.Interfaces;
 using BBSS.Api.Constants;
 using BBSS.Api.Helper;
+using BBSS.Api.Routes;
 
 namespace BBSS.Api.Controllers
 {
@@ -17,7 +18,8 @@ namespace BBSS.Api.Controllers
             _paymentService = paymentService;
         }
 
-        [HttpPost("payment")]
+        [HttpPost]
+        [Route(Router.PaymentRoute.MakePayment)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
         public async Task<ActionResult> Payment(int orderId, string type)
         {
@@ -30,7 +32,8 @@ namespace BBSS.Api.Controllers
                 Ok
             );
         }
-        [HttpPost("add-to-wallet")]
+        [HttpPost]
+        [Route(Router.PaymentRoute.AddToWallet)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
         public async Task<ActionResult> AddToWallet(decimal amount)
         {
@@ -43,7 +46,8 @@ namespace BBSS.Api.Controllers
                 Ok
             );
         }
-        [HttpGet("paymentCallBack")]
+        [HttpGet]
+        [Route(Router.PaymentRoute.PaymentCallBack)]
         public async Task<ActionResult> PaymentCallBack()
         {
             var response = _paymentService.PaymentExecute(Request.Query);
