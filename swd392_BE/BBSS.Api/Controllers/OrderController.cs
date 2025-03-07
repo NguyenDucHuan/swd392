@@ -1,5 +1,6 @@
 ﻿using BBSS.Api.Constants;
 using BBSS.Api.Models.OrderModel;
+using BBSS.Api.Routes;
 using BBSS.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,8 @@ namespace BBSS.Api.Controllers
             _orderService = orderService;
         }
 
-        [HttpPost("create-order")]
+        [HttpPost]
+        [Route(Router.OrderRoute.CreateOrder)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
         public async Task<ActionResult> CreateOrder(int? voucherId, [FromBody]OrderCreateRequest request)
         {
@@ -29,7 +31,20 @@ namespace BBSS.Api.Controllers
             );
         }
 
-        [HttpPost("complete-order")]
+        [HttpPost]
+        [Route(Router.OrderRoute.ConfirmOrder)]
+        [Authorize(Roles = "{UserConstant.USER_ROLE_STAFF}")]
+        public async Task<ActionResult> ConfirmOrder(int orderId)
+        {
+            var result = await _orderService.ConfirmOrderAsync(orderId);
+            return result.Match(
+                (l, c) => Problem(detail: l, statusCode: c),
+                Ok
+            );
+        }
+
+        [HttpPost]
+        [Route(Router.OrderRoute.CompleteOrder)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
         public async Task<ActionResult> CompleteOrder(int orderId)
         {
@@ -41,7 +56,8 @@ namespace BBSS.Api.Controllers
             );
         }
 
-        [HttpPost("cancel-order")]
+        [HttpPost]
+        [Route(Router.OrderRoute.CancelOrder)]
         [Authorize(Roles = $"{UserConstant.USER_ROLE_USER}, {UserConstant.USER_ROLE_STAFF}")]
         public async Task<ActionResult> CancelOrder(int orderId)
         {
@@ -52,23 +68,25 @@ namespace BBSS.Api.Controllers
             );
         }
 
-        [HttpGet("get-user-order")]
+        [HttpGet]
+        [Route(Router.OrderRoute.GetUserOrder)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
-        public async Task<ActionResult> GetOrdersByUser()
+        public async Task<ActionResult> GetOrdersByUser(string? status)
         {
             var userId = Int32.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            var result = await _orderService.GetOrdersByUserAsync(userId);
+            var result = await _orderService.GetOrdersByUserAsync(userId, status);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok
             );
         }
 
-        [HttpGet("get-all-order")]
+        [HttpGet]
+        [Route(Router.OrderRoute.GetAllOrder)]
         [Authorize(Roles = UserConstant.USER_ROLE_STAFF)]
-        public async Task<ActionResult> GetAllOrders()
+        public async Task<ActionResult> GetAllOrders(string? status)
         {
-            var result = await _orderService.GetAllOrdersAsync();
+            var result = await _orderService.GetAllOrdersAsync(status);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok

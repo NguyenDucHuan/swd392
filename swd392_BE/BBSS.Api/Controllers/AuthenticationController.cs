@@ -1,4 +1,5 @@
 ﻿using BBSS.Api.Models.AuthenticationModel;
+using BBSS.Api.Routes;
 using BBSS.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@ namespace BBSS.Api.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route(Router.AtuthenticationRoute.Register)]
         public async Task<IActionResult> Register([FromBody] SignupRequest request)
         {
             var result = await _authenticationService.SignUpAsync(request);
@@ -25,7 +26,7 @@ namespace BBSS.Api.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route(Router.AtuthenticationRoute.Login)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var result = await _authenticationService.SigninAsync(request);
@@ -36,7 +37,7 @@ namespace BBSS.Api.Controllers
         }
 
         [HttpPatch]
-        [Route("verify-email")]
+        [Route(Router.AtuthenticationRoute.VerifyEmail)]
         public async Task<IActionResult> VerifyAccount(string token)
         {
             var result = await _authenticationService.VerifyEmailAsync(token);

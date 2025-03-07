@@ -4,6 +4,7 @@ using OfficeOpenXml;
 using System.IO;
 using BBSS.Api.Services.Interfaces;
 using BBSS.Api.Services.Implements;
+using BBSS.Api.Routes;
 
 namespace BBSS.Api.Controllers
 {
@@ -16,7 +17,8 @@ namespace BBSS.Api.Controllers
             _excelService = excelService;
         }
 
-        [HttpGet("export-monthly-revenue-excel")]
+        [HttpGet]
+        [Route(Router.ExcelRoute.GetMonthlyRevenueExcel)]
         public async Task<IActionResult> ExportMonthlyRevenueExcel()
         {
             var stream = new MemoryStream();
@@ -55,7 +57,8 @@ namespace BBSS.Api.Controllers
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
 
-        [HttpGet("export-quarterly-revenue-excel")]
+        [HttpGet]
+        [Route(Router.ExcelRoute.GetQuarterlyRevenueExcel)]
         public async Task<IActionResult> ExportQuarterlyRevenueExcel()
         {
             var stream = new MemoryStream();
@@ -94,7 +97,8 @@ namespace BBSS.Api.Controllers
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
 
-        [HttpGet("export-yearly-revenue-excel")]
+        [HttpGet]
+        [Route(Router.ExcelRoute.GetYearlyRevenueExcel)]
         public async Task<IActionResult> ExportYearlyRevenueExcel()
         {
             var stream = new MemoryStream();

@@ -8,6 +8,7 @@ using BBSS.Domain.Entities;
 using BBSS.Domain.Paginate;
 using BBSS.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace BBSS.Api.Services.Implements
 {
@@ -339,20 +340,22 @@ namespace BBSS.Api.Services.Implements
             await _uow.GetRepository<OrderStatus>().InsertAsync(orderStatus);
         }
 
-        public async Task<MethodResult<IPaginate<OrderViewModel>>> GetOrdersByUserAsync(int userId)
+        public async Task<MethodResult<IPaginate<OrderViewModel>>> GetOrdersByUserAsync(int userId, string? status)
         {
             var result = await _uow.GetRepository<Order>().GetPagingListAsync<OrderViewModel>(
                     selector: s => _mapper.Map<OrderViewModel>(s),
-                    predicate: p => p.UserId == userId,
+                    predicate: p => p.UserId == userId && 
+                                    (status == null || p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status == status),
                     include: i => i.Include(x => x.OrderDetails)
                 );
             return new MethodResult<IPaginate<OrderViewModel>>.Success(result);
         }
 
-        public async Task<MethodResult<IPaginate<OrderViewModel>>> GetAllOrdersAsync()
+        public async Task<MethodResult<IPaginate<OrderViewModel>>> GetAllOrdersAsync(string? status)
         {
             var result = await _uow.GetRepository<Order>().GetPagingListAsync<OrderViewModel>(
                     selector: s => _mapper.Map<OrderViewModel>(s),
+                    predicate: p => status == null || p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status == status,
                     include: i => i.Include(x => x.OrderDetails)
                 );
             return new MethodResult<IPaginate<OrderViewModel>>.Success(result);

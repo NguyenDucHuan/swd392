@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Enums\" />
-    <Folder Include="Routes\" />
     <Folder Include="Utils\" />
     <Folder Include="Validator\" />
   </ItemGroup>
