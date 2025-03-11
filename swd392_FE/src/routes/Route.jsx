@@ -5,21 +5,21 @@ import { CustomerLayout } from "../layout/CustomerLayout";
 import { ManagerLayout } from "../layout/ManagerLayout";
 
 // Import pages
-import AdvertisingCenter from "../pages/AdvertisingCenter";
-import Content from "../pages/Content";
-import Dashboard from "../pages/Dashboard";
-import GoldUsers from "../pages/GoldUsers";
-import HelpCenter from "../pages/HelpCenter";
-import HelpCenterStart from "../pages/HelpCenterStart";
 import Login from "../pages/Login";
 import About from "../pages/MainPage/About";
 import BlogPage from "../pages/MainPage/BlogPage";
 import HomePage from "../pages/MainPage/HomePage";
-import Settings from "../pages/Settings";
+import AdvertisingCenter from "../pages/ManagerPage/AdvertisingCenter";
+import Content from "../pages/ManagerPage/Content";
+import Dashboard from "../pages/ManagerPage/Dashboard";
+import GoldUsers from "../pages/ManagerPage/GoldUsers";
+import HelpCenter from "../pages/ManagerPage/HelpCenter";
+import HelpCenterStart from "../pages/ManagerPage/HelpCenterStart";
+import Settings from "../pages/ManagerPage/Settings";
+import Register from "../pages/Register";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
 import Users from "../pages/Users";
-import Register from "../pages/Register";
 const AppRoutes = () => {
   return (
     <Routes>

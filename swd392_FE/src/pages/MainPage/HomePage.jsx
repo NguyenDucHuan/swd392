@@ -1,6 +1,5 @@
-import Footer from "@/components/Footer";
-import logo1 from '../../assets/main1.jpg'
-import logo2 from '../../assets/logo.jpg'
+import logo2 from '../../assets/logo.jpg';
+import logo1 from '../../assets/main1.jpg';
 const HomePage = () => {
     return (
         <>
@@ -58,7 +57,6 @@ const HomePage = () => {
                     {/* Add category items here */}
                 </section>
             </div>
-            <Footer></Footer>
         </>
     );
 };
