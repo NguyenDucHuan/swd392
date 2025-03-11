@@ -44,12 +44,12 @@ namespace BBSS.Api.Services.Implements
 
                 foreach (var product in request.Products)
                 {
-                    if (product.Type == "Package")
+                    if (string.CompareOrdinal(product.Type, "Package") == 0)
                     {
                         await HandlePackageProductAsync(product, order);
                         await _uow.CommitAsync();
                     }
-                    else if (product.Type == "BlindBox")
+                    else if (string.CompareOrdinal(product.Type, "BlindBox") == 0)
                     {
                         await HandleBlindBoxProductAsync(product, order);
                         await _uow.CommitAsync();
