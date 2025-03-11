@@ -1,9 +1,8 @@
 // src/pages/About.jsx
-import Footer from "@/components/Footer";
-import logo1 from '../../assets/labubu.jpg'
-import logo2 from '../../assets/baby3.jpg'
-import logo3 from '../../assets/tuimu.jpg'
-import logo4 from '../../assets/gacha.jpg'
+import logo2 from '../../assets/baby3.jpg';
+import logo4 from '../../assets/gacha.jpg';
+import logo1 from '../../assets/labubu.jpg';
+import logo3 from '../../assets/tuimu.jpg';
 
 
 
@@ -79,7 +78,6 @@ function About() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   )
 };

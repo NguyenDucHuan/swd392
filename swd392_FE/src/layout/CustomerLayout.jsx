@@ -1,16 +1,14 @@
 // src/components/Layout.jsx
+import Footer from '../components/User/Footer';
 import NavBar from '../components/User/NavBar';
-import Footer from '../components/Footer';
 export function CustomerLayout({ children }) {
   return (
-    <div className="flex h-screen bg-gray-50">
-      <div className="flex-1 flex flex-col">
-        <NavBar />
-        <main className="flex-1 overflow-auto">
-          {children}
-        </main>
-        <Footer></Footer>
-      </div>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <NavBar />
+      <main className="flex-1">
+        {children}
+      </main>
+      <Footer />
     </div>
   )
 }
