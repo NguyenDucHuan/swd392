@@ -3,6 +3,7 @@ using BBSS.Api.Helper;
 using BBSS.Api.Models.Configurations;
 using BBSS.Api.Models.VnPayModel;
 using BBSS.Api.Services.Interfaces;
+using BBSS.Api.ViewModels;
 using BBSS.Domain.Entities;
 using BBSS.Repository.Interfaces;
 using Microsoft.Extensions.Options;
@@ -19,7 +20,26 @@ namespace BBSS.Api.Services.Implements
             _uow = uow;
         }
 
-        public async Task<MethodResult<IEnumerable<BlindBox>>> GetWheelAsync()
+        public async Task<MethodResult<WheelViewModel>> GetWheelAsync()
+        {
+            var blindBoxes = await _uow.GetRepository<BlindBox>().GetListAsync(
+                predicate: p => p.IsKnowned && !p.IsSold
+            );
+
+            var packages = await _uow.GetRepository<Package>().GetListAsync(
+                predicate: p => p.BlindBoxes.Any(b => b.IsKnowned && !b.IsSold)
+            );
+
+            var result = new WheelViewModel
+            {
+                Packages = packages,
+                Price = packages.Average(p => p.BlindBoxes.Average(b => b.Price))
+            };
+
+            return new MethodResult<WheelViewModel>.Success(result);
+        }
+
+        public async Task<MethodResult<IEnumerable<BlindBox>>> GetPriceWheelAsync()
         {
             var result = await _uow.GetRepository<BlindBox>().GetListAsync(
                 predicate: p => p.IsKnowned
@@ -28,32 +48,46 @@ namespace BBSS.Api.Services.Implements
             return new MethodResult<IEnumerable<BlindBox>>.Success(result);
         }
 
-        public async Task<MethodResult<string>> PlayWheelAsync(string email)
+        public async Task<MethodResult<IEnumerable<int>>> PlayWheelAsync(string email, int times, decimal amount)
         {
-            var result = await _uow.GetRepository<BlindBox>().GetListAsync(
-                predicate: p => p.IsKnowned && !p.IsSold
-            );
-
-            if (result.Count == 0)
-            {
-                return new MethodResult<string>.Failure("No box available", 404);
-            }
-
-            var random = new Random();
-            var index = random.Next(0, result.Count);
-            var blindBox = result.ToList()[index];
-
-            blindBox.IsSold = true;
-            _uow.GetRepository<BlindBox>().UpdateAsync(blindBox);
-
             var user = await _uow.GetRepository<User>().SingleOrDefaultAsync(
                 predicate: p => p.Email == email
             );
 
-            await CreateInventoryItem(user, blindBox.BlindBoxId);
+            if (user.WalletBalance < amount)
+            {
+                return new MethodResult<IEnumerable<int>>.Failure("Wallet is not enough", 404);
+            }
+
+            user.WalletBalance -= amount;
+
+            var blindBoxes = await _uow.GetRepository<BlindBox>().GetListAsync(
+                predicate: p => p.IsKnowned && !p.IsSold
+            );
+
+            if (blindBoxes.Count < times)
+            {
+                return new MethodResult<IEnumerable<int>>.Failure("Box is not enough", 404);
+            }
+
+            var result = new List<int>();
+
+            for (int i = 0; i < times; i++)
+            {
+                var random = new Random();
+                var index = random.Next(0, blindBoxes.Count);
+                var blindBox = blindBoxes.ToList()[index];                
+                blindBox.IsSold = true;
+
+                _uow.GetRepository<BlindBox>().UpdateAsync(blindBox);
+                await CreateInventoryItem(user, blindBox.BlindBoxId);
+                result.Add(blindBox.BlindBoxId);
+                blindBoxes.Remove(blindBox);
+            }
+            
             await _uow.CommitAsync();
 
-            return new MethodResult<string>.Success(blindBox.BlindBoxId.ToString());
+            return new MethodResult<IEnumerable<int>>.Success(result);
         }
 
         private async Task CreateInventoryItem(User user, int blindBoxId)

@@ -34,12 +34,12 @@ namespace BBSS.Api.Controllers
 
         [HttpPost(Router.WheelRoute.PlayWheel)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
-        public async Task<IActionResult> PlayWheel()
+        public async Task<IActionResult> PlayWheel(int times, decimal amount)
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (email == null) return Unauthorized();
 
-            var result = await _wheelService.PlayWheelAsync(email);
+            var result = await _wheelService.PlayWheelAsync(email, times, amount);
             return result.Match(
                 (errorMessage, statusCode) => Problem(detail: errorMessage, statusCode: statusCode),
                 Ok
