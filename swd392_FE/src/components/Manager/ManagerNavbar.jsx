@@ -5,6 +5,7 @@ import { RiLockPasswordLine, RiLoginCircleLine, RiLogoutBoxLine, RiSearchLine, R
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
+import { BASE_URL } from '../../configs/globalVariables';
 
 function ManagerNavbar() {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -24,12 +25,12 @@ function ManagerNavbar() {
           return;
         }
 
-        const response = await axios.get('https://localhost:7295/profile', {
+        const response = await axios.get(BASE_URL + '/authen/profile', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        
+
         setUserProfile(response.data);
       } catch (error) {
         console.error('Failed to fetch profile:', error);
@@ -125,7 +126,7 @@ function ManagerNavbar() {
             <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg py-2 z-50">
               {profileOptions.map((option, index) => (
                 <React.Fragment key={option.id}>
-                  <button 
+                  <button
                     className="w-full px-4 py-2 hover:bg-gray-50 flex items-center whitespace-nowrap"
                     onClick={() => handleProfileOptionClick(option.id)}
                   >
