@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode'; // You'll need to install this package
 import { createContext, useContext, useEffect, useState } from 'react';
-
+import { BASE_URL } from '../configs/globalVariables';
 const AuthContext = createContext(null)
 
 export const AuthProvider = ({ children }) => {
@@ -14,29 +14,29 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       const token = localStorage.getItem('access_token')
-      
+
       if (token) {
         try {
           const decodedToken = jwtDecode(token)
-          
+
           const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || 'User'
           const email = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']
           const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid']
-          
+
           setUser({
             id: userId,
             email: email,
             role: role
           })
-          
+
           // Optionally, you can still fetch additional user details
           try {
-            const profileResponse = await axios.get('https://localhost:7295/profile', {
+            const profileResponse = await axios.get(BASE_URL + '/authen/profile', {
               headers: {
                 Authorization: `Bearer ${token}`
               }
             })
-            
+
             // Update user with full profile data
             setUser(prevUser => ({
               ...prevUser,
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
           localStorage.removeItem('refresh_token')
         }
       }
-      
+
       setLoading(false)
     }
 
@@ -62,24 +62,24 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (userData) => {
     try {
-      const response = await axios.post('https://localhost:7295/login', userData)
-      
+      const response = await axios.post(BASE_URL + '/authen/login', userData)
+
       const { accessToken, refreshToken } = response.data
-      
+
       // Store tokens
       localStorage.setItem('access_token', accessToken.token)
       localStorage.setItem('refresh_token', refreshToken.token)
-      
+
       // Decode token to get user role immediately
       const decodedToken = jwtDecode(accessToken.token)
       const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || 'User'
-      
+
       // Set user in state
       setUser({
         email: userData.email,
         role: role
       })
-      
+
       return { success: true, role: role }
     } catch (error) {
       setError(error.response?.data?.detail || 'Login failed')
