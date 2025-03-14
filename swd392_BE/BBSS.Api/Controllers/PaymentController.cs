@@ -12,7 +12,7 @@ namespace BBSS.Api.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private readonly IPaymentService _paymentService;         
+        private readonly IPaymentService _paymentService;
         public PaymentController(IPaymentService paymentService)
         {
             _paymentService = paymentService;
@@ -63,6 +63,6 @@ namespace BBSS.Api.Controllers
             }
 
             return Redirect($"{redirectUrl}/success");
-        }        
+        }
     }
 }
