@@ -14,8 +14,9 @@ namespace BBSS.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddService().AddAuthenticationConfig()
-                            ;
+            builder.Services.AddService().AddAuthenticationConfig();
+
+
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
@@ -31,6 +32,7 @@ namespace BBSS.Api
             builder.Services.Configure<MailConfiguration>(builder.Configuration.GetSection("MailConfiguration"));
             builder.Services.Configure<AuthenticationConfiguration>(builder.Configuration.GetSection("AuthenticationConfiguration"));
             builder.Services.Configure<VnPayConfig>(builder.Configuration.GetSection("VnPayConfig"));
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

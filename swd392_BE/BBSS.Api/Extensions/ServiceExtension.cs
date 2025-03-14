@@ -27,7 +27,9 @@ namespace BBSS.Api.Extensions
             service.AddTransient<IPaymentService, PaymentService>();
             service.AddTransient<IExcelService, ExcelService>();
             service.AddTransient<IWheelService, WheelService>();
-
+            service.AddTransient<IPackageService, PackageService>();
+            service.AddTransient<ICloudinaryService, CloudinaryService>();
+            service.AddTransient<IBlindBoxService, BlindBoxService>();
 
             return service;
         }
