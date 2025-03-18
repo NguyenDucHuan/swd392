@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
 
           // Optionally, you can still fetch additional user details
           try {
-            const profileResponse = await axios.get(BASE_URL + '/authen/profile', {
+            const profileResponse = await axios.get(BASE_URL + '/users/profile', {
               headers: {
                 Authorization: `Bearer ${token}`
               }
