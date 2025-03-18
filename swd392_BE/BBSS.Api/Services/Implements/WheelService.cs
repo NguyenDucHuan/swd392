@@ -1,4 +1,5 @@
-﻿using BBSS.Api.Constants;
+﻿using AutoMapper;
+using BBSS.Api.Constants;
 using BBSS.Api.Helper;
 using BBSS.Api.Models.Configurations;
 using BBSS.Api.Models.VnPayModel;
@@ -6,6 +7,7 @@ using BBSS.Api.Services.Interfaces;
 using BBSS.Api.ViewModels;
 using BBSS.Domain.Entities;
 using BBSS.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 
@@ -14,10 +16,12 @@ namespace BBSS.Api.Services.Implements
     public class WheelService : IWheelService
     {
         private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
 
-        public WheelService(IUnitOfWork uow)
+        public WheelService(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
+            _mapper = mapper;
         }
 
         public async Task<MethodResult<WheelViewModel>> GetWheelAsync()
@@ -26,8 +30,12 @@ namespace BBSS.Api.Services.Implements
                 predicate: p => p.IsKnowned && !p.IsSold
             );
 
-            var packages = await _uow.GetRepository<Package>().GetListAsync(
-                predicate: p => p.BlindBoxes.Any(b => b.IsKnowned && !b.IsSold)
+            var packages = await _uow.GetRepository<Package>().GetListAsync<PackageViewModel>(
+                selector: s => _mapper.Map<PackageViewModel>(s),
+                predicate: p => p.BlindBoxes.Any(b => b.IsKnowned && !b.IsSold),
+                include: i => i.Include(p => p.BlindBoxes)
+                                     .Include(p => p.PackageImages)
+                                     .Include(p => p.Category)
             );
 
             var result = new WheelViewModel

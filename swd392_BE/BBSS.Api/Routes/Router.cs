@@ -75,5 +75,25 @@ namespace BBSS.Api.Routes
             public const string UpdateCategory = $"{Categories}/update-category";
             public const string DeleteCategory = $"{Categories}/delete-category";
         }
+
+        public static class TransactionRoute
+        {
+            public const string Transactions = $"{prefix}transactions";
+            public const string GetAllTransactions = $"{Transactions}/transactions";
+            public const string GetUserTransactions = $"{Transactions}/user/transactions/";
+        }
+
+        public static class InventoryRoute
+        {
+            public const string Inventories = $"{prefix}inventories";
+            public const string GetInventories = $"{Inventories}/inventories";
+            public const string GetInventory = $"{Inventories}/inventory/{Id}";
+        }
+
+        public static class BlindBoxRoute
+        {
+            public const string BlindBoxes = $"{prefix}blindBoxes";
+            public const string GetBlindBox = $"{BlindBoxes}/blindbox/{Id}";
+        }
     }
 }
