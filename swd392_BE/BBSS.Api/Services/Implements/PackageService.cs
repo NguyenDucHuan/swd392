@@ -8,6 +8,7 @@ using BBSS.Domain.Entities;
 using BBSS.Domain.Paginate;
 using BBSS.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BBSS.Api.Services.Implements
 {
@@ -26,7 +27,8 @@ namespace BBSS.Api.Services.Implements
             _blindBoxService = blindBoxService;
         }
 
-        public async Task<MethodResult<PackageViewModel>> GetPackageByIdAsync(int id)
+
+        public async Task<MethodResult<PackageViewModel>> GetPackageByIdAsync(int id, string filter = "")
         {
             try
             {
@@ -34,6 +36,7 @@ namespace BBSS.Api.Services.Implements
                     predicate: p => p.PackageId == id,
                     include: i => i.Include(p => p.BlindBoxes)
                                    .Include(p => p.PackageImages)
+                                   .Include(p => p.Category)
                 );
 
                 if (package == null)
@@ -42,6 +45,35 @@ namespace BBSS.Api.Services.Implements
                 }
 
                 var result = _mapper.Map<PackageViewModel>(package);
+
+                bool useAvailableOnly = filter?.ToLower().Contains("available") == true;
+
+                // Filter blind boxes based on the filter parameter
+                var filteredBlindBoxes = result.BlindBoxes
+                    .Where(bb => !useAvailableOnly || !bb.IsSold)
+                    .ToList();
+
+                if (filteredBlindBoxes.Any())
+                {
+                    decimal minPrice = filteredBlindBoxes.Min(b => b.DiscountedPrice);
+                    decimal totalPrice = filteredBlindBoxes.Sum(b => b.DiscountedPrice);
+
+                    result.Price = minPrice == totalPrice
+                        ? minPrice.ToString("N0") + " ₫"
+                        : minPrice.ToString("N0") + " - " + totalPrice.ToString("N0") + " ₫";
+
+                    // Pack contains filtered box numbers
+                    //result.Pack = filteredBlindBoxes
+                    //    .OrderBy(b => b.Number)
+                    //    .Select(b => b.Number)
+                    //    .ToList();
+                }
+                else
+                {
+                    result.Price = "Liên hệ";
+                    //result.Pack = new List<int>();
+                }
+
                 return new MethodResult<PackageViewModel>.Success(result);
             }
             catch (Exception ex)
@@ -50,7 +82,7 @@ namespace BBSS.Api.Services.Implements
             }
         }
 
-        public async Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model)
+        public async Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model, int categoryId = 0, int representativeCount = 0)
         {
             try
             {
@@ -59,31 +91,158 @@ namespace BBSS.Api.Services.Implements
                 string search = model.search?.ToLower() ?? string.Empty;
                 string filter = model.filter?.ToLower() ?? string.Empty;
 
-                var packages = await _uow.GetRepository<Package>().GetPagingListAsync(
-                    selector: p => _mapper.Map<PackageViewModel>(p),
-                    predicate: p =>
-                        (string.IsNullOrEmpty(search) ||
-                            p.PakageCode.ToLower().Contains(search) ||
-                            p.Name.ToLower().Contains(search) ||
-                            p.Description.ToLower().Contains(search)) &&
-                        (string.IsNullOrEmpty(filter) ||
-                            (filter == "available" && p.BlindBoxes.Any(bb => !bb.IsSold)) ||
-                            (filter == "sold" && p.BlindBoxes.All(bb => bb.IsSold))),
-                    include: i => i.Include(p => p.BlindBoxes)
-                                   .Include(p => p.PackageImages),
-                    orderBy: BuildOrderBy(model.sortBy),
-                    page: page,
-                    size: size
-                );
+                // Base predicate for filtering
+                Expression<Func<Package, bool>> predicate = p =>
+                    // Search filter
+                    (string.IsNullOrEmpty(search) ||
+                     p.PakageCode.ToLower().Contains(search) ||
+                     p.Name.ToLower().Contains(search) ||
+                     p.Description.ToLower().Contains(search)) &&
+                    (string.IsNullOrEmpty(filter) ||
+                     (filter.Contains("available") && p.BlindBoxes.Any(bb => !bb.IsSold)) ||
+                     (filter.Contains("sold") && p.BlindBoxes.All(bb => bb.IsSold))) &&
+                    (categoryId <= 0 || p.CategoryId == categoryId);
 
-                return new MethodResult<IPaginate<PackageViewModel>>.Success(packages);
+                bool useAvailableOnly = filter.Contains("available");
+
+                bool groupByName = representativeCount > 0;
+
+                if (groupByName)
+                {
+                    var packages = await _uow.GetRepository<Package>().GetListAsync(
+                        selector: p => _mapper.Map<PackageViewModel>(p),
+                        predicate: predicate,
+                        include: i => i.Include(p => p.BlindBoxes)
+                                     .Include(p => p.PackageImages)
+                                     .Include(p => p.Category),
+                        orderBy: BuildOrderBy(model.sortBy)
+                    );
+
+                    var groupedPackages = packages.GroupBy(p => p.Name).ToDictionary(
+                        g => g.Key,
+                        g => new { Packages = g.ToList() }
+                    );
+
+                    var processedGroups = new Dictionary<string, PackageViewModel>();
+                    foreach (var group in groupedPackages)
+                    {
+                        var allPackagesInGroup = group.Value.Packages;
+                        var representativePackage = allPackagesInGroup.First();
+
+                        representativePackage.TotalPackage = allPackagesInGroup.Count;
+                        representativePackage.TotalBlindBox = allPackagesInGroup.Select(x => x.BlindBoxes.Count).Sum();
+                        var allBlindBoxes = allPackagesInGroup
+                            .SelectMany(p => p.BlindBoxes)
+                            .Where(bb => !useAvailableOnly || !bb.IsSold)
+                            .ToList();
+
+                        if (allBlindBoxes.Any())
+                        {
+                            decimal minPrice = allBlindBoxes.Min(b => b.DiscountedPrice);
+                            decimal totalPrice = allBlindBoxes.Sum(b => b.DiscountedPrice);
+
+                            representativePackage.Price = minPrice == totalPrice
+                                ? minPrice.ToString("N0") + " ₫"
+                                : minPrice.ToString("N0") + " - " + totalPrice.ToString("N0") + " ₫";
+
+                            //representativePackage.Pack = allBlindBoxes
+                            //    .OrderBy(b => b.Number)
+                            //    .Select(b => b.Number)
+                            //    .Distinct()
+                            //    .ToList();
+                        }
+                        else
+                        {
+                            representativePackage.Price = "Liên hệ";
+                            //representativePackage.Pack = new List<int>();
+                        }
+
+                        processedGroups[group.Key] = representativePackage;
+                    }
+
+                    var pagedGroups = processedGroups
+                        .OrderBy(g => g.Key)
+                        .Skip((page - 1) * size)
+                        .Take(size)
+                        .Select(g => g.Value)
+                        .ToList();
+
+                    var result = new Paginate<PackageViewModel>
+                    {
+                        Page = page,
+                        Size = size,
+                        Total = groupedPackages.Count,
+                        TotalPages = (int)Math.Ceiling(groupedPackages.Count / (double)size),
+                        Items = pagedGroups
+                    };
+
+                    return new MethodResult<IPaginate<PackageViewModel>>.Success(result);
+                }
+                else
+                {
+                    var packageEntities = await _uow.GetRepository<Package>().GetPagingListAsync(
+                        selector: p => p,
+                        predicate: predicate,
+                        include: i => i.Include(p => p.BlindBoxes)
+                                     .Include(p => p.PackageImages)
+                                     .Include(p => p.Category),
+                        orderBy: BuildOrderBy(model.sortBy),
+                        page: page,
+                        size: size
+                    );
+
+                    var packageViewModels = new List<PackageViewModel>();
+                    foreach (var entity in packageEntities.Items)
+                    {
+                        var packageVM = _mapper.Map<PackageViewModel>(entity);
+
+                        // When not grouping, each package has a count of 1
+                        packageVM.TotalPackage = 1;
+                        packageVM.TotalBlindBox = packageVM.BlindBoxes.Count;
+
+                        var filteredBlindBoxes = packageVM.BlindBoxes
+                            .Where(bb => !useAvailableOnly || !bb.IsSold)
+                            .ToList();
+
+                        if (filteredBlindBoxes.Any())
+                        {
+                            decimal minPrice = filteredBlindBoxes.Min(b => b.DiscountedPrice);
+                            decimal totalPrice = filteredBlindBoxes.Sum(b => b.DiscountedPrice);
+
+                            packageVM.Price = minPrice == totalPrice
+                                ? minPrice.ToString("N0") + " ₫"
+                                : minPrice.ToString("N0") + " - " + totalPrice.ToString("N0") + " ₫";
+                        }
+                        else
+                        {
+                            packageVM.Price = "Liên hệ";
+                        }
+
+                        //packageVM.Pack = filteredBlindBoxes
+                        //    .OrderBy(b => b.Number)
+                        //    .Select(b => b.Number)
+                        //    .ToList();
+
+                        packageViewModels.Add(packageVM);
+                    }
+
+                    var result = new Paginate<PackageViewModel>
+                    {
+                        Page = packageEntities.Page,
+                        Size = packageEntities.Size,
+                        Total = packageEntities.Total,
+                        TotalPages = packageEntities.TotalPages,
+                        Items = packageViewModels
+                    };
+
+                    return new MethodResult<IPaginate<PackageViewModel>>.Success(result);
+                }
             }
             catch (Exception ex)
             {
                 return new MethodResult<IPaginate<PackageViewModel>>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
             }
         }
-
         private Func<IQueryable<Package>, IOrderedQueryable<Package>> BuildOrderBy(string sortBy)
         {
             if (string.IsNullOrEmpty(sortBy)) return null;

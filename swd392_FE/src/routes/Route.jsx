@@ -18,8 +18,8 @@ import HelpCenterStart from "../pages/ManagerPage/HelpCenterStart";
 import Settings from "../pages/ManagerPage/Settings";
 import Register from "../pages/Register";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
-// import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
-import PackageManager from "../pages/ManagerPage/PackageManager";
+import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
+// import PackageManager from "../pages/ManagerPage/PackageManager";
 import Users from "../pages/Users";
 const AppRoutes = () => {
   return (
@@ -60,7 +60,7 @@ const AppRoutes = () => {
         path="/shopping"
         element={
           <CustomerLayout>
-            <PackageManager />
+           <ShoppingPage/>.
           </CustomerLayout>
         }
       />
@@ -78,9 +78,9 @@ const AppRoutes = () => {
         path="/dashboard"
         element={
           <ManagerLayout>
-            <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <StaffRoute>
               <Dashboard />
-            </ProtectedRoute>
+            </StaffRoute>
           </ManagerLayout>
         }
       />

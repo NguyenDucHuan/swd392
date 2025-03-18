@@ -13,7 +13,6 @@ const RoleBasedRoute = ({ children, allowedRoles, redirectTo = "/unauthorized" }
   console.log("Current route requires roles:", allowedRoles);
   console.log("User has role:", userRole);
   
-  // Block all user roles completely - they shouldn't even see the unauthorized page
   if (userRole && userRole.toLowerCase() === "user") {
     console.log("User with 'User' role detected - access denied");
     // You can redirect to login or a specific "access denied" page
