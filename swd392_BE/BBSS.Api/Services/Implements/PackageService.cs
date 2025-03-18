@@ -419,5 +419,62 @@ namespace BBSS.Api.Services.Implements
                 return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
             }
         }
+
+        public async Task<MethodResult<string>> CreateUnknownPackageAsync(PackageUnknownCreateRequest request)
+        {
+            try
+            {
+                await _uow.BeginTransactionAsync();
+                for (int i = 0; i < request.AmountPackage; i++)
+                {                  
+                    var package = _mapper.Map<Package>(request);
+
+                    var imageUrls = await _cloudinaryService.UploadMultipleImagesAsync(request.PakageImages);
+
+                    if (imageUrls.Count != 0)
+                    {
+                        foreach (var url in imageUrls)
+                        {
+                            var packageImage = new PackageImage
+                            {
+                                Url = url
+                            };
+
+                            package.PackageImages.Add(packageImage);
+                        }
+                    }
+
+                    for (int j = 0; j < request.AmountBlindBox; j++)
+                    {
+                        var blindBox = new BlindBox
+                        {
+                            Price = request.Price,
+                            Discount = request.Discount,
+                            IsKnowned = false,
+                            IsSpecial = false,
+                            IsSold = false,
+                            Number = j + 1,
+                        };
+                        package.BlindBoxes.Add(blindBox);
+                    }
+
+                    await _uow.GetRepository<Package>().InsertAsync(package);
+                }
+                    
+                await _uow.CommitAsync();
+                await _uow.CommitTransactionAsync();
+                return new MethodResult<string>.Success("Package Unknown created successfully");
+            }
+            catch (Exception ex)
+            {
+                await _uow.RollbackTransactionAsync();
+                return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
+            }                        
+        }
+
+        //public async Task<MethodResult<string>> CreateKnownPackageAsync(PackageKnownCreateRequest request)
+        //{
+
+        //}
     }
 }

@@ -20,7 +20,7 @@ namespace BBSS.Api.Controllers
         }
 
         [HttpGet(Router.WheelRoute.GetWheel)]
-        public async Task<IActionResult> GetWheel ()
+        public async Task<IActionResult> GetWheel()
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (email == null) return Unauthorized();

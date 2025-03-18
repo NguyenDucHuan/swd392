@@ -13,6 +13,6 @@ namespace BBSS.Api.Services.Interfaces
 
         Task<MethodResult<string>> UpdatePackageAsync(int id, PackageUpdateRequest request);
         Task<MethodResult<string>> DeletePackageAsync(int id);
-
+        Task<MethodResult<string>> CreateUnknownPackageAsync(PackageUnknownCreateRequest request);
     }
 }

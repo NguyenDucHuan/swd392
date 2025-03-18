@@ -61,7 +61,8 @@ namespace BBSS.Api.Routes
             public const string Packages = $"{prefix}package";
             public const string GetPackage = $"{Packages}";
             public const string GetPackages = $"{Packages}s";
-            public const string CreatePackage = $"{Packages}/create-package";
+            public const string CreateUnknownPackage = $"{Packages}/create-unknown-package";
+            public const string CreateKnownPackage = $"{Packages}/create-known-package";
             public const string UpdatePackage = $"{Packages}/update-package";
             public const string DeletePackage = $"{Packages}/delete-package";
         }
