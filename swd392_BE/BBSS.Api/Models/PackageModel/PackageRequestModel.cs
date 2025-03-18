@@ -1,5 +1,51 @@
 ﻿namespace BBSS.Api.Models.PackageModel
 {
+    public class PackageUnknownCreateRequest
+    {
+        public string PakageCode { get; set; } = null!;
+
+        public string? Name { get; set; }
+
+        public string? Description { get; set; }
+
+        public string? Manufacturer { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public List<IFormFile> PakageImages { get; set; }
+
+        public decimal Price { get; set; }
+
+        public decimal Discount { get; set; }
+
+        public int AmountPackage { get; set; }
+
+        public int AmountBlindBox { get; set; }
+    }
+
+    public class PackageKnownCreateRequest
+    {
+        public string PakageCode { get; set; } = null!;
+
+        public string? Name { get; set; }
+
+        public string? Description { get; set; }
+
+        public string? Manufacturer { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public List<IFormFile> PakageImages { get; set; }
+
+        public decimal Price { get; set; }
+
+        public decimal Discount { get; set; }
+
+        public int AmountPackage { get; set; }
+
+        public int AmountBlindBox { get; set; }
+    }
+
     public class PackageCreateRequest
     {
         public string PakageCode { get; set; } = null!;
@@ -37,7 +83,7 @@
         public bool IsSpecial { get; set; } = false;
         public List<IFormFile>? ImageFiles { get; set; }
         public List<int>? FeatureIds { get; set; }
-    }
+    }   
 
     public class PackageUpdateRequest
     {

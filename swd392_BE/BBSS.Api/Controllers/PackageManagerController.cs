@@ -61,5 +61,17 @@ namespace BBSS.Api.Controllers
             );
         }
 
+        [HttpPost]
+        [Route(Router.PackageRoute.CreateUnknownPackage)]
+        //[Authorize(Roles = UserConstant.USER_ROLE_ADMIN)]
+        public async Task<ActionResult> CreateUnknownPackage(PackageUnknownCreateRequest request)
+        {
+            var result = await _packageService.CreateUnknownPackageAsync(request);
+            return result.Match(
+                (l, c) => Problem(detail: l, statusCode: c),
+                Ok
+            );
+        }
+
     }
 }

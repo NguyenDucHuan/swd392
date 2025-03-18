@@ -18,7 +18,7 @@ namespace BBSS.Api.Mapper
                 .ForMember(dest => dest.PackageCode, opt => opt.MapFrom(src => src.Package.PakageCode))
                 .ForMember(dest => dest.PackageName, opt => opt.MapFrom(src => src.Package.Name));
 
-            CreateMap<PackageCreateRequest, Package>();
+            CreateMap<PackageUnknownCreateRequest, Package>();
             
             CreateMap<PackageUpdateRequest, Package>()
                 .ForMember(dest => dest.PackageId, opt => opt.Ignore())
