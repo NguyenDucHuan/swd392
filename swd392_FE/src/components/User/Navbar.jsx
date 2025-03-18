@@ -5,14 +5,14 @@ import { RiLockPasswordLine, RiLoginCircleLine, RiLogoutBoxLine, RiUserLine } fr
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
-
+import { BASE_URL } from '../../configs/globalVariables';
 function Navbar() {
   const [showProfile, setShowProfile] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  
+
   // Fetch user profile data when component mounts
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -23,12 +23,12 @@ function Navbar() {
           return;
         }
 
-        const response = await axios.get('https://localhost:7295/profile', {
+        const response = await axios.get(BASE_URL + '/users/profile', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        
+
         setUserProfile(response.data);
       } catch (error) {
         console.error('Failed to fetch profile:', error);
@@ -40,7 +40,7 @@ function Navbar() {
 
     fetchUserProfile();
   }, []);
-  
+
   const profileOptions = [
     { id: 1, title: 'Quản lí Tài khoản', icon: RiUserLine, path: '/customer/profile' },
     { id: 2, title: 'Đổi mật khẩu', icon: RiLockPasswordLine, path: '/forgot-password' },
@@ -68,7 +68,7 @@ function Navbar() {
           <span className="text-xl font-semibold">PaneWay</span>
         </Link>
       </div>
-      
+
       {/* Navigation links */}
       <div className="hidden md:flex items-center space-x-8">
         <Link to="/about" className="text-gray-700 hover:text-blue-600">About</Link>
@@ -95,7 +95,7 @@ function Navbar() {
                   {loading ? 'Đang tải...' : (userProfile?.name)}
                 </span>
                 <span className="text-sm text-gray-500">
-                  {loading ? '' : (userProfile?.role || user?.role )}
+                  {loading ? '' : (userProfile?.role || user?.role)}
                 </span>
               </div>
             </button>
@@ -104,7 +104,7 @@ function Navbar() {
               <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg py-2 z-50">
                 {profileOptions.map((option, index) => (
                   <div key={option.id}>
-                    <button 
+                    <button
                       className="w-full px-4 py-2 hover:bg-gray-50 flex items-center whitespace-nowrap"
                       onClick={() => handleProfileOptionClick(option)}
                     >

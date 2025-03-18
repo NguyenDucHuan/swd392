@@ -25,7 +25,7 @@ function ManagerNavbar() {
           return;
         }
 
-        const response = await axios.get(BASE_URL + '/authen/profile', {
+        const response = await axios.get(BASE_URL + '/users/profile', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -63,22 +63,24 @@ function ManagerNavbar() {
     { id: 4, title: 'Đăng xuất', icon: RiLogoutBoxLine },
   ];
 
-  const handleProfileOptionClick = (optionId) => {
-    if (optionId === 4) {
+
+  const handleProfileOptionClick = (option) => {
+    if (option.id === 4) {
       // Handle logout
       logout();
       toast.success('Đăng xuất thành công!');
       navigate('/'); // Redirect to home page after logout
-    } else if (optionId === 1) {
+    } else if (option.id === 1) {
       // Navigate to account management
       navigate('/profile');
-    } else if (optionId === 2) {
+    } else if (option.id === 2) {
       // Navigate to change password
       navigate('/change-password');
     }
     // Close the dropdown
     setShowProfile(false);
   };
+
 
   return (
     <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4">
@@ -108,13 +110,13 @@ function ManagerNavbar() {
             }}
           >
             <img
-              src={userProfile?.avatarUrl || "https://ui-avatars.com/api/?name=User&background=random"}
+              src={"https://upload.wikimedia.org/wikipedia/commons/2/24/LEGO_logo.svg"}
               alt="Profile"
               className="w-8 h-8 rounded-full"
             />
             <div className="flex flex-col">
               <span className="font-medium">
-                {loading ? 'Đang tải...' : (userProfile?.fullName || user?.email || 'Người dùng')}
+                {loading ? 'Đang tải...' : (userProfile?.name || user?.email || 'Người dùng')}
               </span>
               <span className="text-sm text-gray-500">
                 {loading ? '' : (userProfile?.role || user?.role || 'User')}
@@ -125,16 +127,16 @@ function ManagerNavbar() {
           {showProfile && (
             <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg py-2 z-50">
               {profileOptions.map((option, index) => (
-                <React.Fragment key={option.id}>
+                <div key={option.id}>
                   <button
                     className="w-full px-4 py-2 hover:bg-gray-50 flex items-center whitespace-nowrap"
-                    onClick={() => handleProfileOptionClick(option.id)}
+                    onClick={() => handleProfileOptionClick(option)}
                   >
                     <option.icon className="w-5 h-5 mr-3 text-gray-500 flex-shrink-0" />
                     <span className="truncate">{option.title}</span>
                   </button>
                   {index < profileOptions.length - 1 && <hr className="my-1" />}
-                </React.Fragment>
+                </div>
               ))}
             </div>
           )}

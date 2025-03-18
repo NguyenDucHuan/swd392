@@ -7,7 +7,7 @@ function ManegerSidebar() {
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
-  
+
   const menuItems = [
     { icon: RiDashboardLine, text: 'Tổng quan', path: '/dashboard' },
     { icon: RiFileTextLine, text: 'Nội dung', path: '/content' },
@@ -22,10 +22,9 @@ function ManegerSidebar() {
   };
 
   return (
-    <div 
-      className={`${
-        isCollapsed ? 'w-16' : 'w-64'
-      } h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300 relative`}
+    <div
+      className={`${isCollapsed ? 'w-16' : 'w-64'
+        } h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300 relative`}
     >
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
@@ -51,12 +50,11 @@ function ManegerSidebar() {
             <li key={index}>
               <Link
                 to={item.path}
-                className={`flex items-center p-2 rounded-lg ${
-                  location.pathname === item.path || 
-                  (item.path === '/users' && location.pathname.startsWith('/users'))
+                className={`flex items-center p-2 rounded-lg ${location.pathname === item.path ||
+                    (item.path === '/users' && location.pathname.startsWith('/users'))
                     ? 'bg-blue-50 text-blue-600'
                     : 'text-gray-700 hover:bg-gray-100'
-                }`}
+                  }`}
                 title={isCollapsed ? item.text : ''}
               >
                 <item.icon className="w-6 h-6" />
@@ -72,27 +70,17 @@ function ManegerSidebar() {
           <li>
             <Link
               to="/settings"
-              className={`flex items-center p-2 rounded-lg ${
-                location.pathname === '/settings'
+              className={`flex items-center p-2 rounded-lg ${location.pathname === '/settings'
                   ? 'bg-blue-50 text-blue-600'
                   : 'text-gray-700 hover:bg-gray-100'
-              }`}
+                }`}
               title={isCollapsed ? 'Cài đặt' : ''}
             >
               <RiSettings4Line className="w-6 h-6" />
               {!isCollapsed && <span className="ml-3">Cài đặt</span>}
             </Link>
           </li>
-          <li>
-            <button 
-              className="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg w-full"
-              title={isCollapsed ? 'Đăng xuất' : ''}
-              onClick={handleLogout}
-            >
-              <RiLogoutBoxLine className="w-6 h-6" />
-              {!isCollapsed && <span className="ml-3">Đăng xuất</span>}
-            </button>
-          </li>
+
         </ul>
       </div>
     </div>

@@ -21,7 +21,6 @@ namespace BBSS.Api.Controllers
 
         [HttpGet]
         [Route(Router.UserRoute.Profile)]
-        [Authorize(Roles = UserConstant.USER_ROLE_USER)]
         public async Task<IActionResult> GetProfilea()
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
