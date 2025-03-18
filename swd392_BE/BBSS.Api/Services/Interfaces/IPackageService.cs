@@ -8,8 +8,8 @@ namespace BBSS.Api.Services.Interfaces
 {
     public interface IPackageService
     {
-        Task<MethodResult<PackageViewModel>> GetPackageByIdAsync(int id);
-        Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model);
+        Task<MethodResult<PackageViewModel>> GetPackageByIdAsync(int id , string filter);
+        Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model, int CategoryID = 0, int RepresentativeCount = 0);
 
         Task<MethodResult<string>> UpdatePackageAsync(int id, PackageUpdateRequest request);
         Task<MethodResult<string>> DeletePackageAsync(int id);

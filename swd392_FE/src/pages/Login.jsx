@@ -28,7 +28,7 @@ function Login() {
                 toast.success('Đăng nhập thành công!');
                 
                 // Redirect based on user role
-                if (result.role === 'Admin') {
+                if (result.role === 'Admin' || result.role === 'Staff') {
                     navigate('/dashboard');
                 } else {
                     navigate('/');

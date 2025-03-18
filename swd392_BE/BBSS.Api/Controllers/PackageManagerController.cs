@@ -19,9 +19,9 @@ namespace BBSS.Api.Controllers
 
         [HttpGet]
         [Route(Router.PackageRoute.GetPackage)]
-        public async Task<ActionResult> GetPackage(int packageId)
+        public async Task<ActionResult> GetPackage(int packageId,  string filter)
         {
-            var result = await _packageService.GetPackageByIdAsync(packageId);
+            var result = await _packageService.GetPackageByIdAsync(packageId, filter);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok
@@ -29,9 +29,9 @@ namespace BBSS.Api.Controllers
         }
         [HttpGet]
         [Route(Router.PackageRoute.GetPackages)]
-        public async Task<ActionResult> GetPackages([FromQuery] PaginateModel model)
+        public async Task<ActionResult> GetPackages([FromQuery] PaginateModel model, [FromQuery] int categoryId = 0, [FromQuery] int representativeCount = 0)
         {
-            var result = await _packageService.GetPackagesAsync(model);
+            var result = await _packageService.GetPackagesAsync(model, categoryId, representativeCount);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok

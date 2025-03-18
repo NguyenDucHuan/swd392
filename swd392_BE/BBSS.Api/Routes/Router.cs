@@ -65,5 +65,14 @@ namespace BBSS.Api.Routes
             public const string UpdatePackage = $"{Packages}/update-package";
             public const string DeletePackage = $"{Packages}/delete-package";
         }
+        public static class CategoryRoute
+        {
+            public const string Categories = $"{prefix}category";
+            public const string GetCategory = $"{Categories}";
+            public const string GetCategories = $"{prefix}categories";
+            public const string CreateCategory = $"{Categories}/create-category";
+            public const string UpdateCategory = $"{Categories}/update-category";
+            public const string DeleteCategory = $"{Categories}/delete-category";
+        }
     }
 }
