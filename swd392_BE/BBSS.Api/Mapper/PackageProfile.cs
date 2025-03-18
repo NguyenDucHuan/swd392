@@ -19,7 +19,25 @@ namespace BBSS.Api.Mapper
                 .ForMember(dest => dest.PackageName, opt => opt.MapFrom(src => src.Package.Name));
 
             CreateMap<PackageUnknownCreateRequest, Package>();
-            
+            CreateMap<PackageKnownCreateRequest, Package>()
+                //.AfterMap((src, dest, context) =>
+                //{
+                //    if (src.BlindBoxes != null && dest.BlindBoxes != null)
+                //    {
+                //        for (int i = 0; i < dest.BlindBoxes.Count; i++)
+                //        {
+                //            dest.BlindBoxes.ToList()[i].Number = i + 1; // Gán số thứ tự 1, 2, 3...
+                //        }
+                //    }
+                //});
+                .ForMember(dest => dest.BlindBoxes, opt => opt.Ignore());
+            CreateMap<BlindBoxCreateRequest, BlindBox>()
+                .ForMember(dest => dest.IsSold, opt => opt.MapFrom(src => 0))
+                .ForMember(dest => dest.IsKnowned, opt => opt.MapFrom(src => 1))
+                .ForMember(dest => dest.BlindBoxFeatures, opt => opt.MapFrom(src => src.FeatureIds));
+            CreateMap<int, BlindBoxFeature>()
+                .ForMember(dest => dest.FeatureId, opt => opt.MapFrom(src => src));
+
             CreateMap<PackageUpdateRequest, Package>()
                 .ForMember(dest => dest.PackageId, opt => opt.Ignore())
                 .ForMember(dest => dest.PakageCode, opt => opt.Ignore())

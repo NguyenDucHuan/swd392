@@ -472,9 +472,59 @@ namespace BBSS.Api.Services.Implements
             }                        
         }
 
-        //public async Task<MethodResult<string>> CreateKnownPackageAsync(PackageKnownCreateRequest request)
-        //{
+        public async Task<MethodResult<string>> CreateKnownPackageAsync(PackageKnownCreateRequest request)
+        {
+            try
+            {
+                await _uow.BeginTransactionAsync();
 
-        //}
+                var package = _mapper.Map<Package>(request);
+
+                var imageUrls = await _cloudinaryService.UploadMultipleImagesAsync(request.PakageImages);
+
+                if (imageUrls.Count != 0)
+                {
+                    foreach (var url in imageUrls)
+                    {
+                        var packageImage = new PackageImage
+                        {
+                            Url = url
+                        };
+
+                        package.PackageImages.Add(packageImage);
+                    }
+                }
+                int number = 1;
+                foreach (var blindBoxRequest in request.BlindBoxes)
+                {
+                    var blindBox = _mapper.Map<BlindBox>(blindBoxRequest);
+                    blindBox.Number = number++;
+
+                    var blindBoxImageUrls = await _cloudinaryService.UploadMultipleImagesAsync(blindBoxRequest.BlindBoxImages);
+                    if (blindBoxImageUrls.Count != 0)
+                    {
+                        foreach (var url in blindBoxImageUrls)
+                        {
+                            var blindBoxImage = new BlindBoxImage
+                            {
+                                Url = url
+                            };
+                            blindBox.BlindBoxImages.Add(blindBoxImage);
+                        }
+                    }
+                    package.BlindBoxes.Add(blindBox);
+                }
+                  
+                await _uow.GetRepository<Package>().InsertAsync(package);
+                await _uow.CommitAsync();
+                await _uow.CommitTransactionAsync();
+                return new MethodResult<string>.Success("Package Known created successfully");
+            }
+            catch (Exception ex)
+            {
+                await _uow.RollbackTransactionAsync();
+                return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

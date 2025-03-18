@@ -31,6 +31,8 @@ namespace BBSS.Api.Extensions
             service.AddTransient<ICloudinaryService, CloudinaryService>();
             service.AddTransient<IBlindBoxService, BlindBoxService>();
             service.AddTransient<ICategoryService, CategoryService>();
+            service.AddTransient<ITransactionService, TransactionService>();
+            service.AddTransient<IInventoryService, InventoryService>();
 
             return service;
         }

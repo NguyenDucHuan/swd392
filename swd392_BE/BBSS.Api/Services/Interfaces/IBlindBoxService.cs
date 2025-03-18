@@ -8,5 +8,6 @@ namespace BBSS.Api.Services.Interfaces
     {
         Task<MethodResult<string>> UpdateBlindBoxAsync(int blindBoxId, BlindBoxUpdateRequest request);
         Task<MethodResult<string>> CreateBlindBoxAsync(int packageId, BlindBoxUpdateRequest request);
+        Task<MethodResult<BlindBoxViewModel>> GetBlindBoxAsync(int blindBoxId);
     }
 }

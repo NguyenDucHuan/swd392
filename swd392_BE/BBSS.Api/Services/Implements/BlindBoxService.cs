@@ -139,5 +139,16 @@ namespace BBSS.Api.Services.Implements
                 return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
             }
         }
+
+        public async Task<MethodResult<BlindBoxViewModel>> GetBlindBoxAsync(int blindBoxId)
+        {
+            var result = await _uow.GetRepository<BlindBox>().SingleOrDefaultAsync<BlindBoxViewModel>(
+                    selector: s => _mapper.Map<BlindBoxViewModel>(s),
+                    predicate: p => p.BlindBoxId == blindBoxId,
+                    include: i => i.Include(p => p.Package)
+                );
+
+            return new MethodResult<BlindBoxViewModel>.Success(result);
+        }
     }
 }
