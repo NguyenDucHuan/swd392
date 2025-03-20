@@ -5,7 +5,7 @@ namespace BBSS.Domain.Entities;
 
 public partial class OrderStatus
 {
-    public int OrderStatusId { get; set; }
+    public int OrderStatusId { get; set; }  
 
     public string? Status { get; set; }
 
