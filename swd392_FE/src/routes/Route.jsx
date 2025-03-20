@@ -1,8 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "../components/ProtectedRoute";
-import { AdminRoute, StaffRoute } from "../components/RoleBasedRoute";
+import { AdminRoute, StaffRoute, UserRoute } from "../components/RoleBasedRoute";
 import { CustomerLayout } from "../layout/CustomerLayout";
 import { ManagerLayout } from "../layout/ManagerLayout";
+
 
 // Import pages
 import Login from "../pages/Login";
@@ -19,9 +20,13 @@ import CreateUnknownPackage from "../pages/ManagerPage/PackageManagement/CreateU
 import EditPackage from "../pages/ManagerPage/PackageManagement/EditPackage";
 import PackageManager from "../pages/ManagerPage/PackageManager";
 import Settings from "../pages/ManagerPage/Settings";
+import ProfilePage from '../pages/ProfilePage/ProfilePage';
 import Register from "../pages/Register";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
+
+// import PackageManager from "../pages/ManagerPage/PackageManager";
+import ChangePasswordPage from "../pages/ProfilePage/ChangePasswordPage";
 import Users from "../pages/Users";
 const AppRoutes = () => {
   return (
@@ -48,7 +53,7 @@ const AppRoutes = () => {
         path="/about"
         element={
           <CustomerLayout>
-            <About />
+            <About/>
           </CustomerLayout>
         }
       />
@@ -56,7 +61,7 @@ const AppRoutes = () => {
         path="/blog"
         element={
           <CustomerLayout>
-            <BlogPage />
+            <BlogPage/>
           </CustomerLayout>
         }
       />
@@ -64,7 +69,7 @@ const AppRoutes = () => {
         path="/shopping"
         element={
           <CustomerLayout>
-           <ShoppingPage/>.
+            <ShoppingPage/>.
           </CustomerLayout>
         }
       />
@@ -72,18 +77,18 @@ const AppRoutes = () => {
         path="/lucky-wheel"
         element={
           <CustomerLayout>
-            <LuckyWheel />
+            <LuckyWheel/>
           </CustomerLayout>
         }
       />
-      
+
       {/* Admin */}
       <Route
         path="/dashboard"
         element={
           <ManagerLayout>
             <StaffRoute>
-              <Dashboard />
+              <Dashboard/>
             </StaffRoute>
           </ManagerLayout>
         }
@@ -93,7 +98,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <AdminRoute>
-              <Settings />
+              <Settings/>
             </AdminRoute>
           </ManagerLayout>
         }
@@ -103,7 +108,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <ProtectedRoute>
-              <HelpCenter />
+              <HelpCenter/>
             </ProtectedRoute>
           </ManagerLayout>
         }
@@ -113,7 +118,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <ProtectedRoute>
-              <HelpCenterStart />
+              <HelpCenterStart/>
             </ProtectedRoute>
           </ManagerLayout>
         }
@@ -123,7 +128,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <AdminRoute>
-              <AdvertisingCenter />
+              <AdvertisingCenter/>
             </AdminRoute>
           </ManagerLayout>
         }
@@ -133,17 +138,19 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <StaffRoute>
-              <Content />
+              <Content/>
             </StaffRoute>
           </ManagerLayout>
         }
       />
+
+
       <Route
         path="/users"
         element={
           <ManagerLayout>
             <AdminRoute>
-              <Users />
+              <Users/>
             </AdminRoute>
           </ManagerLayout>
         }
@@ -153,7 +160,7 @@ const AppRoutes = () => {
         element=
         {
           <CustomerLayout>
-        <Register />
+        <Register/>
         </CustomerLayout>
         }
       />
@@ -198,6 +205,58 @@ const AppRoutes = () => {
           </ManagerLayout>
         }
       />
+
+      {/* <Route>
+        <Navbar />
+        <Route path="/customer/profile" element={<ProfilePage />} />
+        {/* Add other routes here */}
+      {/* </Route> */} */
+
+      <Route
+        path="/change-password"
+        element={
+          <ManagerLayout>
+            <StaffRoute>
+              <ChangePasswordPage />
+            </StaffRoute>
+          </ManagerLayout>
+        }
+      />
+
+      {/* CHO USER */}
+      <Route
+        path="/user-change-password"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <ChangePasswordPage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+
+      <Route
+        path="/customer/profile"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <ProfilePage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ManagerLayout>
+            <StaffRoute>
+              <ProfilePage />
+            </StaffRoute>
+          </ManagerLayout>
+        }
+      />
+
       <Route
         path="/unauthorized"
         element={

@@ -41,7 +41,7 @@ function Navbar() {
 
   const profileOptions = [
     { id: 1, title: 'Quản lí Tài khoản', icon: RiUserLine, path: '/customer/profile' },
-    { id: 2, title: 'Đổi mật khẩu', icon: RiLockPasswordLine, path: '/forgot-password' },
+    { id: 2, title: 'Đổi mật khẩu', icon: RiLockPasswordLine, path: '/user-change-password' },
     { id: 3, title: 'Hoạt động đăng nhập', icon: RiLoginCircleLine, path: '/login-activity' },
     { id: 4, title: 'Đăng xuất', icon: RiLogoutBoxLine, action: 'logout' },
   ];
