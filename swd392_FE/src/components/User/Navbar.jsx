@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { RiLockPasswordLine, RiLoginCircleLine, RiLogoutBoxLine, RiUserLine } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAuth } from '../../contexts/AuthContext';
 import { BASE_URL } from '../../configs/globalVariables';
+import { useAuth } from '../../contexts/AuthContext';
 function Navbar() {
   const [showProfile, setShowProfile] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
@@ -13,7 +13,6 @@ function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  // Fetch user profile data when component mounts
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -32,7 +31,6 @@ function Navbar() {
         setUserProfile(response.data);
       } catch (error) {
         console.error('Failed to fetch profile:', error);
-        // Silent fail for user navbar
       } finally {
         setLoading(false);
       }
@@ -52,7 +50,6 @@ function Navbar() {
     if (option.action === 'logout') {
       logout();
       toast.success('Đăng xuất thành công!');
-      navigate('/'); // Changed to redirect to home page after logout
     } else if (option.path) {
       navigate(option.path);
     }
@@ -61,7 +58,6 @@ function Navbar() {
 
   return (
     <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8">
-      {/* Logo and website name */}
       <div className="flex items-center">
         <Link to="/" className="flex items-center space-x-3">
           <img src='/assets/logo.jpg' alt="Logo" className="h-8 w-auto" />
@@ -91,13 +87,13 @@ function Navbar() {
                 className="w-8 h-8 rounded-full"
               />
               <div className="hidden md:flex flex-col">
-                <span className="font-medium">
-                  {loading ? 'Đang tải...' : (userProfile?.name)}
-                </span>
-                <span className="text-sm text-gray-500">
-                  {loading ? '' : (userProfile?.role || user?.role)}
-                </span>
-              </div>
+            <span className="font-medium">
+              {loading ? 'Đang tải...' : (userProfile?.name || 'User')}
+            </span>
+            <span className="text-green-600 font-medium">
+              {loading ? 'Đang tải...' :userProfile?.walletBalance?.toLocaleString('vi-VN') || 'balance'} ₫
+            </span>
+            </div>
             </button>
 
             {showProfile && (

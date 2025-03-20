@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
+
 function Register() {
     const { register, error } = useAuth();
     const navigate = useNavigate();
@@ -11,6 +12,8 @@ function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
+    const [phone, setPhone] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -27,7 +30,9 @@ function Register() {
             const result = await register({
                 name,
                 email,
-                password
+                password,
+                dateOfBirth,
+                phone
             });
 
             if (result.success) {
@@ -82,6 +87,35 @@ function Register() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="abc@gmail.com"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                        </div>
+                        
+                        <div>
+                            <label htmlFor="phone" className="block text-sm font-bold text-gray-700 text-left">
+                                Số điện thoại
+                            </label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                placeholder="0912345678"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="dateOfBirth" className="block text-sm font-bold text-gray-700 text-left">
+                                Ngày sinh
+                            </label>
+                            <input
+                                type="date"
+                                id="dateOfBirth"
+                                value={dateOfBirth}
+                                onChange={(e) => setDateOfBirth(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 required
                             />
