@@ -60,6 +60,22 @@ export const AuthProvider = ({ children }) => {
     initializeAuth()
   }, [])
 
+  // Register function
+  const register = async (userData) => {
+    try {
+      setError(null)
+      const response = await axios.post(BASE_URL + '/authen/register', userData)
+      
+      console.log('Registration response:', response.data)
+      return { success: true, data: response.data }
+    } catch (error) {
+      console.error('Registration error:', error.response?.data || error.message)
+      const errorMessage = error.response?.data?.message || 'Đăng ký thất bại. Vui lòng thử lại.'
+      setError(errorMessage)
+      throw new Error(errorMessage)
+    }
+  }
+
   const login = async (userData) => {
     try {
       const response = await axios.post(BASE_URL + '/authen/login', userData)
@@ -94,7 +110,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, error, loading }}>
+    <AuthContext.Provider value={{ user, register, login, logout, error, loading }}>
       {children}
     </AuthContext.Provider>
   )

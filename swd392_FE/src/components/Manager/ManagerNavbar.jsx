@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { RiLockPasswordLine, RiLoginCircleLine, RiLogoutBoxLine, RiSearchLine, RiUserLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAuth } from '../../contexts/AuthContext';
 import { BASE_URL } from '../../configs/globalVariables';
+import { useAuth } from '../../contexts/AuthContext';
 
 function ManagerNavbar() {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -69,22 +69,18 @@ function ManagerNavbar() {
       // Handle logout
       logout();
       toast.success('Đăng xuất thành công!');
-      navigate('/'); // Redirect to home page after logout
+      navigate('/'); 
     } else if (option.id === 1) {
-      // Navigate to account management
       navigate('/profile');
     } else if (option.id === 2) {
-      // Navigate to change password
       navigate('/change-password');
     }
-    // Close the dropdown
     setShowProfile(false);
   };
 
 
   return (
     <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4">
-      {/* Search input */}
       <div className="flex-1 max-w-2xl">
         <div className="relative">
           <RiSearchLine className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -97,9 +93,6 @@ function ManagerNavbar() {
       </div>
 
       <div className="flex items-center space-x-4 mr-8">
-        {/* Notifications and Messages sections remain the same */}
-        {/* ... */}
-
         <div className="relative">
           <button
             className="flex items-center space-x-3 hover:bg-gray-100 rounded-lg p-2"

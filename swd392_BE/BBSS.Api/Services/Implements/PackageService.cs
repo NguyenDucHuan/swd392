@@ -61,12 +61,6 @@ namespace BBSS.Api.Services.Implements
                     result.Price = minPrice == totalPrice
                         ? minPrice.ToString("N0") + " ₫"
                         : minPrice.ToString("N0") + " - " + totalPrice.ToString("N0") + " ₫";
-
-                    // Pack contains filtered box numbers
-                    //result.Pack = filteredBlindBoxes
-                    //    .OrderBy(b => b.Number)
-                    //    .Select(b => b.Number)
-                    //    .ToList();
                 }
                 else
                 {
@@ -82,6 +76,8 @@ namespace BBSS.Api.Services.Implements
             }
         }
 
+
+
         public async Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model, int categoryId = 0, int representativeCount = 0)
         {
             try
@@ -90,8 +86,6 @@ namespace BBSS.Api.Services.Implements
                 int size = model.size > 0 ? model.size : 10;
                 string search = model.search?.ToLower() ?? string.Empty;
                 string filter = model.filter?.ToLower() ?? string.Empty;
-
-                // Base predicate for filtering
                 Expression<Func<Package, bool>> predicate = p =>
                     // Search filter
                     (string.IsNullOrEmpty(search) ||
@@ -105,9 +99,9 @@ namespace BBSS.Api.Services.Implements
 
                 bool useAvailableOnly = filter.Contains("available");
 
-                bool groupByName = representativeCount > 0;
+                bool groupByPackageCode = representativeCount > 0;
 
-                if (groupByName)
+                if (groupByPackageCode)
                 {
                     var packages = await _uow.GetRepository<Package>().GetListAsync(
                         selector: p => _mapper.Map<PackageViewModel>(p),
@@ -118,7 +112,7 @@ namespace BBSS.Api.Services.Implements
                         orderBy: BuildOrderBy(model.sortBy)
                     );
 
-                    var groupedPackages = packages.GroupBy(p => p.Name).ToDictionary(
+                    var groupedPackages = packages.GroupBy(p => p.PakageCode).ToDictionary(
                         g => g.Key,
                         g => new { Packages = g.ToList() }
                     );
@@ -144,17 +138,10 @@ namespace BBSS.Api.Services.Implements
                             representativePackage.Price = minPrice == totalPrice
                                 ? minPrice.ToString("N0") + " ₫"
                                 : minPrice.ToString("N0") + " - " + totalPrice.ToString("N0") + " ₫";
-
-                            //representativePackage.Pack = allBlindBoxes
-                            //    .OrderBy(b => b.Number)
-                            //    .Select(b => b.Number)
-                            //    .Distinct()
-                            //    .ToList();
                         }
                         else
                         {
                             representativePackage.Price = "Liên hệ";
-                            //representativePackage.Pack = new List<int>();
                         }
 
                         processedGroups[group.Key] = representativePackage;
@@ -446,7 +433,7 @@ namespace BBSS.Api.Services.Implements
             {
                 await _uow.BeginTransactionAsync();
                 for (int i = 0; i < request.AmountPackage; i++)
-                {                  
+                {
                     var package = _mapper.Map<Package>(request);
 
                     var imageUrls = await _cloudinaryService.UploadMultipleImagesAsync(request.PakageImages);
@@ -480,7 +467,7 @@ namespace BBSS.Api.Services.Implements
 
                     await _uow.GetRepository<Package>().InsertAsync(package);
                 }
-                    
+
                 await _uow.CommitAsync();
                 await _uow.CommitTransactionAsync();
                 return new MethodResult<string>.Success("Package Unknown created successfully");
@@ -489,7 +476,7 @@ namespace BBSS.Api.Services.Implements
             {
                 await _uow.RollbackTransactionAsync();
                 return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
-            }                        
+            }
         }
 
         public async Task<MethodResult<string>> CreateKnownPackageAsync(PackageKnownCreateRequest request)
@@ -534,7 +521,7 @@ namespace BBSS.Api.Services.Implements
                     }
                     package.BlindBoxes.Add(blindBox);
                 }
-                  
+
                 await _uow.GetRepository<Package>().InsertAsync(package);
                 await _uow.CommitAsync();
                 await _uow.CommitTransactionAsync();
