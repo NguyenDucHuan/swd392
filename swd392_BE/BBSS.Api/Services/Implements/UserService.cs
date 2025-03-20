@@ -43,5 +43,11 @@ namespace BBSS.Api.Services.Implements
             _uow.Commit();
             return new MethodResult<string>.Success("Update profile successfully");
         }
+
+        public async Task<MethodResult<string>> DisableUserAsync()
+        {
+
+            return new MethodResult<string>.Success("Update profile successfully");
+        } 
     }
 }

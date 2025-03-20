@@ -12,14 +12,16 @@ import HomePage from "../pages/MainPage/HomePage";
 import AdvertisingCenter from "../pages/ManagerPage/AdvertisingCenter";
 import Content from "../pages/ManagerPage/Content";
 import Dashboard from "../pages/ManagerPage/Dashboard";
-import GoldUsers from "../pages/ManagerPage/GoldUsers";
 import HelpCenter from "../pages/ManagerPage/HelpCenter";
 import HelpCenterStart from "../pages/ManagerPage/HelpCenterStart";
+import CreateKnownPackage from "../pages/ManagerPage/PackageManagement/CreateKnownPackage";
+import CreateUnknownPackage from "../pages/ManagerPage/PackageManagement/CreateUnknownPackage";
+import EditPackage from "../pages/ManagerPage/PackageManagement/EditPackage";
+import PackageManager from "../pages/ManagerPage/PackageManager";
 import Settings from "../pages/ManagerPage/Settings";
 import Register from "../pages/Register";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
-// import PackageManager from "../pages/ManagerPage/PackageManager";
 import Users from "../pages/Users";
 const AppRoutes = () => {
   return (
@@ -27,7 +29,9 @@ const AppRoutes = () => {
       <Route
         path="/login"
         element={
+          <CustomerLayout>
           <Login />
+          </CustomerLayout>
         }
       />
       {/* Geust */}
@@ -147,16 +151,50 @@ const AppRoutes = () => {
       <Route
         path="/register"
         element=
-        {<Register />}
+        {
+          <CustomerLayout>
+        <Register />
+        </CustomerLayout>
+        }
       />
 
       <Route
-        path="/users/gold"
+        path="/packages"
         element={
           <ManagerLayout>
-            <AdminRoute>
-              <GoldUsers />
-            </AdminRoute>
+          <StaffRoute>
+            <PackageManager/>
+          </StaffRoute>
+          </ManagerLayout>
+        }
+      />
+      <Route
+        path="/package/create-unknown"
+        element={
+          <ManagerLayout>
+          <StaffRoute>
+            <CreateUnknownPackage/>
+          </StaffRoute>
+          </ManagerLayout>
+        }
+      />
+      <Route
+        path="/package/create-known"
+        element={
+          <ManagerLayout>
+          <StaffRoute>
+            <CreateKnownPackage/>
+          </StaffRoute>
+          </ManagerLayout>
+        }
+      />
+      <Route
+        path="/package/edit/:packageId"
+        element={
+          <ManagerLayout>
+          <StaffRoute>
+          <EditPackage />
+          </StaffRoute>
           </ManagerLayout>
         }
       />
