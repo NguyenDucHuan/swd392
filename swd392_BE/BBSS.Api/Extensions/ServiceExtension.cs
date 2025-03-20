@@ -33,6 +33,7 @@ namespace BBSS.Api.Extensions
             service.AddTransient<ICategoryService, CategoryService>();
             service.AddTransient<ITransactionService, TransactionService>();
             service.AddTransient<IInventoryService, InventoryService>();
+            service.AddTransient<IFeatureService, FeatureService>();
 
             return service;
         }

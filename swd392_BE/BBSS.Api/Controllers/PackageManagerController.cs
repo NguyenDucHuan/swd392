@@ -40,7 +40,7 @@ namespace BBSS.Api.Controllers
         [HttpPut]
         [Route(Router.PackageRoute.UpdatePackage)]
         //[Authorize(Roles = UserConstant.USER_ROLE_ADMIN)]
-        public async Task<ActionResult> UpdatePackage(int packageId, [FromForm] PackageUpdateRequest request)
+        public async Task<ActionResult> UpdatePackage(int packageId, PackageUpdateRequest request)
         {
             var result = await _packageService.UpdatePackageAsync(packageId, request);
             return result.Match(

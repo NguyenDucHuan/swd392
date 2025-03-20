@@ -42,7 +42,10 @@ namespace BBSS.Api.Mapper
                 .ForMember(dest => dest.PackageId, opt => opt.Ignore())
                 .ForMember(dest => dest.PakageCode, opt => opt.Ignore())
                 .ForMember(dest => dest.PackageImages, opt => opt.Ignore())
-                .ForMember(dest => dest.BlindBoxes, opt => opt.Ignore());
+                .ForMember(dest => dest.BlindBoxes, opt => opt.MapFrom(src => src.BlindBoxes));
+            CreateMap<BlindBoxUpdateRequest, BlindBox>();
+            CreateMap<int, BlindBoxFeature>()
+                .ForMember(dest => dest.FeatureId, opt => opt.MapFrom(src => src));
         }
     }
 }
