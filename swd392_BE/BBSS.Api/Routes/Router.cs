@@ -52,9 +52,9 @@ namespace BBSS.Api.Routes
 
         public static class WheelRoute
         {
-            public const string Wheel = $"{prefix}wheels";
-            public const string GetWheel = $"{Wheel}/wheel";
-            public const string PlayWheel = $"{Wheel}/spinner";
+            public const string Wheel = $"{prefix}wheel";
+            public const string GetWheel = $"{Wheel}";
+            public const string PlayWheel = $"{Wheel}/spin";
         }
         public static class PackageRoute
         {
@@ -79,21 +79,31 @@ namespace BBSS.Api.Routes
         public static class TransactionRoute
         {
             public const string Transactions = $"{prefix}transactions";
-            public const string GetAllTransactions = $"{Transactions}/transactions";
-            public const string GetUserTransactions = $"{Transactions}/user/transactions/";
+            public const string GetAllTransactions = $"{Transactions}";
+            public const string GetUserTransactions = $"{Transactions}/me";
         }
 
         public static class InventoryRoute
         {
             public const string Inventories = $"{prefix}inventories";
-            public const string GetInventories = $"{Inventories}/inventories";
-            public const string GetInventory = $"{Inventories}/inventory/{Id}";
+            public const string GetInventories = $"{Inventories}";
+            public const string GetInventory = $"{Inventories}/{Id}";
         }
 
         public static class BlindBoxRoute
         {
             public const string BlindBoxes = $"{prefix}blindBoxes";
-            public const string GetBlindBox = $"{BlindBoxes}/blindbox/{Id}";
+            public const string GetBlindBox = $"{BlindBoxes}/{Id}";
+        }
+
+        public static class FeatureRoute
+        {
+            public const string Features = $"{prefix}features";
+            public const string GetFeatures = $"{Features}";
+            public const string GetFeature = $"{Features}/{Id}";
+            public const string CreateFeature = $"{Features}";
+            public const string UpdateFeature = $"{Features}/{Id}";
+            public const string DeleteFeature = $"{Features}/{Id}";
         }
     }
 }

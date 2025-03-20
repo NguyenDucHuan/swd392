@@ -38,6 +38,7 @@ namespace BBSS.Api.Models.PackageModel
         public int CategoryId { get; set; }
      
         public List<IFormFile> PakageImages { get; set; }
+        //[FromBody]
 
         public List<BlindBoxCreateRequest> BlindBoxes { get; set; } = new List<BlindBoxCreateRequest>();
     }
@@ -61,6 +62,7 @@ namespace BBSS.Api.Models.PackageModel
         public string? Manufacturer { get; set; }
         public int? CategoryId { get; set; }
         public List<IFormFile>? ImageFiles { get; set; }
+        //[FromBody]
         public List<BlindBoxUpdateRequest>? BlindBoxes { get; set; }
     }
     public class BlindBoxUpdateRequest

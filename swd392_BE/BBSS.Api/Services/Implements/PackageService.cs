@@ -289,63 +289,83 @@ namespace BBSS.Api.Services.Implements
                     }
                 }
 
+                //if (package.BlindBoxes != null && package.BlindBoxes.Count != 0)
+                //{
+                //    foreach (var blindBox in package.BlindBoxes)
+                //    {               
+                //        var imagetoDels = await _uow.GetRepository<BlindBoxImage>().GetListAsync(
+                //                predicate: p => p.BlindBoxId == blindBox.BlindBoxId
+                //            );
+                //        if (imagetoDels.Any())
+                //        {
+                //            _uow.GetRepository<BlindBoxImage>().DeleteRangeAsync(imagetoDels);
+                //        }
+
+                //        var imageUrls = await _cloudinaryService.UploadMultipleImagesAsync(blindBox.ImageFiles)
+                            
+                //        }
+                //    }
+                //}
+
+                
+
                 // Update BlindBoxes
-                if (request.BlindBoxes != null && request.BlindBoxes.Any())
-                {
-                    var existingBlindBoxIds = package.BlindBoxes.Select(bb => bb.BlindBoxId).ToList();
-                    var requestBlindBoxIds = request.BlindBoxes
-                        .Where(bb => bb.BlindBoxId.HasValue)
-                        .Select(bb => bb.BlindBoxId.Value)
-                        .ToList();
+                //if (request.BlindBoxes != null && request.BlindBoxes.Any())
+                //{
+                //    var existingBlindBoxIds = package.BlindBoxes.Select(bb => bb.BlindBoxId).ToList();
+                //    var requestBlindBoxIds = request.BlindBoxes
+                //        .Where(bb => bb.BlindBoxId.HasValue)
+                //        .Select(bb => bb.BlindBoxId.Value)
+                //        .ToList();
 
-                    foreach (var blindBoxReq in request.BlindBoxes.Where(bb => bb.BlindBoxId.HasValue))
-                    {
-                        // Update existing BlindBox
-                        if (existingBlindBoxIds.Contains(blindBoxReq.BlindBoxId.Value))
-                        {
-                            var updateResult = await _blindBoxService.UpdateBlindBoxAsync(
-                                blindBoxReq.BlindBoxId.Value, blindBoxReq);
+                //    foreach (var blindBoxReq in request.BlindBoxes.Where(bb => bb.BlindBoxId.HasValue))
+                //    {
+                //        // Update existing BlindBox
+                //        if (existingBlindBoxIds.Contains(blindBoxReq.BlindBoxId.Value))
+                //        {
+                //            var updateResult = await _blindBoxService.UpdateBlindBoxAsync(
+                //                blindBoxReq.BlindBoxId.Value, blindBoxReq);
 
-                            if (updateResult is MethodResult<string>.Failure)
-                            {
-                                await _uow.RollbackTransactionAsync();
-                                return updateResult;
-                            }
-                        }
-                    }
+                //            if (updateResult is MethodResult<string>.Failure)
+                //            {
+                //                await _uow.RollbackTransactionAsync();
+                //                return updateResult;
+                //            }
+                //        }
+                //    }
 
-                    // Create new BlindBoxes
-                    foreach (var blindBoxReq in request.BlindBoxes.Where(bb => !bb.BlindBoxId.HasValue))
-                    {
-                        var createResult = await _blindBoxService.CreateBlindBoxAsync(package.PackageId, blindBoxReq);
+                //    // Create new BlindBoxes
+                //    foreach (var blindBoxReq in request.BlindBoxes.Where(bb => !bb.BlindBoxId.HasValue))
+                //    {
+                //        var createResult = await _blindBoxService.CreateBlindBoxAsync(package.PackageId, blindBoxReq);
 
-                        if (createResult is MethodResult<string>.Failure)
-                        {
-                            await _uow.RollbackTransactionAsync();
-                            return createResult;
-                        }
-                    }
+                //        if (createResult is MethodResult<string>.Failure)
+                //        {
+                //            await _uow.RollbackTransactionAsync();
+                //            return createResult;
+                //        }
+                //    }
 
-                    var blindBoxesToRemove = package.BlindBoxes
-                        .Where(bb => !requestBlindBoxIds.Contains(bb.BlindBoxId) && !bb.IsSold)
-                        .ToList();
+                //    var blindBoxesToRemove = package.BlindBoxes
+                //        .Where(bb => !requestBlindBoxIds.Contains(bb.BlindBoxId) && !bb.IsSold)
+                //        .ToList();
 
-                    foreach (var blindBox in blindBoxesToRemove)
-                    {
-                        // Delete features and images
-                        foreach (var feature in blindBox.BlindBoxFeatures.ToList())
-                        {
-                            _uow.GetRepository<BlindBoxFeature>().DeleteAsync(feature);
-                        }
+                //    foreach (var blindBox in blindBoxesToRemove)
+                //    {
+                //        // Delete features and images
+                //        foreach (var feature in blindBox.BlindBoxFeatures.ToList())
+                //        {
+                //            _uow.GetRepository<BlindBoxFeature>().DeleteAsync(feature);
+                //        }
 
-                        foreach (var image in blindBox.BlindBoxImages.ToList())
-                        {
-                            _uow.GetRepository<BlindBoxImage>().DeleteAsync(image);
-                        }
+                //        foreach (var image in blindBox.BlindBoxImages.ToList())
+                //        {
+                //            _uow.GetRepository<BlindBoxImage>().DeleteAsync(image);
+                //        }
 
-                        _uow.GetRepository<BlindBox>().DeleteAsync(blindBox);
-                    }
-                }
+                //        _uow.GetRepository<BlindBox>().DeleteAsync(blindBox);
+                //    }
+                //}
 
                 await _uow.CommitAsync();
                 await _uow.CommitTransactionAsync();
