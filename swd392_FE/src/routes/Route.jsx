@@ -1,8 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "../components/ProtectedRoute";
-import { AdminRoute, StaffRoute } from "../components/RoleBasedRoute";
+import { AdminRoute, StaffRoute, UserRoute } from "../components/RoleBasedRoute";
 import { CustomerLayout } from "../layout/CustomerLayout";
 import { ManagerLayout } from "../layout/ManagerLayout";
+
 
 // Import pages
 import Login from "../pages/Login";
@@ -19,8 +20,11 @@ import Settings from "../pages/ManagerPage/Settings";
 import Register from "../pages/Register";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
+import ProfilePage from '../pages/ProfilePage/ProfilePage';
+
 // import PackageManager from "../pages/ManagerPage/PackageManager";
 import Users from "../pages/Users";
+import ChangePasswordPage from "../pages/ProfilePage/ChangePasswordPage";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -60,7 +64,7 @@ const AppRoutes = () => {
         path="/shopping"
         element={
           <CustomerLayout>
-           <ShoppingPage/>.
+            <ShoppingPage />.
           </CustomerLayout>
         }
       />
@@ -72,7 +76,7 @@ const AppRoutes = () => {
           </CustomerLayout>
         }
       />
-      
+
       {/* Admin */}
       <Route
         path="/dashboard"
@@ -134,6 +138,8 @@ const AppRoutes = () => {
           </ManagerLayout>
         }
       />
+
+
       <Route
         path="/users"
         element={
@@ -160,6 +166,58 @@ const AppRoutes = () => {
           </ManagerLayout>
         }
       />
+
+      {/* <Route>
+        <Navbar />
+        <Route path="/customer/profile" element={<ProfilePage />} />
+        {/* Add other routes here */}
+      {/* </Route> */} */
+
+      <Route
+        path="/change-password"
+        element={
+          <ManagerLayout>
+            <StaffRoute>
+              <ChangePasswordPage />
+            </StaffRoute>
+          </ManagerLayout>
+        }
+      />
+
+      {/* CHO USER */}
+      <Route
+        path="/user-change-password"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <ChangePasswordPage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+
+      <Route
+        path="/customer/profile"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <ProfilePage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ManagerLayout>
+            <StaffRoute>
+              <ProfilePage />
+            </StaffRoute>
+          </ManagerLayout>
+        }
+      />
+
       <Route
         path="/unauthorized"
         element={
@@ -171,7 +229,7 @@ const AppRoutes = () => {
           </ManagerLayout>
         }
       />
-    </Routes>
+    </Routes >
   );
 };
 
