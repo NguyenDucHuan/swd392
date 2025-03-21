@@ -6,6 +6,7 @@ import { ManagerLayout } from "../layout/ManagerLayout";
 
 
 // Import pages
+import CartPage from "../pages/CartPage/CartPage";
 import Login from "../pages/Login";
 import About from "../pages/MainPage/About";
 import BlogPage from "../pages/MainPage/BlogPage";
@@ -20,13 +21,12 @@ import CreateUnknownPackage from "../pages/ManagerPage/PackageManagement/CreateU
 import EditPackage from "../pages/ManagerPage/PackageManagement/EditPackage";
 import PackageManager from "../pages/ManagerPage/PackageManager";
 import Settings from "../pages/ManagerPage/Settings";
+import ChangePasswordPage from "../pages/ProfilePage/ChangePasswordPage";
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
 import Register from "../pages/Register";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
+import PackageDetail from "../pages/ShoppingAndLuckyWheel/PackageDetail";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
-
-// import PackageManager from "../pages/ManagerPage/PackageManager";
-import ChangePasswordPage from "../pages/ProfilePage/ChangePasswordPage";
 import Users from "../pages/Users";
 const AppRoutes = () => {
   return (
@@ -176,6 +176,22 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/cart"
+        element={
+          <CustomerLayout>
+            <CartPage />
+          </CustomerLayout>
+        }
+      />
+      <Route
+        path="/package-detail/:packageCode"
+        element={
+          <CustomerLayout>
+            <PackageDetail />
+          </CustomerLayout>
+        }
+      />
+      <Route
         path="/package/create-unknown"
         element={
           <ManagerLayout>
@@ -205,13 +221,6 @@ const AppRoutes = () => {
           </ManagerLayout>
         }
       />
-
-      {/* <Route>
-        <Navbar />
-        <Route path="/customer/profile" element={<ProfilePage />} />
-        {/* Add other routes here */}
-      {/* </Route> */} */
-
       <Route
         path="/change-password"
         element={
@@ -223,7 +232,6 @@ const AppRoutes = () => {
         }
       />
 
-      {/* CHO USER */}
       <Route
         path="/user-change-password"
         element={

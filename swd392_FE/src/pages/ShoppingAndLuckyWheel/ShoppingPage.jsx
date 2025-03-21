@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../configs/globalVariables";
-
 function ShoppingPage() {
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -187,7 +187,12 @@ function ShoppingPage() {
       <h2 className="text-lg font-semibold truncate">{pkg.name}</h2>
       <p className="text-sm text-gray-500 mb-2">{pkg.manufacturer}</p>
       
-      {pkg.blindBoxes && pkg.blindBoxes.$values && pkg.blindBoxes.$values.length > 0 ? (
+      {pkg.price ? (
+  
+        <p className="text-green-600 font-bold text-lg">
+          {pkg.price}
+        </p>
+      ) : pkg.blindBoxes && pkg.blindBoxes.$values && pkg.blindBoxes.$values.length > 0 ? (
         <p className="text-green-600 font-bold text-lg">
           {pkg.blindBoxes.$values[0].discountedPrice.toLocaleString('vi-VN')} ₫
           {pkg.blindBoxes.$values[0].discount > 0 && (
@@ -209,9 +214,9 @@ function ShoppingPage() {
         <p className="text-gray-500">Giá không có sẵn</p>
       )}
       
-      <button className="mt-2 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">
+      <Link to={`/package-detail/${pkg.pakageCode}`} className="mt-2 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition text-center block">
         Xem chi tiết
-      </button>
+      </Link>
     </div>
   ))
         ) : (
