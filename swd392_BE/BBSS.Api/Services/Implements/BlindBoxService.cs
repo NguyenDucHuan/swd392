@@ -146,6 +146,7 @@ namespace BBSS.Api.Services.Implements
                     selector: s => _mapper.Map<BlindBoxViewModel>(s),
                     predicate: p => p.BlindBoxId == blindBoxId,
                     include: i => i.Include(p => p.Package)
+                                   .Include(p => p.BlindBoxFeatures).ThenInclude(bb => bb.Feature)
                 );
 
             return new MethodResult<BlindBoxViewModel>.Success(result);

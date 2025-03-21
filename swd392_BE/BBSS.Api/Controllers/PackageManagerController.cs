@@ -39,9 +39,9 @@ namespace BBSS.Api.Controllers
         }
         [HttpGet]
         [Route(Router.PackageRoute.GetPackages)]
-        public async Task<ActionResult> GetPackages([FromQuery] PaginateModel model, [FromQuery] int categoryId = 0, [FromQuery] int representativeCount = 0)
+        public async Task<ActionResult> GetPackages([FromQuery] PaginateModel model, [FromQuery] int? isKnown, [FromQuery] int categoryId = 0, [FromQuery] int representativeCount = 0)
         {
-            var result = await _packageService.GetPackagesAsync(model, categoryId, representativeCount);
+            var result = await _packageService.GetPackagesAsync(model, isKnown, categoryId, representativeCount);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok

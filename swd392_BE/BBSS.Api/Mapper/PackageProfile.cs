@@ -16,7 +16,13 @@ namespace BBSS.Api.Mapper
 
             CreateMap<BlindBox, BlindBoxViewModel>()
                 .ForMember(dest => dest.PackageCode, opt => opt.MapFrom(src => src.Package.PakageCode))
-                .ForMember(dest => dest.PackageName, opt => opt.MapFrom(src => src.Package.Name));
+                .ForMember(dest => dest.PackageName, opt => opt.MapFrom(src => src.Package.Name))
+                .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.BlindBoxFeatures.Select(x => new FeatureViewModel
+                {
+                    FeatureId = x.FeatureId,
+                    Type = x.Feature.Type,
+                    Description = x.Feature.Description
+                }).ToList()));            
 
             CreateMap<PackageUnknownCreateRequest, Package>();
             CreateMap<PackageKnownCreateRequest, Package>()
