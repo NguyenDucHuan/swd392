@@ -76,7 +76,59 @@ namespace BBSS.Api.Services.Implements
             }
         }
 
+        public async Task<MethodResult<PackageViewModel>> GetPackagesByPackageCodeAsync(string packageCode, string filter = "")
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(packageCode))
+                {
+                    return new MethodResult<PackageViewModel>.Failure("Package code is required", StatusCodes.Status400BadRequest);
+                }
 
+                var packages = await _uow.GetRepository<Package>().GetListAsync(
+                    selector: p => p,
+                    predicate: p => p.PakageCode == packageCode,
+                    include: i => i.Include(p => p.BlindBoxes)
+                                 .Include(p => p.PackageImages)
+                                 .Include(p => p.Category)
+                );
+                if (!packages.Any())
+                {
+                    return new MethodResult<PackageViewModel>.Failure("No packages found with the given code", StatusCodes.Status404NotFound);
+                }
+                var mappedPackages = packages.Select(p => _mapper.Map<PackageViewModel>(p)).ToList();
+                var representativePackage = mappedPackages.First();
+                representativePackage.TotalPackage = mappedPackages.Count;
+                representativePackage.TotalBlindBox = mappedPackages.Sum(p => p.BlindBoxes.Count);
+
+                bool useAvailableOnly = filter?.ToLower().Contains("available") == true;
+                
+                var allBlindBoxes = mappedPackages
+                    .SelectMany(p => p.BlindBoxes)
+                    .Where(bb => !useAvailableOnly || !bb.IsSold)
+                    .ToList();
+
+                if (allBlindBoxes.Any())
+                {
+                    decimal minPrice = allBlindBoxes.Min(b => b.DiscountedPrice);
+                    decimal totalPrice = allBlindBoxes.Sum(b => b.DiscountedPrice);
+
+                    representativePackage.Price = minPrice == totalPrice
+                        ? minPrice.ToString("N0") + " ₫"
+                        : minPrice.ToString("N0") + " - " + totalPrice.ToString("N0") + " ₫";
+                }
+                else
+                {
+                    representativePackage.Price = "Liên hệ";
+                }
+
+                return new MethodResult<PackageViewModel>.Success(representativePackage);
+            }
+            catch (Exception ex)
+            {
+                return new MethodResult<PackageViewModel>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
+            }
+        }
 
         public async Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model, int categoryId = 0, int representativeCount = 0)
         {

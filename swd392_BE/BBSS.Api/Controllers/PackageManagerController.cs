@@ -28,6 +28,16 @@ namespace BBSS.Api.Controllers
             );
         }
         [HttpGet]
+        [Route(Router.PackageRoute.GetPackagesByPackageCode)]
+        public async Task<ActionResult> GetPackagesByPackageCode([FromQuery] string packageCode, [FromQuery] string filter = "")
+        {
+            var result = await _packageService.GetPackagesByPackageCodeAsync(packageCode, filter);
+            return result.Match(
+                (l, c) => Problem(detail: l, statusCode: c),
+                Ok
+            );
+        }
+        [HttpGet]
         [Route(Router.PackageRoute.GetPackages)]
         public async Task<ActionResult> GetPackages([FromQuery] PaginateModel model, [FromQuery] int categoryId = 0, [FromQuery] int representativeCount = 0)
         {

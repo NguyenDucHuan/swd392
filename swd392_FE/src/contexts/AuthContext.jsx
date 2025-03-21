@@ -108,9 +108,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('refresh_token')
     setUser(null)
   }
-
+  const isAuthenticated = !!user;
   return (
-    <AuthContext.Provider value={{ user, register, login, logout, error, loading }}>
+    <AuthContext.Provider value={{ user, register, login, logout,isAuthenticated ,error, loading }}>
       {children}
     </AuthContext.Provider>
   )

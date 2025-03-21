@@ -1,16 +1,19 @@
 import { BrowserRouter } from "react-router-dom";
-import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS
 import { AuthProvider } from "./contexts/AuthContext";
+import { CartProvider } from "./contexts/CartContext";
 import AppRoutes from "./routes/Route";
-import 'font-awesome/css/font-awesome.min.css';
-
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      <CartProvider>
+        <BrowserRouter>
+          <ToastContainer position="top-right" autoClose={3000} />
+          <AppRoutes />
+        </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   );
 }
