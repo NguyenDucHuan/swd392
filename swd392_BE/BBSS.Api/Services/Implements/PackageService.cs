@@ -34,7 +34,7 @@ namespace BBSS.Api.Services.Implements
             {
                 var package = await _uow.GetRepository<Package>().SingleOrDefaultAsync(
                     predicate: p => p.PackageId == id,
-                    include: i => i.Include(p => p.BlindBoxes)
+                    include: i => i.Include(p => p.BlindBoxes).ThenInclude(p => p.BlindBoxFeatures).ThenInclude(p => p.Feature)
                                    .Include(p => p.PackageImages)
                                    .Include(p => p.Category)
                 );
@@ -88,7 +88,7 @@ namespace BBSS.Api.Services.Implements
                 var packages = await _uow.GetRepository<Package>().GetListAsync(
                     selector: p => p,
                     predicate: p => p.PakageCode == packageCode,
-                    include: i => i.Include(p => p.BlindBoxes)
+                    include: i => i.Include(p => p.BlindBoxes).ThenInclude(p => p.BlindBoxFeatures).ThenInclude(p => p.Feature)
                                  .Include(p => p.PackageImages)
                                  .Include(p => p.Category)
                 );
@@ -130,7 +130,7 @@ namespace BBSS.Api.Services.Implements
             }
         }
 
-        public async Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model, int categoryId = 0, int representativeCount = 0)
+        public async Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model, int? isKnown, int categoryId = 0, int representativeCount = 0)
         {
             try
             {
@@ -147,6 +147,9 @@ namespace BBSS.Api.Services.Implements
                     (string.IsNullOrEmpty(filter) ||
                      (filter.Contains("available") && p.BlindBoxes.Any(bb => !bb.IsSold)) ||
                      (filter.Contains("sold") && p.BlindBoxes.All(bb => bb.IsSold))) &&
+                     (!isKnown.HasValue || 
+                     isKnown <= 0 && p.BlindBoxes.All(bb => !bb.IsKnowned) ||
+                     isKnown > 0 && p.BlindBoxes.All(bb => bb.IsKnowned)) &&
                     (categoryId <= 0 || p.CategoryId == categoryId);
 
                 bool useAvailableOnly = filter.Contains("available");
@@ -158,7 +161,7 @@ namespace BBSS.Api.Services.Implements
                     var packages = await _uow.GetRepository<Package>().GetListAsync(
                         selector: p => _mapper.Map<PackageViewModel>(p),
                         predicate: predicate,
-                        include: i => i.Include(p => p.BlindBoxes)
+                        include: i => i.Include(p => p.BlindBoxes).ThenInclude(p => p.BlindBoxFeatures).ThenInclude(p => p.Feature)
                                      .Include(p => p.PackageImages)
                                      .Include(p => p.Category),
                         orderBy: BuildOrderBy(model.sortBy)
@@ -176,7 +179,7 @@ namespace BBSS.Api.Services.Implements
                         var representativePackage = allPackagesInGroup.First();
 
                         representativePackage.TotalPackage = allPackagesInGroup.Count;
-                        representativePackage.TotalBlindBox = allPackagesInGroup.Select(x => x.BlindBoxes.Count).Sum();
+                        representativePackage.TotalBlindBox = allPackagesInGroup.Select(x => x.BlindBoxes.Count).Sum                                                                                                                                        ();
                         var allBlindBoxes = allPackagesInGroup
                             .SelectMany(p => p.BlindBoxes)
                             .Where(bb => !useAvailableOnly || !bb.IsSold)
@@ -222,7 +225,7 @@ namespace BBSS.Api.Services.Implements
                     var packageEntities = await _uow.GetRepository<Package>().GetPagingListAsync(
                         selector: p => p,
                         predicate: predicate,
-                        include: i => i.Include(p => p.BlindBoxes)
+                        include: i => i.Include(p => p.BlindBoxes).ThenInclude(p => p.BlindBoxFeatures).ThenInclude(p => p.Feature)
                                      .Include(p => p.PackageImages)
                                      .Include(p => p.Category),
                         orderBy: BuildOrderBy(model.sortBy),
