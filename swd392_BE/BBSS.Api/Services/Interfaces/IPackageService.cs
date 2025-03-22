@@ -9,7 +9,7 @@ namespace BBSS.Api.Services.Interfaces
     public interface IPackageService
     {
         Task<MethodResult<PackageViewModel>> GetPackageByIdAsync(int id , string filter);
-        Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model, int? isKnown, int CategoryID = 0, int RepresentativeCount = 0);
+        Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model, bool? isKnown, int CategoryID = 0, int RepresentativeCount = 0);
         Task<MethodResult<PackageViewModel>> GetPackagesByPackageCodeAsync(string packageCode, string filter = "");
         Task<MethodResult<string>> UpdatePackageAsync(int id, PackageUpdateRequest request);
         Task<MethodResult<string>> DeletePackageAsync(int id);
