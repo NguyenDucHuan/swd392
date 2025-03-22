@@ -130,7 +130,7 @@ namespace BBSS.Api.Services.Implements
             }
         }
 
-        public async Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model, int? isKnown, int categoryId = 0, int representativeCount = 0)
+        public async Task<MethodResult<IPaginate<PackageViewModel>>> GetPackagesAsync(PaginateModel model, bool? isKnown, int categoryId = 0, int representativeCount = 0)
         {
             try
             {
@@ -147,9 +147,7 @@ namespace BBSS.Api.Services.Implements
                     (string.IsNullOrEmpty(filter) ||
                      (filter.Contains("available") && p.BlindBoxes.Any(bb => !bb.IsSold)) ||
                      (filter.Contains("sold") && p.BlindBoxes.All(bb => bb.IsSold))) &&
-                     (!isKnown.HasValue || 
-                     isKnown <= 0 && p.BlindBoxes.All(bb => !bb.IsKnowned) ||
-                     isKnown > 0 && p.BlindBoxes.All(bb => bb.IsKnowned)) &&
+                     (!isKnown.HasValue || p.BlindBoxes.All(bb => bb.IsKnowned == isKnown)) &&
                     (categoryId <= 0 || p.CategoryId == categoryId);
 
                 bool useAvailableOnly = filter.Contains("available");
@@ -308,16 +306,13 @@ namespace BBSS.Api.Services.Implements
                 var package = await _uow.GetRepository<Package>().SingleOrDefaultAsync(
                     predicate: p => p.PackageId == id,
                     include: i => i.Include(p => p.PackageImages)
-                                 .Include(p => p.BlindBoxes)
+                                 .Include(p => p.BlindBoxes).ThenInclude(bb => bb.BlindBoxFeatures)
                 );
 
                 if (package == null)
                 {
                     return new MethodResult<string>.Failure("Package not found", StatusCodes.Status404NotFound);
                 }
-
-                _mapper.Map(request, package);
-                _uow.GetRepository<Package>().UpdateAsync(package);
 
                 // Upload và quản lý hình ảnh
                 if (request.ImageFiles != null && request.ImageFiles.Any())
@@ -344,83 +339,92 @@ namespace BBSS.Api.Services.Implements
                     }
                 }
 
-                //if (package.BlindBoxes != null && package.BlindBoxes.Count != 0)
-                //{
-                //    foreach (var blindBox in package.BlindBoxes)
-                //    {               
-                //        var imagetoDels = await _uow.GetRepository<BlindBoxImage>().GetListAsync(
-                //                predicate: p => p.BlindBoxId == blindBox.BlindBoxId
-                //            );
-                //        if (imagetoDels.Any())
-                //        {
-                //            _uow.GetRepository<BlindBoxImage>().DeleteRangeAsync(imagetoDels);
-                //        }
+                //Xóa blindboxes không còn trong request
+                var deleteBlindBoxes = package.BlindBoxes.Where(bb => !request.BlindBoxes.Any(b => b.BlindBoxId == bb.BlindBoxId) && !bb.IsSold).ToList();
+                foreach (var blindBox in deleteBlindBoxes)
+                {
+                    var imagetoDels = blindBox.BlindBoxImages.ToList();
+                    if (imagetoDels.Any())
+                    {
+                        _uow.GetRepository<BlindBoxImage>().DeleteRangeAsync(imagetoDels);
+                    }
 
-                //        var imageUrls = await _cloudinaryService.UploadMultipleImagesAsync(blindBox.ImageFiles)
-                            
-                //        }
-                //    }
-                //}
+                    var featuretoDels = blindBox.BlindBoxFeatures.ToList();
+                    if (featuretoDels.Any())
+                    {
+                        _uow.GetRepository<BlindBoxFeature>().DeleteRangeAsync(featuretoDels);
+                    }
 
-                
+                    _uow.GetRepository<BlindBox>().DeleteAsync(blindBox);
+                }
 
-                // Update BlindBoxes
-                //if (request.BlindBoxes != null && request.BlindBoxes.Any())
-                //{
-                //    var existingBlindBoxIds = package.BlindBoxes.Select(bb => bb.BlindBoxId).ToList();
-                //    var requestBlindBoxIds = request.BlindBoxes
-                //        .Where(bb => bb.BlindBoxId.HasValue)
-                //        .Select(bb => bb.BlindBoxId.Value)
-                //        .ToList();
+                _mapper.Map(request, package);
+                _uow.GetRepository<Package>().UpdateAsync(package);
+                await _uow.CommitAsync();
 
-                //    foreach (var blindBoxReq in request.BlindBoxes.Where(bb => bb.BlindBoxId.HasValue))
-                //    {
-                //        // Update existing BlindBox
-                //        if (existingBlindBoxIds.Contains(blindBoxReq.BlindBoxId.Value))
-                //        {
-                //            var updateResult = await _blindBoxService.UpdateBlindBoxAsync(
-                //                blindBoxReq.BlindBoxId.Value, blindBoxReq);
+                if (request.BlindBoxes != null && request.BlindBoxes.Count != 0)
+                {
+                    for (int i = 0; i < request.BlindBoxes.Count; i++)
+                    {
+                        var blindBoxRequest = request.BlindBoxes[i];
+                        var blindBox = package.BlindBoxes.ElementAt(i);
 
-                //            if (updateResult is MethodResult<string>.Failure)
-                //            {
-                //                await _uow.RollbackTransactionAsync();
-                //                return updateResult;
-                //            }
-                //        }
-                //    }
+                        //xóa hết ảnh cũ blind  box
+                        if (blindBoxRequest.BlindBoxId.HasValue)
+                        {
+                            var imagetoDels = await _uow.GetRepository<BlindBoxImage>().GetListAsync(
+                                predicate: p => p.BlindBoxId == blindBoxRequest.BlindBoxId
+                            );
 
-                //    // Create new BlindBoxes
-                //    foreach (var blindBoxReq in request.BlindBoxes.Where(bb => !bb.BlindBoxId.HasValue))
-                //    {
-                //        var createResult = await _blindBoxService.CreateBlindBoxAsync(package.PackageId, blindBoxReq);
+                            if (imagetoDels.Any())
+                            {
+                                _uow.GetRepository<BlindBoxImage>().DeleteRangeAsync(imagetoDels);
+                            }
+                        }
 
-                //        if (createResult is MethodResult<string>.Failure)
-                //        {
-                //            await _uow.RollbackTransactionAsync();
-                //            return createResult;
-                //        }
-                //    }
+                        //Update feature
+                        if (blindBoxRequest.FeatureIds != null && blindBoxRequest.FeatureIds.Count != 0)
+                        {
+                            var featureDbs = await _uow.GetRepository<BlindBoxFeature>().GetListAsync(
+                                predicate: p => p.BlindBoxId == blindBoxRequest.BlindBoxId
+                            );
 
-                //    var blindBoxesToRemove = package.BlindBoxes
-                //        .Where(bb => !requestBlindBoxIds.Contains(bb.BlindBoxId) && !bb.IsSold)
-                //        .ToList();
+                            foreach (var featureDb in featureDbs)
+                            {
+                                if (!blindBoxRequest.FeatureIds.Contains(featureDb.FeatureId))
+                                {
+                                    _uow.GetRepository<BlindBoxFeature>().DeleteAsync(featureDb);
+                                }
+                            }
 
-                //    foreach (var blindBox in blindBoxesToRemove)
-                //    {
-                //        // Delete features and images
-                //        foreach (var feature in blindBox.BlindBoxFeatures.ToList())
-                //        {
-                //            _uow.GetRepository<BlindBoxFeature>().DeleteAsync(feature);
-                //        }
+                            foreach (var featureId in blindBoxRequest.FeatureIds)
+                            {
+                                if (!featureDbs.Select(x => x.FeatureId).Contains(featureId))
+                                {
+                                    await _uow.GetRepository<BlindBoxFeature>().InsertAsync(new BlindBoxFeature
+                                    {
+                                        BlindBoxId = blindBox.BlindBoxId,
+                                        FeatureId = featureId
+                                    });
+                                }
+                            }
+                        }
 
-                //        foreach (var image in blindBox.BlindBoxImages.ToList())
-                //        {
-                //            _uow.GetRepository<BlindBoxImage>().DeleteAsync(image);
-                //        }
-
-                //        _uow.GetRepository<BlindBox>().DeleteAsync(blindBox);
-                //    }
-                //}
+                        //Upload ảnh blindbox
+                        if (blindBoxRequest.ImageFiles != null && blindBoxRequest.ImageFiles.Count != 0)
+                        {
+                            var imageUrls = await _cloudinaryService.UploadMultipleImagesAsync(blindBoxRequest.ImageFiles);
+                            foreach (var imageUrl in imageUrls)
+                            {
+                                await _uow.GetRepository<BlindBoxImage>().InsertAsync(new BlindBoxImage
+                                {
+                                    BlindBoxId = blindBox.BlindBoxId,
+                                    Url = imageUrl
+                                });
+                            }
+                        }
+                    }
+                }
 
                 await _uow.CommitAsync();
                 await _uow.CommitTransactionAsync();

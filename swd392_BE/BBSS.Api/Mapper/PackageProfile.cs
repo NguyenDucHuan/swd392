@@ -25,17 +25,7 @@ namespace BBSS.Api.Mapper
                 }).ToList()));            
 
             CreateMap<PackageUnknownCreateRequest, Package>();
-            CreateMap<PackageKnownCreateRequest, Package>()
-                //.AfterMap((src, dest, context) =>
-                //{
-                //    if (src.BlindBoxes != null && dest.BlindBoxes != null)
-                //    {
-                //        for (int i = 0; i < dest.BlindBoxes.Count; i++)
-                //        {
-                //            dest.BlindBoxes.ToList()[i].Number = i + 1; // Gán số thứ tự 1, 2, 3...
-                //        }
-                //    }
-                //});
+            CreateMap<PackageKnownCreateRequest, Package>()               
                 .ForMember(dest => dest.BlindBoxes, opt => opt.Ignore());
             CreateMap<BlindBoxCreateRequest, BlindBox>()
                 .ForMember(dest => dest.IsSold, opt => opt.MapFrom(src => 0))
@@ -50,8 +40,6 @@ namespace BBSS.Api.Mapper
                 .ForMember(dest => dest.PackageImages, opt => opt.Ignore())
                 .ForMember(dest => dest.BlindBoxes, opt => opt.MapFrom(src => src.BlindBoxes));
             CreateMap<BlindBoxUpdateRequest, BlindBox>();
-            CreateMap<int, BlindBoxFeature>()
-                .ForMember(dest => dest.FeatureId, opt => opt.MapFrom(src => src));
         }
     }
 }
