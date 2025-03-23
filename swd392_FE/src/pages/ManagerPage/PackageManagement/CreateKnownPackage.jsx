@@ -26,15 +26,15 @@ function CreateKnownPackage() {
   function createEmptyBlindBox() {
     return {
       color: '',
-      status: true,
-      size: 10,
-      price: '',
-      discount: 0,
-      number: 1,
-      isKnowned: true,
-      isSpecial: false,
-      imageFiles: [],
-      featureIds: []
+    status: true,
+    size: 10,
+    price: '',
+    discount: 0,
+    number: 1,
+    isKnowned: true,
+    isSpecial: false,
+    imageFiles: [], 
+    featureIds: []
     };
   }
 
@@ -123,14 +123,13 @@ function CreateKnownPackage() {
     const updatedBlindBoxes = [...formData.blindBoxes];
     updatedBlindBoxes[index] = {
       ...updatedBlindBoxes[index],
-      imageFiles: Array.from(files)
+      imageFiles: Array.from(files) 
     };
     setFormData({
       ...formData,
       blindBoxes: updatedBlindBoxes
     });
   };
-
   // Handle feature selection for blind box
   const handleFeatureToggle = (boxIndex, featureId) => {
     const updatedBlindBoxes = [...formData.blindBoxes];
@@ -224,13 +223,13 @@ function CreateKnownPackage() {
       // Add BlindBoxes
       formData.blindBoxes.forEach((box, index) => {
         Object.keys(box).forEach(key => {
-          if (key === 'imageFiles') {
+          if (key === 'imageFiles') { 
             if (box.imageFiles && box.imageFiles.length > 0) {
               box.imageFiles.forEach(file => {
                 packageFormData.append(`blindBoxes[${index}].imageFiles`, file);
               });
             }
-          } else if (key === 'featureIds') {
+          }else if (key === 'featureIds') {
             if (box.featureIds && box.featureIds.length > 0) {
               box.featureIds.forEach(featureId => {
                 packageFormData.append(`blindBoxes[${index}].featureIds`, featureId);

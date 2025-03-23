@@ -74,29 +74,40 @@ function CreateUnknownPackage() {
     setIsSubmitting(true);
     
     try {
+      // Validate required fields
+      if (!formData.pakageCode || !formData.name || !formData.categoryId || !formData.price) {
+        toast.error("Vui lòng điền đầy đủ thông tin bắt buộc");
+        setIsSubmitting(false);
+        return;
+      }
+  
       // Create form data object for file upload
       const packageFormData = new FormData();
       
-      // Add basic fields
+      // Add basic fields - ensure numbers are sent as numbers
       packageFormData.append('pakageCode', formData.pakageCode);
       packageFormData.append('name', formData.name);
-      packageFormData.append('description', formData.description);
-      packageFormData.append('manufacturer', formData.manufacturer);
-      packageFormData.append('categoryId', formData.categoryId);
-      packageFormData.append('price', formData.price);
-      packageFormData.append('discount', formData.discount);
-      packageFormData.append('amountPackage', formData.amountPackage);
-      packageFormData.append('amountBlindBox', formData.amountBlindBox);
+      packageFormData.append('description', formData.description || '');
+      packageFormData.append('manufacturer', formData.manufacturer || '');
+      packageFormData.append('categoryId', Number(formData.categoryId));
+      packageFormData.append('price', Number(formData.price));
+      packageFormData.append('discount', Number(formData.discount) || 0);
+      packageFormData.append('amountPackage', Number(formData.amountPackage) || 1);
+      packageFormData.append('amountBlindBox', Number(formData.amountBlindBox) || 1);
       
-      // Add package images
-      formData.pakageImages.forEach(file => {
-        packageFormData.append('pakageImages', file);
-      });
+      // Add package images if there are any
+      if (formData.pakageImages && formData.pakageImages.length > 0) {
+        formData.pakageImages.forEach(file => {
+          packageFormData.append('pakageImages', file);
+        });
+      }
       
-      // Send the request
+      // Send the request with proper headers
+      const token = localStorage.getItem('access_token');
       await axios.post(`${BASE_URL}/package/create-unknown-package`, packageFormData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
         }
       });
       
@@ -104,7 +115,14 @@ function CreateUnknownPackage() {
       navigate('/packages');
     } catch (err) {
       console.error('Failed to create package:', err);
-      toast.error(err.response?.data?.detail || 'Không thể tạo package. Vui lòng thử lại.');
+      // More detailed error handling
+      if (err.response?.data?.title) {
+        toast.error(`Lỗi: ${err.response.data.title}`);
+      } else if (err.response?.data?.detail) {
+        toast.error(err.response.data.detail);
+      } else {
+        toast.error('Không thể tạo package. Vui lòng thử lại.');
+      }
     } finally {
       setIsSubmitting(false);
     }

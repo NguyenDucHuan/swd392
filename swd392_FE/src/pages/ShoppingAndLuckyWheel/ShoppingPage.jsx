@@ -63,6 +63,7 @@ function ShoppingPage() {
           size: pagination.pageSize,
           search: searchTerm || undefined,
           filter: "available", 
+          isknơ : false,
           categoryId: selectedCategory > 0 ? selectedCategory : undefined,
           representativeCount: 1 
         }
