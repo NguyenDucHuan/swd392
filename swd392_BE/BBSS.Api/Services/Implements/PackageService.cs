@@ -27,16 +27,19 @@ namespace BBSS.Api.Services.Implements
             _blindBoxService = blindBoxService;
         }
 
-
         public async Task<MethodResult<PackageViewModel>> GetPackageByIdAsync(int id, string filter = "")
         {
             try
             {
                 var package = await _uow.GetRepository<Package>().SingleOrDefaultAsync(
-                    predicate: p => p.PackageId == id,
-                    include: i => i.Include(p => p.BlindBoxes).ThenInclude(p => p.BlindBoxFeatures).ThenInclude(p => p.Feature)
-                                   .Include(p => p.PackageImages)
-                                   .Include(p => p.Category)
+                 predicate: p => p.PackageId == id,
+                 include: i => i.Include(p => p.BlindBoxes)
+                            .ThenInclude(p => p.BlindBoxFeatures)
+                            .ThenInclude(p => p.Feature)
+                            .Include(p => p.BlindBoxes)
+                            .ThenInclude(p => p.BlindBoxImages)
+                            .Include(p => p.PackageImages)
+                            .Include(p => p.Category)
                 );
 
                 if (package == null)
@@ -102,7 +105,7 @@ namespace BBSS.Api.Services.Implements
                 representativePackage.TotalBlindBox = mappedPackages.Sum(p => p.BlindBoxes.Count);
 
                 bool useAvailableOnly = filter?.ToLower().Contains("available") == true;
-                
+
                 var allBlindBoxes = mappedPackages
                     .SelectMany(p => p.BlindBoxes)
                     .Where(bb => !useAvailableOnly || !bb.IsSold)
@@ -177,7 +180,7 @@ namespace BBSS.Api.Services.Implements
                         var representativePackage = allPackagesInGroup.First();
 
                         representativePackage.TotalPackage = allPackagesInGroup.Count;
-                        representativePackage.TotalBlindBox = allPackagesInGroup.Select(x => x.BlindBoxes.Count).Sum                                                                                                                                        ();
+                        representativePackage.TotalBlindBox = allPackagesInGroup.Select(x => x.BlindBoxes.Count).Sum();
                         var allBlindBoxes = allPackagesInGroup
                             .SelectMany(p => p.BlindBoxes)
                             .Where(bb => !useAvailableOnly || !bb.IsSold)
@@ -283,6 +286,7 @@ namespace BBSS.Api.Services.Implements
                 return new MethodResult<IPaginate<PackageViewModel>>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
             }
         }
+
         private Func<IQueryable<Package>, IOrderedQueryable<Package>> BuildOrderBy(string sortBy)
         {
             if (string.IsNullOrEmpty(sortBy)) return null;
@@ -446,7 +450,8 @@ namespace BBSS.Api.Services.Implements
 
                 var package = await _uow.GetRepository<Package>().SingleOrDefaultAsync(
                     predicate: p => p.PackageId == id,
-                    include: i => i.Include(p => p.BlindBoxes).Include(p => p.PackageImages)
+                    include: i => i.Include(p => p.BlindBoxes).ThenInclude(bb => bb.BlindBoxImages)
+                                   .Include(p => p.PackageImages)
                 );
 
                 if (package == null)
@@ -459,19 +464,23 @@ namespace BBSS.Api.Services.Implements
                     return new MethodResult<string>.Failure("Cannot delete package with sold blindboxes", StatusCodes.Status400BadRequest);
                 }
 
-                // Xóa tất cả hình ảnh trước
+                // Delete all images associated with the package
                 foreach (var image in package.PackageImages.ToList())
                 {
                     _uow.GetRepository<PackageImage>().DeleteAsync(image);
                 }
 
-                // Xóa tất cả blindboxes chưa được bán
+                // Delete all blindboxes and their associated images
                 foreach (var blindBox in package.BlindBoxes.Where(b => !b.IsSold).ToList())
                 {
+                    foreach (var blindBoxImage in blindBox.BlindBoxImages.ToList())
+                    {
+                        _uow.GetRepository<BlindBoxImage>().DeleteAsync(blindBoxImage);
+                    }
                     _uow.GetRepository<BlindBox>().DeleteAsync(blindBox);
                 }
 
-                // Xóa package
+                // Delete the package
                 _uow.GetRepository<Package>().DeleteAsync(package);
 
                 await _uow.CommitAsync();
@@ -482,7 +491,9 @@ namespace BBSS.Api.Services.Implements
             catch (Exception ex)
             {
                 await _uow.RollbackTransactionAsync();
-                return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
+                // Log the detailed exception message
+                var innerExceptionMessage = ex.InnerException?.Message ?? ex.Message;
+                return new MethodResult<string>.Failure($"An error occurred while deleting the package: {innerExceptionMessage}", StatusCodes.Status500InternalServerError);
             }
         }
 

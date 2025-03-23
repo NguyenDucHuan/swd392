@@ -16,7 +16,6 @@
         public string Price { get; set; } = string.Empty;
         public int TotalPackage { get; set; }
         public int TotalBlindBox { get; set; }
-        //public List<int> Pack { get; set; } = new List<int>();
         public List<ImageViewModel> Images { get; set; } = new List<ImageViewModel>();
         public List<BlindBoxViewModel> BlindBoxes { get; set; } = new List<BlindBoxViewModel>();
     }

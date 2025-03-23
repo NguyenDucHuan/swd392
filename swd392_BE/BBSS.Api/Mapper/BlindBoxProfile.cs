@@ -9,6 +9,7 @@ namespace BBSS.Api.Mapper
     {
         public BlindBoxProfile()
         {
+            
         }
     }
 }

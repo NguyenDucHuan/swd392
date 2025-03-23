@@ -22,8 +22,17 @@ namespace BBSS.Api.Mapper
                     FeatureId = x.FeatureId,
                     Type = x.Feature.Type,
                     Description = x.Feature.Description
-                }).ToList()));            
+                }).ToList()))
+                .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.BlindBoxImages.Select(img => new ImageViewModel
+                {
+                    Url = img.Url
+                }).ToList())); ;
 
+            CreateMap<BlindBoxCreateRequest, BlindBox>()
+            .ForMember(dest => dest.IsSold, opt => opt.MapFrom(src => false))
+            .ForMember(dest => dest.IsKnowned, opt => opt.MapFrom(src => true))
+            .ForMember(dest => dest.BlindBoxFeatures, opt => opt.MapFrom(src => src.FeatureIds))
+            .ForMember(dest => dest.BlindBoxImages, opt => opt.Ignore());
             CreateMap<PackageUnknownCreateRequest, Package>();
             CreateMap<PackageKnownCreateRequest, Package>()               
                 .ForMember(dest => dest.BlindBoxes, opt => opt.Ignore());

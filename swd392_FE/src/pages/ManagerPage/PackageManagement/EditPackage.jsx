@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { RiAddLine, RiCloseLine } from 'react-icons/ri';
+import { RiCloseLine } from 'react-icons/ri';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../configs/globalVariables';
@@ -27,37 +27,21 @@ function EditPackage() {
     blindBoxes: []
   });
 
-  function createEmptyBlindBox(number = 1) {
-    return {
-      blindBoxId: 0,
-      color: '',
-      status: true,
-      size: 10,
-      price: '',
-      discount: 0,
-      number: number,
-      isKnowned: true,
-      isSpecial: false,
-      imageFiles: [],
-      currentImages: [],
-      featureIds: []
-    };
-  }
   useEffect(() => {
     const fetchPackage = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/packages/${packageId}?filter=all`);
+        const response = await axios.get(`${BASE_URL}/package?packageId=${packageId}&filter=all`);
         const packageData = response.data;
         
         const isKnown = packageData.blindBoxes && packageData.blindBoxes.length > 0 
           ? packageData.blindBoxes[0].isKnowned 
           : true;
         setIsKnownPackage(isKnown);
-        if (packageData.images && packageData.images.length > 0) {
-          setCurrentImages(packageData.images);
+        if (packageData.images?.$values && packageData.images.$values.length > 0) {
+          setCurrentImages(packageData.images.$values);
         }
-        
-        const processedBlindBoxes = packageData.blindBoxes?.map(box => ({
+
+        const processedBlindBoxes = packageData.blindBoxes?.$values?.map(box => ({
           blindBoxId: box.blindBoxId,
           color: box.color || '',
           status: box.status,
@@ -67,9 +51,9 @@ function EditPackage() {
           number: box.number,
           isKnowned: box.isKnowned,
           isSpecial: box.isSpecial,
-          currentImages: box.images || [],
+          currentImages: box.imageUrls?.$values || [],
           imageFiles: [],
-          featureIds: box.features?.map(f => f.featureId) || []
+          featureIds: box.features?.$values?.map(f => f.featureId) || []
         })) || [];
         
         if (!processedBlindBoxes.length) {
@@ -122,7 +106,6 @@ function EditPackage() {
     fetchCategories();
   }, []);
 
-  // Fetch features
   useEffect(() => {
     const fetchFeatures = async () => {
       try {
@@ -145,7 +128,6 @@ function EditPackage() {
     fetchFeatures();
   }, []);
 
-  // Handle form field changes for package details
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === 'file') {
@@ -166,7 +148,6 @@ function EditPackage() {
     }
   };
 
-  // Handle changes for blind box fields
   const handleBlindBoxChange = (index, field, value) => {
     const updatedBlindBoxes = [...formData.blindBoxes];
     updatedBlindBoxes[index] = {
@@ -191,7 +172,6 @@ function EditPackage() {
     });
   };
 
-  // Handle feature selection for blind box
   const handleFeatureToggle = (boxIndex, featureId) => {
     const updatedBlindBoxes = [...formData.blindBoxes];
     const currentFeatures = updatedBlindBoxes[boxIndex].featureIds || [];
@@ -207,51 +187,12 @@ function EditPackage() {
       blindBoxes: updatedBlindBoxes
     });
   };
+ 
 
-  // Add a new blind box (for known packages only)
-  const addBlindBox = () => {
-    if (!isKnownPackage) return;
-    
-    const lastBlindBox = formData.blindBoxes[formData.blindBoxes.length - 1];
-    const newBlindBox = {
-      ...createEmptyBlindBox(),
-      number: (lastBlindBox.number || 0) + 1
-    };
-    
-    setFormData({
-      ...formData,
-      blindBoxes: [...formData.blindBoxes, newBlindBox]
-    });
-  };
-
-  // Remove a blind box (for known packages only)
-  const removeBlindBox = (index) => {
-    if (!isKnownPackage) return;
-    
-    if (formData.blindBoxes.length <= 1) {
-      toast.warning("Phải có ít nhất một BlindBox");
-      return;
-    }
-    
-    // Only allow removing new blind boxes that don't have an ID yet
-    if (formData.blindBoxes[index].blindBoxId) {
-      toast.warning("Không thể xóa BlindBox đã có trong hệ thống");
-      return;
-    }
-    
-    const updatedBlindBoxes = formData.blindBoxes.filter((_, i) => i !== index);
-    setFormData({
-      ...formData,
-      blindBoxes: updatedBlindBoxes
-    });
-  };
-
-  // Remove current image
   const removeCurrentImage = (index) => {
     setCurrentImages(currentImages.filter((_, i) => i !== index));
   };
 
-  // Remove blind box current image
   const removeBlindBoxCurrentImage = (boxIndex, imageIndex) => {
     const updatedBlindBoxes = [...formData.blindBoxes];
     updatedBlindBoxes[boxIndex].currentImages = updatedBlindBoxes[boxIndex].currentImages.filter((_, i) => i !== imageIndex);
@@ -261,13 +202,11 @@ function EditPackage() {
     });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     
     try {
-      // Validate required fields
       if (!formData.pakageCode || !formData.name || !formData.categoryId) {
         toast.error("Vui lòng điền đầy đủ thông tin bắt buộc");
         setIsSubmitting(false);
@@ -283,10 +222,7 @@ function EditPackage() {
         }
       }
       
-      // Create form data object for file upload
       const packageFormData = new FormData();
-      
-      // Add basic fields
       packageFormData.append('pakageCode', formData.pakageCode);
       packageFormData.append('name', formData.name);
       packageFormData.append('description', formData.description || '');
@@ -296,9 +232,15 @@ function EditPackage() {
       // Add retained current images
       if (currentImages && currentImages.length > 0) {
         currentImages.forEach((image, index) => {
-          packageFormData.append(`currentImages[${index}]`, image.url || image);
+          if (typeof image === 'object') {
+            packageFormData.append(`currentImages[${index}].imageId`, image.imageId || '');
+            packageFormData.append(`currentImages[${index}].url`, image.url || '');
+          } else {
+            packageFormData.append(`currentImages[${index}]`, image);
+          }
         });
       }
+      
       
       // Add new package images
       if (formData.pakageImages && formData.pakageImages.length > 0) {
@@ -327,7 +269,12 @@ function EditPackage() {
         // Add retained current images
         if (box.currentImages && box.currentImages.length > 0) {
           box.currentImages.forEach((image, imageIndex) => {
-            packageFormData.append(`blindBoxes[${index}].currentImages[${imageIndex}]`, image.url || image);
+            if (typeof image === 'object') {
+              packageFormData.append(`blindBoxes[${index}].currentImages[${imageIndex}].imageId`, image.imageId || '');
+              packageFormData.append(`blindBoxes[${index}].currentImages[${imageIndex}].url`, image.url || '');
+            } else {
+              packageFormData.append(`blindBoxes[${index}].currentImages[${imageIndex}]`, image);
+            }
           });
         }
         
@@ -346,8 +293,7 @@ function EditPackage() {
         }
       });
       
-      // Send the request
-      await axios.put(`${BASE_URL}/packages/update-package?packageId=${packageId}`, packageFormData, {
+      await axios.put(`${BASE_URL}/package/update-package?packageId=${packageId}`, packageFormData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -533,31 +479,8 @@ function EditPackage() {
             
             {/* BlindBoxes Section */}
             <div className="mt-8 border-t pt-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium">BlindBoxes</h2>
-                {isKnownPackage && (
-                  <button
-                    type="button"
-                    onClick={addBlindBox}
-                    className="flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                  >
-                    <RiAddLine className="mr-1" />
-                    Thêm BlindBox
-                  </button>
-                )}
-              </div>
-              
               {formData.blindBoxes.map((box, index) => (
                 <div key={index} className="mb-8 p-4 border rounded-lg bg-gray-50 relative">
-                  {isKnownPackage && formData.blindBoxes.length > 1 && !box.blindBoxId && (
-                    <button
-                      type="button"
-                      onClick={() => removeBlindBox(index)}
-                      className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-                    >
-                      <RiCloseLine size={20} />
-                    </button>
-                  )}
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
@@ -655,6 +578,10 @@ function EditPackage() {
                               src={image.url || image} 
                               alt={`BlindBox ${box.number} - ${imageIndex}`} 
                               className="w-full h-20 object-cover rounded"
+                              onError={(e) => {
+                                console.log("Failed to load image:", image.url || image);
+                                e.target.src = 'https://via.placeholder.com/100?text=No+Image';
+                              }}
                             />
                             <button
                               type="button"

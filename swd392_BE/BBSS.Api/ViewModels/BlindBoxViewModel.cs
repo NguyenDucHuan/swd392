@@ -30,7 +30,7 @@
 
         public string PackageName { get; set; }
 
-        public List<string> ImageUrls { get; set; } = new List<string>();
+        public List<ImageViewModel> ImageUrls { get; set; } = new List<ImageViewModel>();
 
         public List<FeatureViewModel> Features { get; set; } = new List<FeatureViewModel>();
     }
