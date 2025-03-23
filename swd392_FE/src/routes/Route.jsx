@@ -28,6 +28,7 @@ import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import PackageDetail from "../pages/ShoppingAndLuckyWheel/PackageDetail";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
 import Users from "../pages/Users";
+import RechargePage from "../pages/ProfilePage/RechargePage";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -35,7 +36,7 @@ const AppRoutes = () => {
         path="/login"
         element={
           <CustomerLayout>
-          <Login />
+            <Login />
           </CustomerLayout>
         }
       />
@@ -53,7 +54,7 @@ const AppRoutes = () => {
         path="/about"
         element={
           <CustomerLayout>
-            <About/>
+            <About />
           </CustomerLayout>
         }
       />
@@ -61,7 +62,7 @@ const AppRoutes = () => {
         path="/blog"
         element={
           <CustomerLayout>
-            <BlogPage/>
+            <BlogPage />
           </CustomerLayout>
         }
       />
@@ -69,7 +70,7 @@ const AppRoutes = () => {
         path="/shopping"
         element={
           <CustomerLayout>
-            <ShoppingPage/>.
+            <ShoppingPage />.
           </CustomerLayout>
         }
       />
@@ -77,7 +78,7 @@ const AppRoutes = () => {
         path="/lucky-wheel"
         element={
           <CustomerLayout>
-            <LuckyWheel/>
+            <LuckyWheel />
           </CustomerLayout>
         }
       />
@@ -88,7 +89,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <StaffRoute>
-              <Dashboard/>
+              <Dashboard />
             </StaffRoute>
           </ManagerLayout>
         }
@@ -98,7 +99,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <AdminRoute>
-              <Settings/>
+              <Settings />
             </AdminRoute>
           </ManagerLayout>
         }
@@ -108,7 +109,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <ProtectedRoute>
-              <HelpCenter/>
+              <HelpCenter />
             </ProtectedRoute>
           </ManagerLayout>
         }
@@ -118,7 +119,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <ProtectedRoute>
-              <HelpCenterStart/>
+              <HelpCenterStart />
             </ProtectedRoute>
           </ManagerLayout>
         }
@@ -128,7 +129,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <AdminRoute>
-              <AdvertisingCenter/>
+              <AdvertisingCenter />
             </AdminRoute>
           </ManagerLayout>
         }
@@ -138,7 +139,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <StaffRoute>
-              <Content/>
+              <Content />
             </StaffRoute>
           </ManagerLayout>
         }
@@ -150,7 +151,7 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <AdminRoute>
-              <Users/>
+              <Users />
             </AdminRoute>
           </ManagerLayout>
         }
@@ -160,8 +161,8 @@ const AppRoutes = () => {
         element=
         {
           <CustomerLayout>
-        <Register/>
-        </CustomerLayout>
+            <Register />
+          </CustomerLayout>
         }
       />
 
@@ -169,9 +170,9 @@ const AppRoutes = () => {
         path="/packages"
         element={
           <ManagerLayout>
-          <StaffRoute>
-            <PackageManager/>
-          </StaffRoute>
+            <StaffRoute>
+              <PackageManager />
+            </StaffRoute>
           </ManagerLayout>
         }
       />
@@ -197,9 +198,9 @@ const AppRoutes = () => {
         path="/package/create-unknown"
         element={
           <ManagerLayout>
-          <StaffRoute>
-            <CreateUnknownPackage/>
-          </StaffRoute>
+            <StaffRoute>
+              <CreateUnknownPackage />
+            </StaffRoute>
           </ManagerLayout>
         }
       />
@@ -207,9 +208,9 @@ const AppRoutes = () => {
         path="/package/create-known"
         element={
           <ManagerLayout>
-          <StaffRoute>
-            <CreateKnownPackage/>
-          </StaffRoute>
+            <StaffRoute>
+              <CreateKnownPackage />
+            </StaffRoute>
           </ManagerLayout>
         }
       />
@@ -217,9 +218,9 @@ const AppRoutes = () => {
         path="/package/edit/:packageId"
         element={
           <ManagerLayout>
-          <StaffRoute>
-          <EditPackage />
-          </StaffRoute>
+            <StaffRoute>
+              <EditPackage />
+            </StaffRoute>
           </ManagerLayout>
         }
       />
@@ -255,6 +256,18 @@ const AppRoutes = () => {
           </CustomerLayout>
         }
       />
+
+      <Route
+        path="/recharge"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <RechargePage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+
 
       <Route
         path="/profile"
