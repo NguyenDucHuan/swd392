@@ -21,6 +21,11 @@ namespace BBSS.Api.Routes
             public const string GetUpdateDelete = $"{Users}/" + "{" + Id + "}";
             public const string Profile = $"{Users}/profile";
             public const string UpdateProfile = $"{Users}/update-profile";
+
+            public const string CreateUser = $"{Users}/create-user"; // Tạo mới user
+            public const string UpdateUser = $"{Users}/" + "{" + nameof(Id) + "}"; // Cập nhật user (Manager/Admin)
+            public const string UpdateUserStatus = $"{Users}/status/" + "{" + nameof(Id) + "}"; // Cập nhật trạng thái user
+
         }
 
         public static class OrderRoute
@@ -106,5 +111,34 @@ namespace BBSS.Api.Routes
             public const string UpdateFeature = $"{Features}/{Id}";
             public const string DeleteFeature = $"{Features}/{Id}";
         }
+
+        public static class FeedbackRoute
+        {
+            public const string Feedbacks = $"{Router.prefix}feedbacks";
+            public const string GetFeedbackByProduct = $"{Feedbacks}/product/{{productId}}"; // Lấy danh sách feedback theo sản phẩm
+            public const string GetAllFeedbacks = $"{Feedbacks}/manager-feedbacks"; // Lấy toàn bộ feedback (Manager)
+            public const string CreateFeedback = $"{Feedbacks}/create-feedback"; // Tạo mới feedback
+            public const string UpdateFeedbackStatus = $"{Feedbacks}/update-feedback-status/{{feedbackId}}"; // Cập nhật trạng thái feedback
+        }
+
+        public static class VoucherRoute
+        {
+            private const string prefix = "api/voucher";
+            public const string GetVoucherById = $"{prefix}/{{id}}"; // Lấy thông tin voucher theo ID
+            public const string GetAllVouchers = $"{prefix}/all"; // Lấy toàn bộ voucher
+            public const string CreateVoucher = $"{prefix}/create"; // Tạo mới voucher
+            public const string UpdateVoucher = $"{prefix}/update/{{id}}"; // Cập nhật voucher
+            public const string DeleteVoucher = $"{prefix}/delete/{{id}}"; // Xóa voucher
+        }
+
+        public static class UserVoucherRoute
+        {
+            private const string prefix = "api/user-voucher";
+            public const string GetUserVoucherById = $"{prefix}/{{id}}"; // Lấy thông tin UserVoucher theo ID
+            public const string GetUserVouchersByUserId = $"{prefix}/user/{{userId}}"; // Lấy danh sách voucher của khách hàng
+            public const string AssignVoucher = $"{prefix}/assign"; // Assign voucher cho khách hàng
+            public const string RedeemVoucher = $"{prefix}/redeem/{{id}}"; // Đổi voucher
+        }
+
     }
 }
