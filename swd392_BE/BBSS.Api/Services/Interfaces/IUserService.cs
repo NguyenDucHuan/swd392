@@ -8,5 +8,10 @@ namespace BBSS.Api.Services.Interfaces
     {
         Task<MethodResult<ProfileViewModel>> GetProfileAsync(string email);
         Task<MethodResult<string>> UpdateProfileAsync(string email, UpdateProfileRequest request);
+
+        Task<MethodResult<UserResponse>> CreateUserAsync(UserRequest request);
+        Task<MethodResult<string>> UpdateUserAsync(int id, UserRequest request);
+        Task<MethodResult<string>> UpdateUserStatusAsync(int id, UpdateStatusRequest request);
+
     }
 }

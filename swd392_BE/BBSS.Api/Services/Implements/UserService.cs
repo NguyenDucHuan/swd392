@@ -48,6 +48,83 @@ namespace BBSS.Api.Services.Implements
         {
 
             return new MethodResult<string>.Success("Update profile successfully");
-        } 
+        }
+
+        public async Task<MethodResult<UserResponse>> CreateUserAsync(UserRequest request)
+        {
+            try
+            {
+                // Ánh xạ từ request sang entity
+                var user = _mapper.Map<User>(request);
+
+                await _uow.GetRepository<User>().InsertAsync(user);
+                await _uow.CommitAsync();
+
+                // Ánh xạ từ entity sang response
+                var response = _mapper.Map<UserResponse>(user);
+                return new MethodResult<UserResponse>.Success(response);
+            }
+            catch (Exception ex)
+            {
+                return new MethodResult<UserResponse>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        // Cập nhật hồ sơ cá nhân
+
+
+        // Cập nhật thông tin người dùng
+        public async Task<MethodResult<string>> UpdateUserAsync(int id, UserRequest request)
+        {
+            try
+            {
+                // Sử dụng overload cho thực thể đầy đủ
+                var user = await _uow.GetRepository<User>().SingleOrDefaultAsync(
+                    predicate: u => u.UserId == id
+                );
+
+                if (user == null)
+                    return new MethodResult<string>.Failure("User not found", StatusCodes.Status404NotFound);
+
+                // Ánh xạ từ request sang user
+                _mapper.Map(request, user);
+
+                _uow.GetRepository<User>().UpdateAsync(user);
+                await _uow.CommitAsync();
+
+                return new MethodResult<string>.Success("User updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        // Cập nhật trạng thái người dùng
+        public async Task<MethodResult<string>> UpdateUserStatusAsync(int id, UpdateStatusRequest request)
+        {
+            try
+            {
+                // Chọn đúng overload để chỉ lấy thực thể
+                var user = await _uow.GetRepository<User>().SingleOrDefaultAsync(
+                    predicate: u => u.UserId == id
+                );
+
+                if (user == null)
+                    return new MethodResult<string>.Failure("User not found", StatusCodes.Status404NotFound);
+
+                // Cập nhật trạng thái
+                _mapper.Map(request, user);
+
+                _uow.GetRepository<User>().UpdateAsync(user);
+                await _uow.CommitAsync();
+
+                return new MethodResult<string>.Success("User status updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }
