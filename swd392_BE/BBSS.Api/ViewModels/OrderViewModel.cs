@@ -21,10 +21,10 @@
     {
         public int OrderDetailId { get; set; }
 
-        public int BlindBoxId { get; set; }
-       
-        public decimal Price { get; set; }
+        public int? BlindBoxId { get; set; }
 
-        public int Quantity { get; set; }
+        public int? PackageId { get; set; }
+
+        public decimal Price { get; set; }
     }
 }

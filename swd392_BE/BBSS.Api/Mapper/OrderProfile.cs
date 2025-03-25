@@ -15,11 +15,12 @@ namespace BBSS.Api.Mapper
                 .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => 0));
 
             CreateMap<Order, OrderViewModel>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status))
                 .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.OrderDetails.Select(x => new OrderDetailViewModel
                 {
-                    OrderDetailId = x.OrderId,
-                    //BlindBoxId = x.BlindBoxId,
-                    //Quantity = x.Quantity,
+                    OrderDetailId = x.OrderDetailId,
+                    BlindBoxId = x.BlindBoxId,
+                    PackageId = x.PackageId,
                     Price = x.UnitPrice
                 })));
         }
