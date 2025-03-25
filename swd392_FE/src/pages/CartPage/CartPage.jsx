@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '../../configs/globalVariables';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
+
 function CartPage() {
   const { cartItems, removeFromCart, updateQuantity, clearCart, totalItems } = useCart();
   const { isAuthenticated } = useAuth();
@@ -33,15 +34,16 @@ function CartPage() {
     });
     return total;
   };
+
   const handleCheckout = () => {
     const token = localStorage.getItem('access_token');
-    
+
     if (!isAuthenticated || !token) {
       toast.warning('Vui lòng đăng nhập để tiến hành thanh toán!');
       navigate('/login', { state: { from: '/cart' } });
       return;
     }
-    
+
     setShowCheckoutModal(true);
   };
 
@@ -50,9 +52,9 @@ function CartPage() {
       toast.error('Vui lòng nhập số điện thoại!');
       return;
     }
-    
+
     setIsProcessing(true);
-    
+
     try {
       // Prepare order items from cart
       const orderItems = cartItems.map(item => ({
@@ -60,25 +62,25 @@ function CartPage() {
         PakageCode: item.pakageCode,
         Quantity: item.quantity
       }));
-      
+
       // Create order request
       const orderData = {
         Phone: shippingInfo.phone,
         Address: shippingInfo.address,
         Products: orderItems
       };
-      
+
       // Send request to create order
       const response = await axios.post(`${BASE_URL}/orders/order`, orderData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       });
-      
+
       // If order created successfully
       if (response.data) {
         // Redirect to payment route with order ID
-        const paymentResponse = await axios.post(`${BASE_URL}/payment/payment`, 
+        const paymentResponse = await axios.post(`${BASE_URL}/payment/payment`,
           { orderId: response.data, type: "Order" },
           {
             headers: {
@@ -86,14 +88,14 @@ function CartPage() {
             }
           }
         );
-        
+
         if (paymentResponse.data) {
           // Close modal
           setShowCheckoutModal(false);
-          
+
           // Clear cart
           clearCart();
-          
+
           // Redirect to payment URL
           window.location.href = paymentResponse.data;
         } else {
@@ -140,7 +142,7 @@ function CartPage() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Giỏ hàng của bạn ({totalItems} sản phẩm)</h1>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -159,10 +161,10 @@ function CartPage() {
                     <td className="py-4">
                       <div className="flex items-center">
                         {item.imageUrl ? (
-                          <img 
-                            src={item.imageUrl} 
-                            alt={item.name} 
-                            className="w-16 h-16 object-contain mr-4" 
+                          <img
+                            src={item.imageUrl}
+                            alt={item.name}
+                            className="w-16 h-16 object-contain mr-4"
                             onError={(e) => {
                               e.target.src = 'https://via.placeholder.com/100?text=No+Image';
                             }}
@@ -183,20 +185,20 @@ function CartPage() {
                     </td>
                     <td className="py-4">
                       <div className="flex items-center justify-center">
-                        <button 
+                        <button
                           className="px-2 py-1 border rounded-l-md"
                           onClick={() => updateQuantity(item.pakageCode, item.type, item.quantity - 1)}
                         >
                           -
                         </button>
-                        <input 
-                          type="number" 
-                          min="1" 
+                        <input
+                          type="number"
+                          min="1"
                           value={item.quantity}
-                          onChange={(e) => updateQuantity(item.pakageCode, item.type, parseInt(e.target.value) || 1)} 
+                          onChange={(e) => updateQuantity(item.pakageCode, item.type, parseInt(e.target.value) || 1)}
                           className="w-12 text-center border-t border-b"
                         />
-                        <button 
+                        <button
                           className="px-2 py-1 border rounded-r-md"
                           onClick={() => updateQuantity(item.pakageCode, item.type, item.quantity + 1)}
                         >
@@ -205,12 +207,12 @@ function CartPage() {
                       </div>
                     </td>
                     <td className="py-4 text-right font-medium">
-                      {typeof item.formattedPrice === 'string' 
-                        ? item.formattedPrice 
+                      {typeof item.formattedPrice === 'string'
+                        ? item.formattedPrice
                         : formatCurrency(item.price)}
                     </td>
                     <td className="py-4 text-right">
-                      <button 
+                      <button
                         onClick={() => removeFromCart(item.pakageCode, item.type)}
                         className="text-red-500 hover:text-red-700"
                       >
@@ -222,12 +224,12 @@ function CartPage() {
               </tbody>
             </table>
           </div>
-          
+
           <div className="flex justify-between items-center mb-6">
             <Link to="/shopping" className="text-blue-600 hover:text-blue-800 flex items-center">
               <FaArrowLeft className="mr-2" /> Tiếp tục mua sắm
             </Link>
-            <button 
+            <button
               onClick={clearCart}
               className="px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50"
             >
@@ -235,11 +237,11 @@ function CartPage() {
             </button>
           </div>
         </div>
-        
+
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg shadow-md p-6 sticky top-6">
             <h2 className="text-lg font-bold mb-4">Tóm tắt đơn hàng</h2>
-            
+
             <div className="border-t pt-4 mb-4">
               <div className="flex justify-between mb-2">
                 <span>Tạm tính:</span>
@@ -250,15 +252,15 @@ function CartPage() {
                 <span>Miễn phí</span>
               </div>
             </div>
-            
+
             <div className="border-t pt-4 mb-6">
               <div className="flex justify-between font-bold">
                 <span>Tổng cộng:</span>
                 <span>{formatCurrency(calculateSubtotal())}</span>
               </div>
             </div>
-            
-            <button 
+
+            <button
               onClick={handleCheckout}
               disabled={isProcessing}
               className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center disabled:bg-blue-400"
@@ -270,7 +272,7 @@ function CartPage() {
                 </>
               ) : (
                 <>
-                  <FaCreditCard className="mr-2" /> Checkout 
+                  <FaCreditCard className="mr-2" /> Checkout
                 </>
               )}
               {/* Checkout Modal */}
@@ -279,14 +281,14 @@ function CartPage() {
                   <div className="bg-white rounded-lg p-6 max-w-md w-full">
                     <div className="flex justify-between items-center mb-4">
                       <h3 className="text-lg font-semibold">Thông tin giao hàng</h3>
-                      <button 
+                      <button
                         onClick={() => setShowCheckoutModal(false)}
                         className="text-gray-400 hover:text-gray-600"
                       >
                         ×
                       </button>
                     </div>
-                    
+
                     <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -298,11 +300,12 @@ function CartPage() {
                           value={shippingInfo.phone}
                           onChange={handleShippingInfoChange}
                           className="w-full p-2 border border-gray-300 rounded-md"
+                          style={{ color: 'black', backgroundColor: 'white' }}
                           required
                           placeholder="Nhập số điện thoại của bạn"
                         />
                       </div>
-                      
+
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           Địa chỉ nhận hàng <span className="text-red-500">*</span>
@@ -312,13 +315,14 @@ function CartPage() {
                           value={shippingInfo.address}
                           onChange={handleShippingInfoChange}
                           className="w-full p-2 border border-gray-300 rounded-md"
+                          style={{ color: 'black', backgroundColor: 'white' }}
                           required
                         >
                           <option value="Nhận tại cửa hàng">Nhận tại cửa hàng</option>
                           <option value="Giao hàng tận nơi">Giao hàng tận nơi</option>
                         </select>
                       </div>
-                      
+
                       {shippingInfo.address === 'Giao hàng tận nơi' && (
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -329,28 +333,29 @@ function CartPage() {
                             value={shippingInfo.addressDetail || ''}
                             onChange={handleShippingInfoChange}
                             className="w-full p-2 border border-gray-300 rounded-md"
+                            style={{ color: 'black', backgroundColor: 'white' }}
                             rows="3"
                             required
                             placeholder="Nhập địa chỉ chi tiết của bạn"
                           ></textarea>
                         </div>
                       )}
-                      
+
                       <div className="text-right">
                         <p className="text-sm text-gray-700 mb-1">Tổng cộng:</p>
                         <p className="text-lg font-bold text-blue-600">{formatCurrency(calculateSubtotal())}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex justify-end space-x-3 mt-6">
-                      <button 
+                      <button
                         onClick={() => setShowCheckoutModal(false)}
                         className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                         disabled={isProcessing}
                       >
                         Hủy
                       </button>
-                      <button 
+                      <button
                         onClick={processOrder}
                         disabled={isProcessing}
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
