@@ -99,9 +99,16 @@ namespace BBSS.Api.Services.Implements
                 {
                     return new MethodResult<PackageViewModel>.Failure("No packages found with the given code", StatusCodes.Status404NotFound);
                 }
-                var mappedPackages = packages.Select(p => _mapper.Map<PackageViewModel>(p)).ToList();
-                var representativePackage = mappedPackages.First();
-                representativePackage.TotalPackage = mappedPackages.Count;
+                var unsoldPackages = packages.Where(p => p.BlindBoxes.Any(bb => !bb.IsSold)).ToList();
+                if (!unsoldPackages.Any())
+                {
+                    return new MethodResult<PackageViewModel>.Failure("No unsold packages found with the given code", StatusCodes.Status404NotFound);
+                }
+                var fullyUnsoldPackages = packages.Where(p => !p.BlindBoxes.Any(bb => bb.IsSold)).ToList();
+                var mappedPackages = unsoldPackages.Select(p => _mapper.Map<PackageViewModel>(p)).ToList();
+                var representativePackage = mappedPackages.OrderByDescending(p => p.BlindBoxes.Count(bb => !bb.IsSold)).First();
+                decimal totalPrice = representativePackage.BlindBoxes.Sum(b => b.DiscountedPrice);
+                representativePackage.TotalPackage = fullyUnsoldPackages.Count;
                 representativePackage.TotalBlindBox = mappedPackages.Sum(p => p.BlindBoxes.Count);
 
                 bool useAvailableOnly = filter?.ToLower().Contains("available") == true;
@@ -114,8 +121,6 @@ namespace BBSS.Api.Services.Implements
                 if (allBlindBoxes.Any())
                 {
                     decimal minPrice = allBlindBoxes.Min(b => b.DiscountedPrice);
-                    decimal totalPrice = allBlindBoxes.Sum(b => b.DiscountedPrice);
-
                     representativePackage.Price = minPrice == totalPrice
                         ? minPrice.ToString("N0") + " ₫"
                         : minPrice.ToString("N0") + " - " + totalPrice.ToString("N0") + " ₫";
@@ -176,10 +181,11 @@ namespace BBSS.Api.Services.Implements
                     var processedGroups = new Dictionary<string, PackageViewModel>();
                     foreach (var group in groupedPackages)
                     {
+                        var fullyUnsoldPackages = packages.Where(p => !p.BlindBoxes.Any(bb => bb.IsSold)).ToList();
                         var allPackagesInGroup = group.Value.Packages;
-                        var representativePackage = allPackagesInGroup.First();
-
-                        representativePackage.TotalPackage = allPackagesInGroup.Count;
+                        var representativePackage = allPackagesInGroup.OrderByDescending(p => p.BlindBoxes.Count(bb => !bb.IsSold)).First();
+                        decimal totalPrice = representativePackage.BlindBoxes.Sum(b => b.DiscountedPrice);
+                        representativePackage.TotalPackage = fullyUnsoldPackages.Count;
                         representativePackage.TotalBlindBox = allPackagesInGroup.Select(x => x.BlindBoxes.Count).Sum();
                         var allBlindBoxes = allPackagesInGroup
                             .SelectMany(p => p.BlindBoxes)
@@ -189,7 +195,6 @@ namespace BBSS.Api.Services.Implements
                         if (allBlindBoxes.Any())
                         {
                             decimal minPrice = allBlindBoxes.Min(b => b.DiscountedPrice);
-                            decimal totalPrice = allBlindBoxes.Sum(b => b.DiscountedPrice);
 
                             representativePackage.Price = minPrice == totalPrice
                                 ? minPrice.ToString("N0") + " ₫"

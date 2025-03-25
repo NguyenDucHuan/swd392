@@ -7,78 +7,88 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
   const [cartTotal, setCartTotal] = useState(0);
-  const { user } = useAuth(); // Lấy thông tin người dùng từ AuthContext
+  const { user } = useAuth();
   
-  // Tạo key riêng cho mỗi người dùng
   const getCartKey = () => {
-    return user ? `paneway-cart-${user.id}` : 'paneway-cart-guest';
+    return user ? `blindbox-cart-${user.id}` : 'blindbox-cart-guest';
   };
 
-  // Load cart từ localStorage khi component mount hoặc user thay đổi
   useEffect(() => {
     const loadCart = () => {
       const cartKey = getCartKey();
       const storedCart = localStorage.getItem(cartKey);
       if (storedCart) {
-        const parsedCart = JSON.parse(storedCart);
-        setCartItems(parsedCart);
+        try {
+          const parsedCart = JSON.parse(storedCart);
+          setCartItems(Array.isArray(parsedCart) ? parsedCart : []);
+        } catch (error) {
+          console.error("Error parsing cart data:", error);
+          setCartItems([]);
+          localStorage.removeItem(cartKey);
+        }
       } else {
-        // Reset giỏ hàng nếu không có dữ liệu cho user hiện tại
         setCartItems([]);
       }
     };
     
     loadCart();
-  }, [user]); // Re-run khi user thay đổi (đăng nhập/đăng xuất)
+  }, [user]); 
 
-  // Cập nhật localStorage và tính toán tổng khi cartItems thay đổi
   useEffect(() => {
-    if (cartItems.length > 0) {
-      const cartKey = getCartKey();
-      localStorage.setItem(cartKey, JSON.stringify(cartItems));
+    const cartKey = getCartKey();
+    
+    // Always update localStorage, even with empty cart
+    localStorage.setItem(cartKey, JSON.stringify(cartItems));
+    
+    // Calculate quantity and total price
+    const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+    
+    let totalPrice = 0;
+    for (const item of cartItems) {
+      let price = item.price;
+      if (typeof price === 'string') {
+        // Convert string price to number if needed
+        price = parseFloat(price.replace(/[^\d.]/g, ''));
+      }
+      if (!isNaN(price)) {
+        totalPrice += price * item.quantity;
+      }
     }
     
-    // Tính toán số lượng và tổng tiền
-    const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
-    const totalPrice = cartItems.reduce(
-      (total, item) => total + (item.price * item.quantity), 
-      0
-    );
-    
-    setCartCount(itemCount);
+    setTotalItems(itemCount);
     setCartTotal(totalPrice);
   }, [cartItems, user]);
 
-  // Thêm sản phẩm vào giỏ hàng
+  // Add product to cart
   const addToCart = (item) => {
     setCartItems(prevItems => {
-      // Kiểm tra sản phẩm đã có trong giỏ chưa
+      // Check if product is already in cart
       const existingItemIndex = prevItems.findIndex(
         cartItem => cartItem.pakageCode === item.pakageCode && cartItem.type === item.type
       );
 
       if (existingItemIndex !== -1) {
-        // Cập nhật số lượng nếu sản phẩm đã tồn tại
+        // Update quantity if product exists
         const updatedItems = [...prevItems];
-        updatedItems[existingItemIndex].quantity += item.quantity;
+        updatedItems[existingItemIndex].quantity += (item.quantity || 1);
         return updatedItems;
       } else {
-        // Thêm sản phẩm mới
-        return [...prevItems, item];
+        // Add new product
+        return [...prevItems, {...item, quantity: item.quantity || 1}];
       }
     });
   };
 
-  // Xóa sản phẩm khỏi giỏ hàng
+  // Remove product from cart
   const removeFromCart = (pakageCode, type) => {
     setCartItems(prevItems => 
       prevItems.filter(item => !(item.pakageCode === pakageCode && item.type === type))
     );
   };
 
-  // Cập nhật số lượng sản phẩm
+  // Update product quantity
   const updateQuantity = (pakageCode, type, quantity) => {
     if (quantity <= 0) {
       removeFromCart(pakageCode, type);
@@ -94,7 +104,7 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // Xóa toàn bộ giỏ hàng
+  // Clear entire cart
   const clearCart = () => {
     setCartItems([]);
     const cartKey = getCartKey();
@@ -105,7 +115,7 @@ export const CartProvider = ({ children }) => {
     <CartContext.Provider 
       value={{ 
         cartItems, 
-        cartCount, 
+        totalItems, 
         cartTotal, 
         addToCart, 
         removeFromCart, 

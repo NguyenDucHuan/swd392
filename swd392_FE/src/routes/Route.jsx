@@ -179,7 +179,9 @@ const AppRoutes = () => {
         path="/cart"
         element={
           <CustomerLayout>
+          <UserRoute>
             <CartPage />
+          </UserRoute>
           </CustomerLayout>
         }
       />

@@ -46,63 +46,94 @@ function CartPage() {
   };
 
   const processOrder = async () => {
+    // Validate required fields
     if (!shippingInfo.phone) {
       toast.error('Vui lòng nhập số điện thoại!');
+      return;
+    }
+    
+    // Additional validation for delivery address
+    if (shippingInfo.address === 'Giao hàng tận nơi' && !shippingInfo.addressDetail) {
+      toast.error('Vui lòng nhập địa chỉ chi tiết!');
       return;
     }
     
     setIsProcessing(true);
     
     try {
-      // Prepare order items from cart
       const orderItems = cartItems.map(item => ({
-        Type: item.type,
-        PakageCode: item.pakageCode,
-        Quantity: item.quantity
+        type: item.type,
+        pakageCode: item.pakageCode,
+        quantity: item.quantity
       }));
       
-      // Create order request
       const orderData = {
-        Phone: shippingInfo.phone,
-        Address: shippingInfo.address,
-        Products: orderItems
+        phone: shippingInfo.phone,
+        address: shippingInfo.address === 'Giao hàng tận nơi' 
+          ? `${shippingInfo.address}: ${shippingInfo.addressDetail}` 
+          : shippingInfo.address,
+        products: orderItems  
       };
       
-      // Send request to create order
+      console.log('Sending order data:', orderData);
+      
       const response = await axios.post(`${BASE_URL}/orders/order`, orderData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
       
-      // If order created successfully
       if (response.data) {
-        // Redirect to payment route with order ID
-        const paymentResponse = await axios.post(`${BASE_URL}/payment/payment`, 
-          { orderId: response.data, type: "Order" },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('access_token')}`
-            }
-          }
-        );
-        
-        if (paymentResponse.data) {
-          // Close modal
-          setShowCheckoutModal(false);
-          
-          // Clear cart
+        if (typeof response.data === 'string' && response.data.includes("successfully")) {
+          toast.success('Đặt hàng thành công!');
           clearCart();
-          
-          // Redirect to payment URL
-          window.location.href = paymentResponse.data;
-        } else {
-          throw new Error('Không nhận được URL thanh toán');
+          setShowCheckoutModal(false);
+          navigate('/shopping');
+          return;
         }
+        if (typeof response.data === 'number' || (typeof response.data === 'string' && !isNaN(response.data))) {
+          toast.success('Đặt hàng thành công!');
+          clearCart();
+          setShowCheckoutModal(false);
+          navigate('/shopping');
+          return;
+        }
+        
+        if (response.data.isSuccess) {
+          toast.success('Đặt hàng thành công!');
+          clearCart();
+          setShowCheckoutModal(false);
+          navigate('/shopping');
+          return;
+        }
+        
+        toast.success('Đặt hàng thành công!');
+        console.log('Unexpected success response format:', response.data);
+        clearCart();
+        setShowCheckoutModal(false);
+        navigate('/shopping');
+      } else {
+        toast.error('Đặt hàng không thành công: Vui lòng thử lại sau');
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      toast.error(error.response?.data?.detail || 'Có lỗi xảy ra khi xử lý đơn hàng');
+      
+      // More detailed error handling
+      if (error.response) {
+        // The server responded with an error status
+        if (error.response.status === 500) {
+          toast.error('Lỗi máy chủ: Không thể xử lý đơn hàng. Vui lòng thử lại sau hoặc liên hệ hỗ trợ.');
+        } else if (error.response.data && error.response.data.detail) {
+          toast.error(error.response.data.detail);
+        } else {
+          toast.error(`Lỗi ${error.response.status}: Không thể xử lý đơn hàng`);
+        }
+      } else if (error.request) {
+        toast.error('Không nhận được phản hồi từ máy chủ. Vui lòng kiểm tra kết nối mạng.');
+      } else {
+        toast.error('Có lỗi xảy ra khi xử lý đơn hàng: ' + error.message);
+      }
     } finally {
       setIsProcessing(false);
     }
@@ -273,19 +304,19 @@ function CartPage() {
                   <FaCreditCard className="mr-2" /> Checkout 
                 </>
               )}
-              {/* Checkout Modal */}
-              {showCheckoutModal && (
+            </button>
+            {showCheckoutModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                   <div className="bg-white rounded-lg p-6 max-w-md w-full">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-lg font-semibold">Thông tin giao hàng</h3>
-                      <button 
-                        onClick={() => setShowCheckoutModal(false)}
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        ×
-                      </button>
-                    </div>
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-semibold">Thông tin giao hàng</h3>
+                    <button 
+                      onClick={() => setShowCheckoutModal(false)}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      ×
+                    </button>
+                  </div>
                     
                     <div className="space-y-4">
                       <div>
@@ -311,7 +342,7 @@ function CartPage() {
                           name="address"
                           value={shippingInfo.address}
                           onChange={handleShippingInfoChange}
-                          className="w-full p-2 border border-gray-300 rounded-md"
+                          className="w-full p-2 border text-gray-700 border-gray-300 rounded-md"
                           required
                         >
                           <option value="Nhận tại cửa hàng">Nhận tại cửa hàng</option>
@@ -328,7 +359,7 @@ function CartPage() {
                             name="addressDetail"
                             value={shippingInfo.addressDetail || ''}
                             onChange={handleShippingInfoChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
+                            className="w-full p-2 border text-gray-700 border-gray-300 rounded-md"
                             rows="3"
                             required
                             placeholder="Nhập địa chỉ chi tiết của bạn"
@@ -345,7 +376,7 @@ function CartPage() {
                     <div className="flex justify-end space-x-3 mt-6">
                       <button 
                         onClick={() => setShowCheckoutModal(false)}
-                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                        className="px-4 py-2 border text-gray-700 border-gray-300 rounded-lg hover:bg-gray-50"
                         disabled={isProcessing}
                       >
                         Hủy
@@ -355,20 +386,12 @@ function CartPage() {
                         disabled={isProcessing}
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                       >
-                        {isProcessing ? (
-                          <>
-                            <span className="inline-block animate-spin h-4 w-4 border-t-2 border-b-2 border-white rounded-full mr-2"></span>
-                            Đang xử lý...
-                          </>
-                        ) : (
-                          'Tiến hành thanh toán'
-                        )}
+                        {isProcessing ? "Đang xử lý..." : "Tiến hành thanh toán"}
                       </button>
                     </div>
                   </div>
                 </div>
               )}
-            </button>
           </div>
         </div>
       </div>
