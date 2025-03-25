@@ -61,13 +61,16 @@ namespace BBSS.Api.Models.PackageModel
         public string? Description { get; set; }
         public string? Manufacturer { get; set; }
         public int? CategoryId { get; set; }
+
+        public bool IsUpdateImagePackage { get; set; }
         public List<IFormFile>? ImageFiles { get; set; }
         //[FromBody]
         public List<BlindBoxUpdateRequest>? BlindBoxes { get; set; }
     }
     public class BlindBoxUpdateRequest
     {
-        public int? BlindBoxId { get; set; }  // Added to identify existing BlindBoxes
+        public int? BlindBoxId { get; set; }  // Added to identify existing BlindBoxes'
+        public bool IsUpdateImageBlindBox { get; set; }
         public string? Color { get; set; }
         public bool? Status { get; set; }
         public double? Size { get; set; }

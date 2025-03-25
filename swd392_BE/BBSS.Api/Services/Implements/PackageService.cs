@@ -324,29 +324,33 @@ namespace BBSS.Api.Services.Implements
                 }
 
                 // Upload và quản lý hình ảnh
-                if (request.ImageFiles != null && request.ImageFiles.Any())
+                if (request.IsUpdateImagePackage)
                 {
-                    var imageUrls = await _cloudinaryService.UploadMultipleImagesAsync(request.ImageFiles);
-
-                    if (imageUrls.Any())
+                    // Xóa ảnh cũ
+                    foreach (var image in package.PackageImages.ToList())
                     {
-                        // Xóa ảnh cũ
-                        foreach (var image in package.PackageImages.ToList())
-                        {
-                            _uow.GetRepository<PackageImage>().DeleteAsync(image);
-                        }
+                        _uow.GetRepository<PackageImage>().DeleteAsync(image);
+                    }
 
-                        // Thêm ảnh mới
-                        foreach (var imageUrl in imageUrls)
-                        {
-                            await _uow.GetRepository<PackageImage>().InsertAsync(new PackageImage
+                    if (request.ImageFiles != null && request.ImageFiles.Any())
+                    {
+                        var imageUrls = await _cloudinaryService.UploadMultipleImagesAsync(request.ImageFiles);
+
+                        if (imageUrls.Any())
+                        {                            
+                            // Thêm ảnh mới
+                            foreach (var imageUrl in imageUrls)
                             {
-                                PackageId = package.PackageId,
-                                Url = imageUrl
-                            });
+                                await _uow.GetRepository<PackageImage>().InsertAsync(new PackageImage
+                                {
+                                    PackageId = package.PackageId,
+                                    Url = imageUrl
+                                });
+                            }
                         }
                     }
                 }
+                
 
                 //Xóa blindboxes không còn trong request
                 var deleteBlindBoxes = package.BlindBoxes.Where(bb => !request.BlindBoxes.Any(b => b.BlindBoxId == bb.BlindBoxId) && !bb.IsSold).ToList();
@@ -381,13 +385,15 @@ namespace BBSS.Api.Services.Implements
                         //xóa hết ảnh cũ blind  box
                         if (blindBoxRequest.BlindBoxId.HasValue)
                         {
-                            var imagetoDels = await _uow.GetRepository<BlindBoxImage>().GetListAsync(
-                                predicate: p => p.BlindBoxId == blindBoxRequest.BlindBoxId
-                            );
-
-                            if (imagetoDels.Any())
+                            if (blindBoxRequest.IsUpdateImageBlindBox)
                             {
-                                _uow.GetRepository<BlindBoxImage>().DeleteRangeAsync(imagetoDels);
+                                var imagetoDels = await _uow.GetRepository<BlindBoxImage>().GetListAsync(
+                                predicate: p => p.BlindBoxId == blindBoxRequest.BlindBoxId);
+
+                                if (imagetoDels.Any())
+                                {
+                                    _uow.GetRepository<BlindBoxImage>().DeleteRangeAsync(imagetoDels);
+                                }
                             }
                         }
 
@@ -420,16 +426,19 @@ namespace BBSS.Api.Services.Implements
                         }
 
                         //Upload ảnh blindbox
-                        if (blindBoxRequest.ImageFiles != null && blindBoxRequest.ImageFiles.Count != 0)
+                        if (blindBoxRequest.IsUpdateImageBlindBox)
                         {
-                            var imageUrls = await _cloudinaryService.UploadMultipleImagesAsync(blindBoxRequest.ImageFiles);
-                            foreach (var imageUrl in imageUrls)
+                            if (blindBoxRequest.ImageFiles != null && blindBoxRequest.ImageFiles.Count != 0)
                             {
-                                await _uow.GetRepository<BlindBoxImage>().InsertAsync(new BlindBoxImage
+                                var imageUrls = await _cloudinaryService.UploadMultipleImagesAsync(blindBoxRequest.ImageFiles);
+                                foreach (var imageUrl in imageUrls)
                                 {
-                                    BlindBoxId = blindBox.BlindBoxId,
-                                    Url = imageUrl
-                                });
+                                    await _uow.GetRepository<BlindBoxImage>().InsertAsync(new BlindBoxImage
+                                    {
+                                        BlindBoxId = blindBox.BlindBoxId,
+                                        Url = imageUrl
+                                    });
+                                }
                             }
                         }
                     }
