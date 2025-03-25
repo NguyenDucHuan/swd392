@@ -69,7 +69,7 @@ function ManagerNavbar() {
       // Handle logout
       logout();
       toast.success('Đăng xuất thành công!');
-      navigate('/'); 
+      navigate('/');
     } else if (option.id === 1) {
       navigate('/profile');
     } else if (option.id === 2) {
