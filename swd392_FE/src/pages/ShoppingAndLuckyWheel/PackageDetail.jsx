@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
-    FaArrowLeft,
-    FaBoxOpen,
-    FaChevronLeft,
-    FaChevronRight,
-    FaInfoCircle,
-    FaShoppingCart,
-    FaStar
+  FaArrowLeft,
+  FaBoxOpen,
+  FaChevronLeft,
+  FaChevronRight,
+  FaInfoCircle,
+  FaShoppingCart,
+  FaStar
 } from 'react-icons/fa';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -65,6 +65,12 @@ function PackageDetail() {
       fetchPackageByCode();
     }
   }, [packageCode]);
+  useEffect(() => {
+    if (purchaseType === 'package' && packageData?.totalPackage <= 0) {
+      setPurchaseType('blindbox');
+      toast.info('Đã chuyển sang mua từng BlindBox do Package đã hết hàng');
+    }
+  }, [packageData, purchaseType]);
 
   const handleImageClick = (imageUrl, index) => {
     setSelectedImage(imageUrl);
@@ -268,7 +274,11 @@ function PackageDetail() {
           <div>
             <div className="flex items-center space-x-2 mb-2">
               {/* Tags section */}
-              <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Blind Box</span>
+              {packageData.totalPackage > 0 && (
+                <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                  {packageData.totalPackage} Package{packageData.totalBlindBox > 1 ? 's' : ''}
+                </span>
+              )}
               {packageData.totalBlindBox > 0 && (
                 <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
                   {packageData.totalBlindBox} BlindBox{packageData.totalBlindBox > 1 ? 's' : ''}
@@ -285,12 +295,6 @@ function PackageDetail() {
                   {packageData.price}
                 </h2>
               </div>
-
-              {packageData.totalBlindBox > 0 && (
-                <p className="text-sm text-gray-600">
-                  Package này chứa {packageData.totalBlindBox} BlindBox bí ẩn
-                </p>
-              )}
             </div>
             
             {/* Mystery Message */}
@@ -343,23 +347,31 @@ function PackageDetail() {
                   <div className="space-y-2">
                     {packageData.manufacturer && (
                       <div className="flex">
-                        <span className="w-32 text-gray-600">Nhà sản xuất:</span>
+                        <span className="w-40 text-gray-600">Nhà sản xuất:</span>
                         <span className="text-gray-800">{packageData.manufacturer}</span>
                       </div>
                     )}
                     {packageData.category && (
                       <div className="flex">
-                        <span className="w-32 text-gray-600">Danh mục:</span>
+                        <span className="w-40 text-gray-600">Danh mục:</span>
                         <span className="text-gray-800">{packageData.category.name}</span>
                       </div>
                     )}
                     <div className="flex">
-                      <span className="w-32 text-gray-600">Mã Package:</span>
+                      <span className="w-40 text-gray-600">Số Package còn lại:</span>
+                      <span className="text-gray-800">{packageData.totalPackage || 0}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="w-40 text-gray-600">Mã Package:</span>
                       <span className="text-gray-800">{packageData.pakageCode}</span>
                     </div>
                     <div className="flex">
-                      <span className="w-32 text-gray-600">Số lượng BlindBox:</span>
+                      <span className="w-40 text-gray-600">Số lượng BlindBox:</span>
                       <span className="text-gray-800">{packageData.totalBlindBox}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="w-40 text-gray-600">Số Package còn lại:</span>
+                      <span className="text-gray-800">{packageData.totalPackage || 0}</span>
                     </div>
                   </div>
                 </>
@@ -411,7 +423,7 @@ function PackageDetail() {
             <div className="border-t pt-4 mb-4">
               <div className="font-medium mb-2">Chọn loại mua hàng:</div>
               <div className="flex space-x-4 mb-4">
-                <label className="flex items-center">
+                <label className={`flex items-center ${packageData.totalPackage <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <input
                     type="radio"
                     name="purchaseType"
@@ -419,8 +431,9 @@ function PackageDetail() {
                     checked={purchaseType === 'package'}
                     onChange={() => setPurchaseType('package')}
                     className="mr-2"
+                    disabled={packageData.totalPackage <= 0}
                   />
-                  <span>Mua nguyên package</span>
+                  <span>Mua nguyên package {packageData.totalPackage <= 0 && '(Hết hàng)'}</span>
                 </label>
                 <label className="flex items-center">
                   <input
@@ -485,32 +498,6 @@ function PackageDetail() {
         </div>
       </div>
 
-      {/* BlindBoxes List (if more than 4) */}
-      {blindBoxes.length > 4 && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Tất cả BlindBoxes trong package</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {blindBoxes.map((box, index) => (
-              <div key={box.blindBoxId || index} className={`border p-3 rounded-lg ${box.isSpecial ? 'border-yellow-300 bg-yellow-50' : ''}`}>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-medium">BlindBox #{box.number}</span>
-                  {box.isSpecial && (
-                    <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded">Đặc biệt</span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-600">Màu: {box.color}</p>
-                <p className="text-sm text-gray-600">Kích thước: {box.size}cm</p>
-                <div className="mt-2">
-                  <span className="text-green-600 font-medium">{box.discountedPrice.toLocaleString('vi-VN')} ₫</span>
-                  {box.discount > 0 && (
-                    <span className="text-sm text-gray-500 line-through ml-2">{box.price.toLocaleString('vi-VN')} ₫</span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Login Modal */}
       {showLoginModal && (

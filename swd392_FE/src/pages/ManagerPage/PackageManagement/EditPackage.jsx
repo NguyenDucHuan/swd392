@@ -281,7 +281,7 @@ function EditPackage() {
         // Add new images
         if (box.imageFiles && box.imageFiles.length > 0) {
           box.imageFiles.forEach(file => {
-            packageFormData.append(`blindBoxes[${index}].imageFiles`, file);
+            packageFormData.append(`blindBoxes[${index}].ImageFiles`, file);
           });
         }
         
