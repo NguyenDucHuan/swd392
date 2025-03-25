@@ -1,6 +1,8 @@
 
 using BBSS.Api.Extensions;
 using BBSS.Api.Models.Configurations;
+using BBSS.Api.Services.Implements;
+using BBSS.Api.Services.Interfaces;
 using BBSS.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -16,7 +18,10 @@ namespace BBSS.Api
             // Add services to the container.
             builder.Services.AddService().AddAuthenticationConfig();
 
-
+            builder.Services.AddScoped<IVoucherService, VoucherService>();
+            builder.Services.AddScoped<IUserVoucherService, UserVoucherService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
