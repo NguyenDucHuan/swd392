@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
-import { RiLockPasswordLine, RiLoginCircleLine, RiLogoutBoxLine, RiUserLine } from 'react-icons/ri';
+import { RiLockPasswordLine, RiLoginCircleLine, RiLogoutBoxLine, RiUserLine, RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../configs/globalVariables';
@@ -15,7 +15,7 @@ function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { totalItems } = useCart();
-  
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -45,8 +45,9 @@ function Navbar() {
   const profileOptions = [
     { id: 1, title: 'Quản lí Tài khoản', icon: RiUserLine, path: '/customer/profile' },
     { id: 2, title: 'Đổi mật khẩu', icon: RiLockPasswordLine, path: '/user-change-password' },
-    { id: 3, title: 'Hoạt động đăng nhập', icon: RiLoginCircleLine, path: '/login-activity' },
-    { id: 4, title: 'Đăng xuất', icon: RiLogoutBoxLine, action: 'logout' },
+    { id: 3, title: 'Nạp tiền', icon: RiMoneyDollarCircleLine, path: '/deposit' },
+    { id: 4, title: 'Hoạt động đăng nhập', icon: RiLoginCircleLine, path: '/login-activity' },
+    { id: 5, title: 'Đăng xuất', icon: RiLogoutBoxLine, action: 'logout' },
   ];
 
   const handleProfileOptionClick = (option) => {
@@ -76,7 +77,7 @@ function Navbar() {
         <Link to="/lucky-wheel" className="text-gray-700 hover:text-blue-600">Lucky Wheel</Link>
       </div>
 
-      
+
       <div className="flex items-center space-x-4">
         {user ? (
           <>
@@ -89,7 +90,7 @@ function Navbar() {
                 </span>
               )}
             </Link>
-            
+
             <div className="relative">
               <button
                 className="flex items-center space-x-3 hover:bg-gray-100 rounded-lg p-2"
@@ -105,7 +106,7 @@ function Navbar() {
                     {loading ? 'Đang tải...' : (userProfile?.name || 'User')}
                   </span>
                   <span className="text-green-600 font-medium">
-                    {loading ? 'Đang tải...' :userProfile?.walletBalance?.toLocaleString('vi-VN') || 'balance'} ₫
+                    {loading ? 'Đang tải...' : userProfile?.walletBalance?.toLocaleString('vi-VN') || 'balance'} ₫
                   </span>
                 </div>
               </button>

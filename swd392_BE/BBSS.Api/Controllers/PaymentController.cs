@@ -8,7 +8,7 @@ using BBSS.Api.Routes;
 
 namespace BBSS.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Payment")]
     [ApiController]
     public class PaymentController : ControllerBase
     {
@@ -47,7 +47,7 @@ namespace BBSS.Api.Controllers
             );
         }
         [HttpGet]
-        [Route(Router.PaymentRoute.PaymentCallBack)]
+        [Route("api/payments/payment-call-back")]
         public async Task<ActionResult> PaymentCallBack()
         {
             var response = _paymentService.PaymentExecute(Request.Query);

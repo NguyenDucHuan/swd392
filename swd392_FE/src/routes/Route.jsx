@@ -29,6 +29,10 @@ import PackageDetail from "../pages/ShoppingAndLuckyWheel/PackageDetail";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
 import Users from "../pages/Users";
 import RechargePage from "../pages/ProfilePage/RechargePage";
+import PaymentPage from "../pages/PaymentPage/PaymentPage";
+import PaymentResultPage from "../pages/PaymentPage/PaymentResultPage";
+import DepositPage from "../pages/DepositPage";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -180,9 +184,9 @@ const AppRoutes = () => {
         path="/cart"
         element={
           <CustomerLayout>
-          <UserRoute>
-            <CartPage />
-          </UserRoute>
+            <UserRoute>
+              <CartPage />
+            </UserRoute>
           </CustomerLayout>
         }
       />
@@ -268,6 +272,27 @@ const AppRoutes = () => {
         }
       />
 
+      <Route
+        path="/payment"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <PaymentPage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+
+      <Route
+        path="/payment-result"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <PaymentResultPage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
 
       <Route
         path="/profile"
@@ -289,6 +314,17 @@ const AppRoutes = () => {
               <p>You do not have permission to access this resource.</p>
             </div>
           </ManagerLayout>
+        }
+      />
+
+      <Route
+        path="/deposit"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <DepositPage />
+            </UserRoute>
+          </CustomerLayout>
         }
       />
     </Routes>

@@ -4,6 +4,7 @@ import { FaBox, FaEdit, FaEye, FaSave, FaShoppingBag, FaUser } from 'react-icons
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../configs/globalVariables';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function ProfilePage() {
     const [userProfile, setUserProfile] = useState(null);
@@ -14,7 +15,9 @@ function ProfilePage() {
     const [activeTab, setActiveTab] = useState('profile');
     const [loading, setLoading] = useState(true);
     const [expandedOrder, setExpandedOrder] = useState(null);
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false);
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -47,7 +50,7 @@ function ProfilePage() {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                
+
                 // Handle the nested response structure
                 const orders = response.data.items?.$values || [];
                 setOrderHistory(orders);
@@ -138,6 +141,41 @@ function ProfilePage() {
         }
     };
 
+    const handlePayment = async (orderId) => {
+        setIsProcessingPayment(true);
+        try {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                toast.error('Vui lòng đăng nhập để thanh toán!');
+                return;
+            }
+
+            // Get order details
+            const order = orderHistory.find(o => o.orderId === orderId);
+            if (!order) {
+                toast.error('Không tìm thấy thông tin đơn hàng');
+                return;
+            }
+
+            // Navigate to payment page with order info
+            navigate('/payment', {
+                state: {
+                    orderInfo: {
+                        orderId: order.orderId,
+                        totalAmount: order.totalAmount,
+                        items: order.details?.$values || []
+                    }
+                }
+            });
+
+        } catch (error) {
+            console.error('Payment processing error:', error);
+            toast.error('Có lỗi xảy ra khi xử lý thanh toán');
+        } finally {
+            setIsProcessingPayment(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -197,7 +235,7 @@ function ProfilePage() {
                                         <div className="p-3 bg-gray-50 rounded-md">{userProfile.email}</div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="space-y-4">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-1">Vai trò</label>
@@ -211,7 +249,7 @@ function ProfilePage() {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div className="mt-6">
                                 {isEditing ? (
                                     <button
@@ -247,16 +285,16 @@ function ProfilePage() {
                                                     <span className="text-gray-600">{formatDate(order.orderDate)}</span>
                                                 </div>
                                                 <div className="flex items-center gap-3">
-                                                    <button 
+                                                    <button
                                                         className="text-blue-600 hover:text-blue-800 flex items-center"
                                                         onClick={() => setExpandedOrder(expandedOrder === order.orderId ? null : order.orderId)}
                                                     >
-                                                        <FaEye className="mr-1" /> 
+                                                        <FaEye className="mr-1" />
                                                         {expandedOrder === order.orderId ? 'Ẩn chi tiết' : 'Xem chi tiết'}
                                                     </button>
                                                 </div>
                                             </div>
-                                            
+
                                             {expandedOrder === order.orderId && (
                                                 <div className="p-4">
                                                     <div className="mb-4">
@@ -266,7 +304,7 @@ function ProfilePage() {
                                                             <p>Số điện thoại: {order.phone || 'N/A'}</p>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <h4 className="font-medium mb-2">Sản phẩm:</h4>
                                                     <div className="overflow-x-auto">
                                                         <table className="min-w-full divide-y divide-gray-200">
@@ -294,9 +332,23 @@ function ProfilePage() {
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    
+
                                                     <div className="mt-4 text-right">
                                                         <div className="text-lg font-bold">Tổng cộng: {formatCurrency(order.totalAmount)}</div>
+                                                        <button
+                                                            onClick={() => handlePayment(order.orderId)}
+                                                            disabled={isProcessingPayment}
+                                                            className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 flex items-center justify-center"
+                                                        >
+                                                            {isProcessingPayment ? (
+                                                                <>
+                                                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                                                    Đang xử lý...
+                                                                </>
+                                                            ) : (
+                                                                'Tiến hành thanh toán'
+                                                            )}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             )}
@@ -322,11 +374,11 @@ function ProfilePage() {
                                         <div key={item.inventoryItemId} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                                             <div className="h-48 bg-gray-100 relative overflow-hidden">
                                                 {item.blindBox?.image ? (
-                                                    <img 
-                                                        src={item.blindBox.image} 
-                                                        alt={item.blindBox.name} 
+                                                    <img
+                                                        src={item.blindBox.image}
+                                                        alt={item.blindBox.name}
                                                         className="w-full h-full object-cover"
-                                                        onError={(e) => {e.target.src = 'https://via.placeholder.com/300x200?text=No+Image'}}
+                                                        onError={(e) => { e.target.src = 'https://via.placeholder.com/300x200?text=No+Image' }}
                                                     />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center">
