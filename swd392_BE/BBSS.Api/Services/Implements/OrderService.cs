@@ -347,6 +347,7 @@ namespace BBSS.Api.Services.Implements
                     predicate: p => p.UserId == userId && 
                                     (status == null || p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status == status),
                     include: i => i.Include(x => x.OrderDetails)
+                                   .Include(x => x.OrderStatuses)
                 );
             return new MethodResult<IPaginate<OrderViewModel>>.Success(result);
         }
