@@ -10,11 +10,11 @@
 
         public decimal TotalAmount { get; set; }
 
-        public string Status { get; set; } = null!;
-
         public DateTime OrderDate { get; set; }
 
         public List<OrderDetailViewModel> Details { get; set; } = null!;
+
+        public List<OrderStatusViewModel> Statuses { get; set; } = null!;
     }
 
     public class OrderDetailViewModel
@@ -26,5 +26,12 @@
         public int? PackageId { get; set; }
 
         public decimal Price { get; set; }
+    }
+
+    public class OrderStatusViewModel
+    {
+        public string? Status { get; set; }
+
+        public DateTime UpdateTime { get; set; }
     }
 }
