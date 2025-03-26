@@ -617,5 +617,13 @@ namespace BBSS.Api.Services.Implements
                 return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
             }
         }
+
+        public async Task<MethodResult<IEnumerable<string>>> GetPackageCodesAsync()
+        {
+            var result = await _uow.GetRepository<Package>().GetListAsync(
+                selector: p => p.PakageCode
+            );
+            return new MethodResult<IEnumerable<string>>.Success(result.Distinct());
+        }
     }
 }

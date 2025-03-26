@@ -15,5 +15,6 @@ namespace BBSS.Api.Services.Interfaces
         Task<MethodResult<string>> DeletePackageAsync(int id);
         Task<MethodResult<string>> CreateUnknownPackageAsync(PackageUnknownCreateRequest request);
         Task<MethodResult<string>> CreateKnownPackageAsync(PackageKnownCreateRequest request);
+        Task<MethodResult<IEnumerable<string>>> GetPackageCodesAsync();
     }
 }
