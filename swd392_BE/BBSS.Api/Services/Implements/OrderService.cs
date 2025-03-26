@@ -348,7 +348,9 @@ namespace BBSS.Api.Services.Implements
                                     (status == null || p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status == status),
                     include: i => i.Include(x => x.OrderDetails)
                                    .Include(x => x.OrderStatuses)
+                                   .Include(x => x.User.Transactions)
                 );
+
             return new MethodResult<IPaginate<OrderViewModel>>.Success(result);
         }
 
@@ -358,6 +360,8 @@ namespace BBSS.Api.Services.Implements
                     selector: s => _mapper.Map<OrderViewModel>(s),
                     predicate: p => status == null || p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status == status,
                     include: i => i.Include(x => x.OrderDetails)
+                                   .Include(x => x.OrderStatuses)
+                                   .Include(x => x.User.Transactions)
                 );
             return new MethodResult<IPaginate<OrderViewModel>>.Success(result);
         }
