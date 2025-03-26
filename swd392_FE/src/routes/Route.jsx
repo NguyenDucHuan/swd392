@@ -19,16 +19,16 @@ import HelpCenterStart from "../pages/ManagerPage/HelpCenterStart";
 import CreateKnownPackage from "../pages/ManagerPage/PackageManagement/CreateKnownPackage";
 import CreateUnknownPackage from "../pages/ManagerPage/PackageManagement/CreateUnknownPackage";
 import EditPackage from "../pages/ManagerPage/PackageManagement/EditPackage";
-import PackageManager from "../pages/ManagerPage/PackageManager";
+import PackageManager from "../pages/ManagerPage/PackageManagement/PackageManager";
 import Settings from "../pages/ManagerPage/Settings";
 import ChangePasswordPage from "../pages/ProfilePage/ChangePasswordPage";
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
+import RechargePage from "../pages/ProfilePage/RechargePage";
 import Register from "../pages/Register";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import PackageDetail from "../pages/ShoppingAndLuckyWheel/PackageDetail";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
 import Users from "../pages/Users";
-import RechargePage from "../pages/ProfilePage/RechargePage";
 const AppRoutes = () => {
   return (
     <Routes>
