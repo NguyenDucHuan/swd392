@@ -19,7 +19,8 @@ function PackageManager() {
   const [packageToDelete, setPackageToDelete] = useState(null);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [categorySearchTerm, setCategorySearchTerm] = useState('');
-  
+  const [isKnownFilter, setIsKnownFilter] = useState(null); // null means "all"
+  const [showIsKnownDropdown, setShowIsKnownDropdown] = useState(false);
   // Pagination
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -62,7 +63,8 @@ function PackageManager() {
           size: pagination.pageSize,
           search: searchTerm || undefined,
           filter: filterParam,
-          categoryId: selectedCategory > 0 ? selectedCategory : undefined
+          categoryId: selectedCategory > 0 ? selectedCategory : undefined,
+          isKnown: isKnownFilter 
         }
       });
       
@@ -98,8 +100,7 @@ function PackageManager() {
   // Initial fetch and when dependencies change
   useEffect(() => {
     fetchPackages();
-  }, [pagination.currentPage, pagination.pageSize, selectedCategory, selectedFilter]);
-
+  }, [pagination.currentPage, pagination.pageSize, selectedCategory, selectedFilter, isKnownFilter]);
   // Handle search
   const handleSearch = (e) => {
     e.preventDefault();
@@ -131,9 +132,9 @@ function PackageManager() {
 
   // Filter options
   const filterOptions = [
-    { value: '', label: 'AllAll' },
-    { value: 'available', label: 'available' },
-    { value: 'sold', label: 'sold' }
+    { value: '', label: 'Tất cả trạng thái' },
+    { value: 'available', label: 'Còn hàng' },
+    { value: 'sold', label: 'Đã bán' }
   ];
 
   return (
@@ -143,139 +144,206 @@ function PackageManager() {
         
         {/* Action buttons */}
         <div className="grid grid-cols-4 gap-6 mb-6">
-          <Link to="/package/create-unknown" className="flex items-center justify-center px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50">
+          <Link to="/package/create-unknown" className="flex items-center justify-center px-4 py-2 border border-pink-500 text-pink-500 rounded-lg hover:bg-pink-50">
             <RiAddLine className="mr-2" />
             Create Unknown Package
           </Link>
-          <Link to="/package/create-known" className="flex items-center justify-center px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50">
+          <Link to="/package/create-known" className="flex items-center justify-center px-4 py-2 border border-pink-500 text-pink-500 rounded-lg hover:bg-pink-50">
             <RiAddLine className="mr-2" />
             Create Known Package
           </Link>
-          <button className="flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-lg col-span-2 hover:bg-blue-600">
+          <button className="flex items-center justify-center px-4 py-2 bg-pink-500 text-white rounded-lg col-span-2 hover:bg-pink-600">
             <RiFilter3Line className="mr-2" />
             Xuất báo cáo
           </button>
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white rounded-lg shadow p-4 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search */}
-            <div className="md:flex-1">
-              <form onSubmit={handleSearch} className="flex">
-                <div className="relative flex-1">
-                  <RiSearchLine className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Tìm theo tên hoặc mã package..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-l-lg"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <button 
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600"
-                >
-                  Tìm kiếm
-                </button>
-              </form>
-            </div>
+       {/* Search and Filters */}
+<div className="bg-white rounded-lg shadow p-4 mb-6">
+  <div className="flex flex-col space-y-4">
+    {/* Search */}
+    <div className="w-full">
+      <form onSubmit={handleSearch} className="flex">
+        <div className="relative flex-1">
+          <RiSearchLine className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Tìm theo tên hoặc mã package..."
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-l-lg"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <button 
+          type="submit"
+          className="px-4 py-2 bg-pink-500 text-white rounded-r-lg hover:bg-pink-600"
+        >
+          Tìm kiếm
+        </button>
+      </form>
+    </div>
 
-            {/* Filters */}
-            <div className="flex gap-2">
+    {/* Filters Row */}
+    <div className="flex flex-wrap gap-3">
+      {/* Status Filter */}
+      <div className="relative">
+        <button 
+          className="flex items-center justify-between px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[150px]"
+          onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+        >
+          <span>
+            {filterOptions.find(option => option.value === selectedFilter)?.label || 'Trạng thái'}
+          </span>
+          <RiFilter3Line className="ml-2" />
+        </button>
+        
+        {showFilterDropdown && (
+          <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10 border border-gray-200">
+            {filterOptions.map(option => (
+              <button
+                key={option.value}
+                className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${selectedFilter === option.value ? 'bg-pink-50 text-pink-600' : ''}`}
+                onClick={() => {
+                  setSelectedFilter(option.value);
+                  setShowFilterDropdown(false);
+                  setPagination({ ...pagination, currentPage: 1 });
+                }}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Category Filter */}
+      <div className="relative">
+        <button 
+          className="flex items-center justify-between px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[200px]"
+          onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+        >
+          <span>
+            {selectedCategory === 0 
+              ? 'Tất cả danh mục' 
+              : categories.find(c => c.categoryId === selectedCategory)?.name || 'Danh mục'}
+          </span>
+          <RiFilter3Line className="ml-2" />
+        </button>
+        
+        {showCategoryDropdown && (
+          <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg z-10 border border-gray-200">
+            <div className="p-2 border-b">
               <div className="relative">
-                <button 
-                  className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                  onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-                >
-                  <RiFilter3Line className="mr-2" />
-                  {filterOptions.find(option => option.value === selectedFilter)?.label || 'Trạng thái'}
-                </button>
-                
-                {showFilterDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10 border border-gray-200">
-                    {filterOptions.map(option => (
-                      <button
-                        key={option.value}
-                        className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${selectedFilter === option.value ? 'bg-blue-50 text-blue-600' : ''}`}
-                        onClick={() => {
-                          setSelectedFilter(option.value);
-                          setShowFilterDropdown(false);
-                        }}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                <RiSearchLine className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Tìm danh mục..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
+                  value={categorySearchTerm}
+                  onChange={(e) => setCategorySearchTerm(e.target.value)}
+                />
               </div>
             </div>
-          </div>
-
-          {/* Category filters */}
-          <div className="mt-4 flex gap-2">
-  <div className="relative">
-    <button 
-      className="flex items-center justify-between px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[200px]"
-      onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-    >
-      <span>
-        {selectedCategory === 0 
-          ? 'All Categories' 
-          : categories.find(c => c.categoryId === selectedCategory)?.name || 'Danh mục'}
-      </span>
-      <RiFilter3Line className="ml-2" />
-    </button>
-    
-    {showCategoryDropdown && (
-      <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg z-10 border border-gray-200">
-        <div className="p-2 border-b">
-          <div className="relative">
-            <RiSearchLine className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Tìm danh mục..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
-              value={categorySearchTerm}
-              onChange={(e) => setCategorySearchTerm(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="max-h-60 overflow-y-auto">
-          <button
-            className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${selectedCategory === 0 ? 'bg-blue-50 text-blue-600' : ''}`}
-            onClick={() => {
-              filterByCategory(0);
-              setShowCategoryDropdown(false);
-              setCategorySearchTerm('');
-            }}
-          >
-            Tất cả danh mục
-          </button>
-          {categories
-            .filter(category => 
-              category.name.toLowerCase().includes(categorySearchTerm.toLowerCase())
-            )
-            .map(category => (
+            <div className="max-h-60 overflow-y-auto">
               <button
-                key={category.categoryId}
-                className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${selectedCategory === category.categoryId ? 'bg-blue-50 text-blue-600' : ''}`}
+                className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${selectedCategory === 0 ? 'bg-pink-50 text-pink-600' : ''}`}
                 onClick={() => {
-                  filterByCategory(category.categoryId);
+                  filterByCategory(0);
                   setShowCategoryDropdown(false);
                   setCategorySearchTerm('');
                 }}
               >
-                {category.name}
+                Tất cả danh mục
               </button>
-            ))}
-        </div>
+              {categories
+                .filter(category => 
+                  category.name.toLowerCase().includes(categorySearchTerm.toLowerCase())
+                )
+                .map(category => (
+                  <button
+                    key={category.categoryId}
+                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${selectedCategory === category.categoryId ? 'bg-pink-50 text-pink-600' : ''}`}
+                    onClick={() => {
+                      filterByCategory(category.categoryId);
+                      setShowCategoryDropdown(false);
+                      setCategorySearchTerm('');
+                    }}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+            </div>
+          </div>
+        )}
       </div>
-    )}
+
+      {/* isKnown Filter */}
+      <div className="relative">
+        <button 
+          className="flex items-center justify-between px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[180px]"
+          onClick={() => setShowIsKnownDropdown(!showIsKnownDropdown)}
+        >
+          <span>
+            {isKnownFilter === null ? 'Tất cả Package' : 
+             isKnownFilter === true ? 'Known Package' : 'Unknown Package'}
+          </span>
+          <RiFilter3Line className="ml-2" />
+        </button>
+        
+        {showIsKnownDropdown && (
+          <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10 border border-gray-200">
+            <button
+              className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${isKnownFilter === null ? 'bg-pink-50 text-pink-600' : ''}`}
+              onClick={() => {
+                setIsKnownFilter(null);
+                setShowIsKnownDropdown(false);
+                setPagination({ ...pagination, currentPage: 1 });
+              }}
+            >
+              Tất cả Package
+            </button>
+            <button
+              className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${isKnownFilter === true ? 'bg-pink-50 text-pink-600' : ''}`}
+              onClick={() => {
+                setIsKnownFilter(true);
+                setShowIsKnownDropdown(false);
+                setPagination({ ...pagination, currentPage: 1 });
+              }}
+            >
+              Known Package
+            </button>
+            <button
+              className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${isKnownFilter === false ? 'bg-pink-50 text-pink-600' : ''}`}
+              onClick={() => {
+                setIsKnownFilter(false);
+                setShowIsKnownDropdown(false);
+                setPagination({ ...pagination, currentPage: 1 });
+              }}
+            >
+              Unknown Package
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Clear Filters Button */}
+      <button 
+        className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700"
+        onClick={() => {
+          setSearchTerm('');
+          setSelectedFilter('');
+          setSelectedCategory(0);
+          setIsKnownFilter(null);
+          setPagination({ ...pagination, currentPage: 1 });
+        }}
+      >
+        <RiCloseFill className="mr-1" />
+        Xóa bộ lọc
+      </button>
+    </div>
   </div>
 </div>
-        </div>
 
         {/* Loading and error states */}
         {loading && <div className="text-center py-10">Đang tải dữ liệu...</div>}
@@ -337,7 +405,7 @@ function PackageManager() {
                           <div className="flex justify-end space-x-2">
                             <Link 
                               to={`/package/edit/${pkg.packageId}`}
-                              className="text-blue-600 hover:text-blue-900 p-1"
+                              className="text-pink-600 hover:text-pink-900 p-1"
                             >
                               <RiEditLine size={18} />
                             </Link>
@@ -382,7 +450,7 @@ function PackageManager() {
                       key={page}
                       onClick={() => setPagination({...pagination, currentPage: page + 1})}
                       className={`px-3 py-1 rounded border mx-1 ${
-                        pagination.currentPage === page + 1 ? 'bg-blue-500 text-white' : ''
+                        pagination.currentPage === page + 1 ? 'bg-pink-500 text-white' : ''
                       }`}
                     >
                       {page + 1}
