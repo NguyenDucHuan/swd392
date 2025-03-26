@@ -70,10 +70,10 @@ function Navbar() {
 
       {/* Navigation links */}
       <div className="hidden md:flex items-center space-x-8">
-        <Link to="/about" className="text-gray-700 hover:text-blue-600">About</Link>
-        <Link to="/blog" className="text-gray-700 hover:text-blue-600">Blog</Link>
-        <Link to="/shopping" className="text-gray-700 hover:text-blue-600">Shop</Link>
-        <Link to="/lucky-wheel" className="text-gray-700 hover:text-blue-600">Lucky Wheel</Link>
+        <Link to="/about" className="text-gray-700 hover:text-pink-600">About</Link>
+        <Link to="/blog" className="text-gray-700 hover:text-pink-600">Blog</Link>
+        <Link to="/shopping" className="text-gray-700 hover:text-pink-600">Shop</Link>
+        <Link to="/lucky-wheel" className="text-gray-700 hover:text-pink-600">Lucky Wheel</Link>
       </div>
 
       
@@ -132,13 +132,13 @@ function Navbar() {
           <>
             <Link
               to="/login"
-              className="px-4 py-2 text-blue-600 hover:text-blue-800"
+              className="px-4 py-2 text-pink-600 hover:text-pink-800"
             >
               Đăng nhập
             </Link>
             <Link
               to="/register"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
             >
               Đăng ký
             </Link>

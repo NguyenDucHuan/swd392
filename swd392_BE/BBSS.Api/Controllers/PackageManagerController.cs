@@ -49,7 +49,7 @@ namespace BBSS.Api.Controllers
         }
         [HttpPut]
         [Route(Router.PackageRoute.UpdatePackage)]
-        //[Authorize(Roles = UserConstant.USER_ROLE_ADMIN)]
+        [Authorize(Roles = UserConstant.USER_ROLE_STAFF)]
         public async Task<ActionResult> UpdatePackage(int packageId, PackageUpdateRequest request)
         {
             var result = await _packageService.UpdatePackageAsync(packageId, request);
@@ -61,7 +61,7 @@ namespace BBSS.Api.Controllers
 
         [HttpDelete]
         [Route(Router.PackageRoute.DeletePackage)]
-        //[Authorize(Roles = UserConstant.USER_ROLE_ADMIN)]
+        [Authorize(Roles = UserConstant.USER_ROLE_STAFF)]
         public async Task<ActionResult> DeletePackage(int packageId)
         {
             var result = await _packageService.DeletePackageAsync(packageId);
@@ -73,7 +73,7 @@ namespace BBSS.Api.Controllers
 
         [HttpPost]
         [Route(Router.PackageRoute.CreateUnknownPackage)]
-        //[Authorize(Roles = UserConstant.USER_ROLE_ADMIN)]
+        [Authorize(Roles = UserConstant.USER_ROLE_STAFF)]
         public async Task<ActionResult> CreateUnknownPackage(PackageUnknownCreateRequest request)
         {
             var result = await _packageService.CreateUnknownPackageAsync(request);
@@ -85,7 +85,7 @@ namespace BBSS.Api.Controllers
 
         [HttpPost]
         [Route(Router.PackageRoute.CreateKnownPackage)]
-        //[Authorize(Roles = UserConstant.USER_ROLE_ADMIN)]
+        [Authorize(Roles = UserConstant.USER_ROLE_STAFF)]
         public async Task<ActionResult> CreateKnownPackage(PackageKnownCreateRequest request)
         {
             var result = await _packageService.CreateKnownPackageAsync(request);

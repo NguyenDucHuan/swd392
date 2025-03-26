@@ -373,10 +373,11 @@ function EditPackage() {
           });
         }
       });
-      
+      const token = localStorage.getItem('access_token');
       await axios.put(`${BASE_URL}/package/update-package?packageId=${packageId}`, packageFormData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
         }
       });
       

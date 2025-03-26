@@ -133,13 +133,13 @@ function ShoppingPage() {
           <input
             type="text"
             placeholder="Tìm kiếm sản phẩm..."
-            className="px-4 py-2 border border-gray-300 rounded-l-lg w-full max-w-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-300 rounded-l-lg w-full max-w-md focus:outline-none focus:ring-2 focus:ring-pink-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button 
             type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600"
+            className="px-4 py-2 bg-pink-500 text-white rounded-r-lg hover:bg-pink-600"
           >
             Tìm kiếm
           </button>
@@ -149,7 +149,7 @@ function ShoppingPage() {
       {/* Categories */}
       <div className="flex flex-wrap justify-center space-x-2 space-y-2 mb-6">
         <button
-          className={`px-4 py-2 rounded-lg transition ${selectedCategory === 0 ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+          className={`px-4 py-2 rounded-lg transition ${selectedCategory === 0 ? 'bg-pink-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
           onClick={() => filterByCategory(0)}
         >
           Tất cả
@@ -157,7 +157,7 @@ function ShoppingPage() {
         {categories.map(category => (
           <button
             key={category.categoryId}
-            className={`px-4 py-2 rounded-lg transition ${selectedCategory === category.categoryId ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+            className={`px-4 py-2 rounded-lg transition ${selectedCategory === category.categoryId ? 'bg-pink-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
             onClick={() => filterByCategory(category.categoryId)}
           >
             {category.name}
@@ -215,7 +215,7 @@ function ShoppingPage() {
         <p className="text-gray-500">Giá không có sẵn</p>
       )}
       
-      <Link to={`/package-detail/${pkg.pakageCode}`} className="mt-2 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition text-center block">
+      <Link to={`/package-detail/${pkg.pakageCode}`} className="mt-2 w-full bg-pink-500 text-white py-2 rounded-lg hover:bg-pink-600 transition text-center block">
         Xem chi tiết
       </Link>
     </div>
@@ -244,7 +244,7 @@ function ShoppingPage() {
                     key={page}
                     onClick={() => setPagination({...pagination, currentPage: page + 1})}
                     className={`px-3 py-1 rounded border ${
-                      pagination.currentPage === page + 1 ? 'bg-blue-500 text-white' : ''
+                      pagination.currentPage === page + 1 ? 'bg-pink-500 text-white' : ''
                     }`}
                   >
                     {page + 1}

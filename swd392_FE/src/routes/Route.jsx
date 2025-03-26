@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import { ProtectedRoute } from "../components/ProtectedRoute";
 import { AdminRoute, StaffRoute, UserRoute } from "../components/RoleBasedRoute";
 import { CustomerLayout } from "../layout/CustomerLayout";
 import { ManagerLayout } from "../layout/ManagerLayout";
@@ -11,11 +10,8 @@ import Login from "../pages/Login";
 import About from "../pages/MainPage/About";
 import BlogPage from "../pages/MainPage/BlogPage";
 import HomePage from "../pages/MainPage/HomePage";
-import AdvertisingCenter from "../pages/ManagerPage/AdvertisingCenter";
-import Content from "../pages/ManagerPage/Content";
 import Dashboard from "../pages/ManagerPage/Dashboard";
-import HelpCenter from "../pages/ManagerPage/HelpCenter";
-import HelpCenterStart from "../pages/ManagerPage/HelpCenterStart";
+import OrderManager from "../pages/ManagerPage/OrderManage/OrderManagerPage";
 import CreateKnownPackage from "../pages/ManagerPage/PackageManagement/CreateKnownPackage";
 import CreateUnknownPackage from "../pages/ManagerPage/PackageManagement/CreateUnknownPackage";
 import EditPackage from "../pages/ManagerPage/PackageManagement/EditPackage";
@@ -29,6 +25,8 @@ import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import PackageDetail from "../pages/ShoppingAndLuckyWheel/PackageDetail";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
 import Users from "../pages/Users";
+
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -48,8 +46,15 @@ const AppRoutes = () => {
             <HomePage />
           </CustomerLayout>
         }
-
       />
+      <Route path="/manage-orders"
+        element={
+          <ManagerLayout>
+            <StaffRoute>
+              <OrderManager/>
+            </StaffRoute>
+          </ManagerLayout>
+        }/>
       <Route
         path="/about"
         element={
@@ -104,47 +109,6 @@ const AppRoutes = () => {
           </ManagerLayout>
         }
       />
-      <Route
-        path="/help"
-        element={
-          <ManagerLayout>
-            <ProtectedRoute>
-              <HelpCenter />
-            </ProtectedRoute>
-          </ManagerLayout>
-        }
-      />
-      <Route
-        path="/starthelp"
-        element={
-          <ManagerLayout>
-            <ProtectedRoute>
-              <HelpCenterStart />
-            </ProtectedRoute>
-          </ManagerLayout>
-        }
-      />
-      <Route
-        path="/ads"
-        element={
-          <ManagerLayout>
-            <AdminRoute>
-              <AdvertisingCenter />
-            </AdminRoute>
-          </ManagerLayout>
-        }
-      />
-      <Route
-        path="/content"
-        element={
-          <ManagerLayout>
-            <StaffRoute>
-              <Content />
-            </StaffRoute>
-          </ManagerLayout>
-        }
-      />
-
 
       <Route
         path="/users"

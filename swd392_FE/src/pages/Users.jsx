@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 const timeData = [
   { name: 'T2', value: 45 },
@@ -39,7 +39,7 @@ function Users() {
             <div className="flex flex-col space-y-2">
               <Link
                 to="/users"
-                className="flex items-center p-2 rounded-lg bg-blue-50 text-blue-600"
+                className="flex items-center p-2 rounded-lg bg-pink-50 text-pink-600"
               >
                 <span className="ml-2">Người dùng</span>
               </Link>
@@ -60,7 +60,7 @@ function Users() {
                     <h3 className="text-gray-500 text-sm">Tổng số Người dùng</h3>
                     <p className="text-2xl font-bold mt-1">1000</p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center">
                     <span className="text-2xl">👥</span>
                   </div>
                 </div>
@@ -75,7 +75,7 @@ function Users() {
                     <h3 className="text-gray-500 text-sm">Người dùng mới</h3>
                     <p className="text-2xl font-bold mt-1">1000</p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center">
                     <span className="text-2xl">👤</span>
                   </div>
                 </div>
@@ -90,7 +90,7 @@ function Users() {
                     <h3 className="text-gray-500 text-sm">Tỉ lệ chuyển đổi</h3>
                     <p className="text-2xl font-bold mt-1">1000</p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center">
                     <span className="text-2xl">📈</span>
                   </div>
                 </div>
@@ -104,7 +104,7 @@ function Users() {
                   <div>
                     <h3 className="text-gray-500 text-sm">Hạng Tài khoản</h3>
                   </div>
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center">
                     <span className="text-2xl">⭐</span>
                   </div>
                 </div>
@@ -154,7 +154,7 @@ function Users() {
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
-                          className="bg-blue-500 h-2 rounded-full"
+                          className="bg-pink-500 h-2 rounded-full"
                           style={{ width: `${item.percentage}%` }}
                         />
                       </div>
@@ -171,8 +171,8 @@ function Users() {
                   <h4 className="text-gray-500">Trung bình hàng ngày</h4>
                   <div className="text-2xl font-bold mt-2">10 giờ 50 phút</div>
                 </div>
-                <div className="flex items-center text-sm text-blue-500">
-                  <span className="bg-blue-50 px-2 py-1 rounded">38% từ tuần trước</span>
+                <div className="flex items-center text-sm text-pink-500">
+                  <span className="bg-pink-50 px-2 py-1 rounded">38% từ tuần trước</span>
                 </div>
               </div>
               <div className="h-64">
