@@ -465,6 +465,7 @@ namespace BBSS.Api.Services.Implements
                 var package = await _uow.GetRepository<Package>().SingleOrDefaultAsync(
                     predicate: p => p.PackageId == id,
                     include: i => i.Include(p => p.BlindBoxes).ThenInclude(bb => bb.BlindBoxImages)
+                                   .Include(p => p.BlindBoxes).ThenInclude(bb => bb.BlindBoxFeatures)
                                    .Include(p => p.PackageImages)
                 );
 
@@ -490,6 +491,10 @@ namespace BBSS.Api.Services.Implements
                     foreach (var blindBoxImage in blindBox.BlindBoxImages.ToList())
                     {
                         _uow.GetRepository<BlindBoxImage>().DeleteAsync(blindBoxImage);
+                    }
+                    foreach (var blindBoxfeature in blindBox.BlindBoxFeatures.ToList())
+                    {
+                        _uow.GetRepository<BlindBoxFeature>().DeleteAsync(blindBoxfeature);
                     }
                     _uow.GetRepository<BlindBox>().DeleteAsync(blindBox);
                 }
@@ -616,6 +621,14 @@ namespace BBSS.Api.Services.Implements
                 await _uow.RollbackTransactionAsync();
                 return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
             }
+        }
+
+        public async Task<MethodResult<IEnumerable<string>>> GetPackageCodesAsync()
+        {
+            var result = await _uow.GetRepository<Package>().GetListAsync(
+                selector: p => p.PakageCode
+            );
+            return new MethodResult<IEnumerable<string>>.Success(result.Distinct());
         }
     }
 }

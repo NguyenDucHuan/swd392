@@ -25,6 +25,7 @@ namespace BBSS.Api.Mapper
                 }).ToList()))
                 .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.BlindBoxImages.Select(img => new ImageViewModel
                 {
+                    ImageId = img.BlindBoxImageId,
                     Url = img.Url
                 }).ToList())); ;
 

@@ -18,6 +18,17 @@ namespace BBSS.Api.Controllers
         }
 
         [HttpGet]
+        [Route(Router.PackageRoute.GetPackageCodes)]
+        public async Task<ActionResult> GetPackageCodes()
+        {
+            var result = await _packageService.GetPackageCodesAsync();
+            return result.Match(
+                (l, c) => Problem(detail: l, statusCode: c),
+                Ok
+            );
+        }
+
+        [HttpGet]
         [Route(Router.PackageRoute.GetPackage)]
         public async Task<ActionResult> GetPackage(int packageId, string filter)
         {

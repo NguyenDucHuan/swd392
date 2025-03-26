@@ -6,9 +6,11 @@ using BBSS.Api.Models.VnPayModel;
 using BBSS.Api.Services.Interfaces;
 using BBSS.Api.ViewModels;
 using BBSS.Domain.Entities;
+using BBSS.Domain.Paginate;
 using BBSS.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace BBSS.Api.Services.Implements
@@ -24,39 +26,62 @@ namespace BBSS.Api.Services.Implements
             _mapper = mapper;
         }
 
-        public async Task<MethodResult<WheelViewModel>> GetWheelAsync()
+        public async Task<MethodResult<WheelViewModel>> GetWheelAsync(string packageCode)
         {
             var blindBoxes = await _uow.GetRepository<BlindBox>().GetListAsync(
-                predicate: p => p.IsKnowned && !p.IsSold
-            );
+                selector: s => _mapper.Map<BlindBoxViewModel>(s),
+                predicate: p => p.IsKnowned && !p.IsSold && (string.IsNullOrEmpty(packageCode) || p.Package.PakageCode == packageCode),
+                include: i => i.Include(p => p.Package)
+                               .Include(p => p.BlindBoxFeatures).ThenInclude(p => p.Feature)
+                               .Include(p => p.BlindBoxImages)
 
-            var packages = await _uow.GetRepository<Package>().GetListAsync<PackageViewModel>(
-                selector: s => _mapper.Map<PackageViewModel>(s),
-                predicate: p => p.BlindBoxes.Any(b => b.IsKnowned && !b.IsSold),
-                include: i => i.Include(p => p.BlindBoxes)
-                                     .Include(p => p.PackageImages)
-                                     .Include(p => p.Category)
             );
+            var totalBlindBoxes = blindBoxes.Count;
+
+            var whellBlindBoxes = new List<WheelBlindBoxViewModel>();
+
+            var groupedBlindBoxes = new Dictionary<(string, string), List<BlindBoxViewModel>> ();
+
+            if (string.IsNullOrEmpty(packageCode))
+            {
+                groupedBlindBoxes = blindBoxes.GroupBy(g => ((string?)null, g.Color)).ToDictionary(
+                    g => g.Key,
+                    g => g.ToList()
+                );
+            }
+            else
+            {
+                groupedBlindBoxes = blindBoxes.GroupBy(g => (g.PackageCode, g.Color)).ToDictionary(
+                    g => g.Key,
+                    g => g.ToList()
+                );
+            }
+
+            foreach (var group in groupedBlindBoxes)
+            {
+                var wheelBlindBoxViewModel = new WheelBlindBoxViewModel
+                {
+                    PackageCode = group.Value.First().PackageCode,
+                    Color = group.Key.Item2,
+                    Quantity = group.Value.Count,
+                    Rate = (float) group.Value.Count / totalBlindBoxes * 100,
+                    BlindBoxes = group.Value,
+                };
+
+                whellBlindBoxes.Add(wheelBlindBoxViewModel);
+            }
 
             var result = new WheelViewModel
-            {
-                Packages = packages,
-                Price = packages.Average(p => p.BlindBoxes.Average(b => b.Price))
+            {                               
+                Price = blindBoxes.Average(b => b.DiscountedPrice),
+                TotalBlindBoxes = totalBlindBoxes,
+                WheelBlindBoxes = whellBlindBoxes
             };
 
             return new MethodResult<WheelViewModel>.Success(result);
         }
 
-        public async Task<MethodResult<IEnumerable<BlindBox>>> GetPriceWheelAsync()
-        {
-            var result = await _uow.GetRepository<BlindBox>().GetListAsync(
-                predicate: p => p.IsKnowned
-            );
-
-            return new MethodResult<IEnumerable<BlindBox>>.Success(result);
-        }
-
-        public async Task<MethodResult<IEnumerable<int>>> PlayWheelAsync(string email, int times, decimal amount)
+        public async Task<MethodResult<IEnumerable<int>>> PlayWheelAsync(string email, string packageCode, int times, decimal amount)
         {
             var user = await _uow.GetRepository<User>().SingleOrDefaultAsync(
                 predicate: p => p.Email == email
@@ -70,7 +95,7 @@ namespace BBSS.Api.Services.Implements
             user.WalletBalance -= amount;
 
             var blindBoxes = await _uow.GetRepository<BlindBox>().GetListAsync(
-                predicate: p => p.IsKnowned && !p.IsSold
+                predicate: p => p.IsKnowned && !p.IsSold && (string.IsNullOrEmpty(packageCode) || p.Package.PakageCode == packageCode)
             );
 
             if (blindBoxes.Count < times)
