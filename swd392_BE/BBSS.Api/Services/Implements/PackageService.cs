@@ -398,20 +398,20 @@ namespace BBSS.Api.Services.Implements
                         }
 
                         //Update feature
-                        if (blindBoxRequest.FeatureIds != null && blindBoxRequest.FeatureIds.Count != 0)
-                        {
-                            var featureDbs = await _uow.GetRepository<BlindBoxFeature>().GetListAsync(
+                        var featureDbs = await _uow.GetRepository<BlindBoxFeature>().GetListAsync(
                                 predicate: p => p.BlindBoxId == blindBoxRequest.BlindBoxId
                             );
 
-                            foreach (var featureDb in featureDbs)
+                        foreach (var featureDb in featureDbs)
+                        {
+                            if (!blindBoxRequest.FeatureIds.Contains(featureDb.FeatureId))
                             {
-                                if (!blindBoxRequest.FeatureIds.Contains(featureDb.FeatureId))
-                                {
-                                    _uow.GetRepository<BlindBoxFeature>().DeleteAsync(featureDb);
-                                }
+                                _uow.GetRepository<BlindBoxFeature>().DeleteAsync(featureDb);
                             }
+                        }
 
+                        if (blindBoxRequest.FeatureIds != null && blindBoxRequest.FeatureIds.Count != 0)
+                        {
                             foreach (var featureId in blindBoxRequest.FeatureIds)
                             {
                                 if (!featureDbs.Select(x => x.FeatureId).Contains(featureId))

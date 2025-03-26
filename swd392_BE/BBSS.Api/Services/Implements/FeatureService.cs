@@ -23,8 +23,16 @@ namespace BBSS.Api.Services.Implements
         {
             try
             {
-                var features = _mapper.Map<Feature>(request);
-                await _uow.GetRepository<Feature>().InsertAsync(features);
+                var checkExist =  await _uow.GetRepository<Feature>().SingleOrDefaultAsync(
+                    predicate: p => p.Type == request.Type && p.Description == request.Description
+                );
+                if (checkExist != null)
+                {
+                    return new MethodResult<string>.Failure("The feature has existed", StatusCodes.Status400BadRequest);
+                }
+
+                var feature = _mapper.Map<Feature>(request);
+                await _uow.GetRepository<Feature>().InsertAsync(feature);
                 await _uow.CommitAsync();
                 return new MethodResult<string>.Success("Create feature successfully");
             }

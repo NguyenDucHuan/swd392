@@ -15,6 +15,8 @@
         public List<OrderDetailViewModel> Details { get; set; } = null!;
 
         public List<OrderStatusViewModel> Statuses { get; set; } = null!;
+
+        public TransactionViewModel Transaction { get; set; }
     }
 
     public class OrderDetailViewModel
