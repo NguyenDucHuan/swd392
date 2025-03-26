@@ -15,6 +15,8 @@ namespace BBSS.Api.Mapper
                 .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => 0));
 
             CreateMap<Order, OrderViewModel>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.User.Name))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(dest => dest.Statuses, opt => opt.MapFrom(src => src.OrderStatuses))
                 .ForMember(dest => dest.Transaction, opt => opt.MapFrom(src => src.User.Transactions.FirstOrDefault(x => x.RelatedId == src.OrderId && (x.Type == Constants.TransactionConstant.TRANSACTION_TYPE_DEDUCTION || x.Type == Constants.TransactionConstant.TRANSACTION_TYPE_DEPOSIT))))
                 .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.OrderDetails.Select(x => new OrderDetailViewModel
