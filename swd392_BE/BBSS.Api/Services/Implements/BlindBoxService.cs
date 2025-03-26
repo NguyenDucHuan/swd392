@@ -147,6 +147,7 @@ namespace BBSS.Api.Services.Implements
                     predicate: p => p.BlindBoxId == blindBoxId,
                     include: i => i.Include(p => p.Package)
                                    .Include(p => p.BlindBoxFeatures).ThenInclude(bb => bb.Feature)
+                                   .Include(p => p.BlindBoxImages)
                 );
 
             return new MethodResult<BlindBoxViewModel>.Success(result);
