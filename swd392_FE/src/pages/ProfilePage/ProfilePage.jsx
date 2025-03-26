@@ -153,7 +153,7 @@ function ProfilePage() {
             case 'pending':
                 return 'bg-yellow-100 text-yellow-800';
             case 'processing':
-                return 'bg-blue-100 text-blue-800';
+                return 'bg-pink-100 text-pink-800';
             case 'completed':
                 return 'bg-green-100 text-green-800';
             case 'cancelled':
@@ -166,7 +166,7 @@ function ProfilePage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
             </div>
         );
     }
@@ -178,19 +178,19 @@ function ProfilePage() {
                 {/* Tabs */}
                 <div className="flex border-b">
                     <button
-                        className={`px-6 py-3 flex items-center ${activeTab === 'profile' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
+                        className={`px-6 py-3 flex items-center ${activeTab === 'profile' ? 'border-b-2 border-pink-500 text-pink-500' : 'text-gray-500'}`}
                         onClick={() => setActiveTab('profile')}
                     >
                         <FaUser className="mr-2" /> Thông tin tài khoản
                     </button>
                     <button
-                        className={`px-6 py-3 flex items-center ${activeTab === 'orders' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
+                        className={`px-6 py-3 flex items-center ${activeTab === 'orders' ? 'border-b-2 border-pink-500 text-pink-500' : 'text-gray-500'}`}
                         onClick={() => setActiveTab('orders')}
                     >
                         <FaShoppingBag className="mr-2" /> Đơn hàng
                     </button>
                     <button
-                        className={`px-6 py-3 flex items-center ${activeTab === 'inventory' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
+                        className={`px-6 py-3 flex items-center ${activeTab === 'inventory' ? 'border-b-2 border-pink-500 text-pink-500' : 'text-gray-500'}`}
                         onClick={() => setActiveTab('inventory')}
                     >
                         <FaBox className="mr-2" /> Bộ sưu tập
@@ -212,7 +212,7 @@ function ProfilePage() {
                                                 type="text"
                                                 value={name}
                                                 onChange={(e) => setName(e.target.value)}
-                                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                             />
                                         ) : (
                                             <div className="p-3 bg-gray-50 rounded-md">{userProfile.name || 'Chưa cập nhật'}</div>
@@ -225,7 +225,7 @@ function ProfilePage() {
                                                 type="tel"
                                                 value={phone}
                                                 onChange={(e) => setPhone(e.target.value)}
-                                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                                 placeholder="Nhập số điện thoại"
                                             />
                                         ) : (
@@ -243,7 +243,7 @@ function ProfilePage() {
                                                 type="date"
                                                 value={dateOfBirth}
                                                 onChange={(e) => setDateOfBirth(e.target.value)}
-                                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                             />
                                         ) : (
                                             <div className="p-3 bg-gray-50 rounded-md">
@@ -269,14 +269,14 @@ function ProfilePage() {
                                 {isEditing ? (
                                     <button
                                         onClick={handleSaveClick}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                                        className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 flex items-center"
                                     >
                                         <FaSave className="mr-2" /> Lưu thay đổi
                                     </button>
                                 ) : (
                                     <button
                                         onClick={handleEditClick}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                                        className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 flex items-center"
                                     >
                                         <FaEdit className="mr-2" /> Chỉnh sửa
                                     </button>
@@ -301,7 +301,7 @@ function ProfilePage() {
                                                 </div>
                                                 <div className="flex items-center gap-3">
                                                     <button 
-                                                        className="text-blue-600 hover:text-blue-800 flex items-center"
+                                                        className="text-pink-600 hover:text-pink-800 flex items-center"
                                                         onClick={() => setExpandedOrder(expandedOrder === order.orderId ? null : order.orderId)}
                                                     >
                                                         <FaEye className="mr-1" /> 
@@ -398,7 +398,7 @@ function ProfilePage() {
                                                     <p className="text-sm text-gray-500 mb-2">Mã: {item.blindBox.pakageCode}</p>
                                                 )}
                                                 <div className="flex justify-between items-center mt-2">
-                                                    <div className="text-blue-600 font-medium">
+                                                    <div className="text-pink-600 font-medium">
                                                         {formatCurrency(item.blindBox?.price)}
                                                     </div>
                                                     {item.blindBox?.isSpecial && (
@@ -436,7 +436,7 @@ function ProfilePage() {
                             </button>
                             <button 
                                 onClick={handleConfirmSave}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
                             >
                                 Xác nhận
                             </button>

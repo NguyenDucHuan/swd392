@@ -17,7 +17,7 @@ function Settings() {
               </svg>
             </button>
           </div>
-          <button className="text-blue-500 text-sm">Cập nhập Logo</button>
+          <button className="text-pink-500 text-sm">Cập nhập Logo</button>
         </div>
 
         <div className="grid grid-cols-2 gap-8">
@@ -78,7 +78,7 @@ function Settings() {
         </div>
 
         <div className="mt-8 flex justify-end">
-          <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+          <button className="px-6 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600">
             Save
           </button>
         </div>

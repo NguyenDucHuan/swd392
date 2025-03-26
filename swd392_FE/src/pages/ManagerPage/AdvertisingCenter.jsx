@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { RiSearchLine, RiFilter3Line, RiArticleLine } from 'react-icons/ri';
 import { FaEdit } from "react-icons/fa";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { RiArticleLine, RiFilter3Line } from 'react-icons/ri';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 const data = [
     { name: '25k', value: 40 },
@@ -53,7 +53,7 @@ function AdvertisingCenter() {
       case 'Đã dùng':
         return 'bg-green-100 text-green-800';
       case 'Chưa dùng':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-pink-100 text-pink-800';
       case 'Đợi duyệt':
         return 'bg-orange-100 text-orange-800';
       default:
@@ -65,15 +65,15 @@ function AdvertisingCenter() {
     <div className="flex-1 bg-gray-50 p-8">
       <div className="mb-8">
       <div className="grid grid-cols-4 gap-6 mb-6">
-            <button className="flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-lg col-span-2">
+            <button className="flex items-center justify-center px-4 py-2 bg-pink-500 text-white rounded-lg col-span-2">
               <RiArticleLine  className="mr-2" />
               Tạo Header
             </button>
-            <button className="flex items-center justify-center px-4 py-2 border border-blue-500 text-blue-500 rounded-lg">
+            <button className="flex items-center justify-center px-4 py-2 border border-pink-500 text-pink-500 rounded-lg">
             <RiArticleLine  className="mr-2" />
             Tạo Onpage
             </button>
-            <button className="flex items-center justify-center px-4 py-2 border border-blue-500 text-blue-500 rounded-lg">
+            <button className="flex items-center justify-center px-4 py-2 border border-pink-500 text-pink-500 rounded-lg">
             <FaEdit className="mr-2" />
             Chỉnh sửa
             </button>
