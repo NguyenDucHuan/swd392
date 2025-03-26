@@ -1,5 +1,6 @@
 ﻿using BBSS.Api.Constants;
 using BBSS.Api.Models.OrderModel;
+using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Routes;
 using BBSS.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -71,10 +72,10 @@ namespace BBSS.Api.Controllers
         [HttpGet]
         [Route(Router.OrderRoute.GetUserOrder)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
-        public async Task<ActionResult> GetOrdersByUser(string? status)
+        public async Task<ActionResult> GetOrdersByUser([FromQuery] PaginateModel model, decimal? minAmount, decimal? maxAmount)
         {
             var userId = Int32.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            var result = await _orderService.GetOrdersByUserAsync(userId, status);
+            var result = await _orderService.GetOrdersByUserAsync(userId, model, minAmount, maxAmount);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok
@@ -84,9 +85,9 @@ namespace BBSS.Api.Controllers
         [HttpGet]
         [Route(Router.OrderRoute.GetAllOrder)]
         [Authorize(Roles = UserConstant.USER_ROLE_STAFF)]
-        public async Task<ActionResult> GetAllOrders(string? status)
+        public async Task<ActionResult> GetAllOrders([FromQuery] PaginateModel model, decimal? minAmount, decimal? maxAmount)
         {
-            var result = await _orderService.GetAllOrdersAsync(status);
+            var result = await _orderService.GetAllOrdersAsync(model, minAmount, maxAmount);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok

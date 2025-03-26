@@ -1,8 +1,17 @@
-﻿namespace BBSS.Api.ViewModels
+﻿using BBSS.Api.Models.VoucherModel;
+using BBSS.Domain.Entities;
+
+namespace BBSS.Api.ViewModels
 {
     public class OrderViewModel
     {
         public int OrderId { get; set; }
+
+        public int UserId { get; set; }
+
+        public string Name { get; set; } = null!;
+
+        public string Email { get; set; } = null!;
 
         public string Address { get; set; } = null!;
 
@@ -11,6 +20,8 @@
         public decimal TotalAmount { get; set; }
 
         public DateTime OrderDate { get; set; }
+
+        public VoucherResponse Voucher { get; set; }
 
         public List<OrderDetailViewModel> Details { get; set; } = null!;
 

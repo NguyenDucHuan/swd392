@@ -2,12 +2,15 @@
 using BBSS.Api.Constants;
 using BBSS.Api.Helper;
 using BBSS.Api.Models.OrderModel;
+using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Services.Interfaces;
 using BBSS.Api.ViewModels;
 using BBSS.Domain.Entities;
 using BBSS.Domain.Paginate;
 using BBSS.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace BBSS.Api.Services.Implements
@@ -340,30 +343,76 @@ namespace BBSS.Api.Services.Implements
             await _uow.GetRepository<OrderStatus>().InsertAsync(orderStatus);
         }
 
-        public async Task<MethodResult<IPaginate<OrderViewModel>>> GetOrdersByUserAsync(int userId, string? status)
+        public async Task<MethodResult<IPaginate<OrderViewModel>>> GetOrdersByUserAsync(int userId, PaginateModel model, decimal? minAmount, decimal? maxAmount)
         {
+            int page = model.page > 0 ? model.page : 1;
+            int size = model.size > 0 ? model.size : 10;
+
+            Expression<Func<Order, bool>> predicate = p =>
+                p.UserId == userId &&
+                (string.IsNullOrEmpty(model.search) || p.User.Name.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
+                                                       p.User.Email.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
+                                                       p.Address.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
+                                                       p.Phone.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0) &&
+                (string.IsNullOrEmpty(model.filter) || string.Equals(model.filter, p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status, StringComparison.OrdinalIgnoreCase)) &&
+                (minAmount == null || p.TotalAmount >= minAmount) &&
+                (maxAmount == null || p.TotalAmount <= maxAmount);
+
             var result = await _uow.GetRepository<Order>().GetPagingListAsync<OrderViewModel>(
                     selector: s => _mapper.Map<OrderViewModel>(s),
-                    predicate: p => p.UserId == userId && 
-                                    (status == null || p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status == status),
+                    predicate: predicate,
                     include: i => i.Include(x => x.OrderDetails)
                                    .Include(x => x.OrderStatuses)
                                    .Include(x => x.User.Transactions)
+                                   .Include(x => x.Voucher),
+                    orderBy: BuildOrderBy(model.sortBy),
+                    page: page,
+                    size: size
                 );
 
             return new MethodResult<IPaginate<OrderViewModel>>.Success(result);
         }
 
-        public async Task<MethodResult<IPaginate<OrderViewModel>>> GetAllOrdersAsync(string? status)
+        public async Task<MethodResult<IPaginate<OrderViewModel>>> GetAllOrdersAsync(PaginateModel model, decimal? minAmount, decimal? maxAmount)
         {
+            int page = model.page > 0 ? model.page : 1;
+            int size = model.size > 0 ? model.size : 10;
+
+            Expression<Func<Order, bool>> predicate = p =>
+                (string.IsNullOrEmpty(model.search) || p.User.Name.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
+                                                       p.User.Email.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
+                                                       p.Address.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
+                                                       p.Phone.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0) &&
+                (string.IsNullOrEmpty(model.filter) || string.Equals(model.filter, p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status, StringComparison.OrdinalIgnoreCase)) &&
+                (minAmount == null || p.TotalAmount >= minAmount) &&
+                (maxAmount == null || p.TotalAmount <= maxAmount);
+
             var result = await _uow.GetRepository<Order>().GetPagingListAsync<OrderViewModel>(
                     selector: s => _mapper.Map<OrderViewModel>(s),
-                    predicate: p => status == null || p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status == status,
+                    predicate: predicate,
                     include: i => i.Include(x => x.OrderDetails)
                                    .Include(x => x.OrderStatuses)
                                    .Include(x => x.User.Transactions)
+                                   .Include(x => x.Voucher),
+                    orderBy: BuildOrderBy(model.sortBy),
+                    page: page,
+                    size: size
                 );
             return new MethodResult<IPaginate<OrderViewModel>>.Success(result);
+        }
+
+        private Func<IQueryable<Order>, IOrderedQueryable<Order>> BuildOrderBy(string sortBy)
+        {
+            if (string.IsNullOrEmpty(sortBy)) return null;
+
+            return sortBy.ToLower() switch
+            {
+                "amount" => q => q.OrderBy(p => p.TotalAmount),
+                "amount_desc" => q => q.OrderByDescending(p => p.TotalAmount),
+                "date" => q => q.OrderBy(p => p.OrderDate),
+                "date_desc" => q => q.OrderByDescending(p => p.OrderDate),
+                _ => q => q.OrderByDescending(p => p.OrderId) // Default sort
+            };
         }
 
         public async Task<MethodResult<string>> CompleteOrderAsync(int userId, int orderId)
