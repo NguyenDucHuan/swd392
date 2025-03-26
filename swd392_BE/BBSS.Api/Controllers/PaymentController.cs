@@ -8,7 +8,7 @@ using BBSS.Api.Routes;
 
 namespace BBSS.Api.Controllers
 {
-    [Route("api/Payment")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PaymentController : ControllerBase
     {
