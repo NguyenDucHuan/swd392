@@ -71,6 +71,7 @@ namespace BBSS.Api.Routes
             public const string UpdatePackage = $"{Packages}/update-package";
             public const string DeletePackage = $"{Packages}/delete-package";
             public const string GetPackagesByPackageCode = $"{Packages}/by-code";
+            public const string GetPackageCodes = $"{Packages}/package-codes";
         }
         public static class CategoryRoute
         {
