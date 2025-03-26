@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { RiAddLine, RiCloseFill, RiDeleteBin6Line, RiEditLine, RiFilter3Line, RiSearchLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { BASE_URL } from '../../configs/globalVariables';
+import { BASE_URL } from '../../../configs/globalVariables';
 
 function PackageManager() {
   // State management

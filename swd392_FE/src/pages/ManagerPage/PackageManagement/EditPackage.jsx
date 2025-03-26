@@ -15,7 +15,8 @@ function EditPackage() {
   const [features, setFeatures] = useState([]);
   const [currentImages, setCurrentImages] = useState([]);
   const [isKnownPackage, setIsKnownPackage] = useState(true);
-  
+  const [isUpdateImagePackage, setIsUpdateImagePackage] = useState(false);
+  const [isUpdateImageBlindBoxes, setIsUpdateImageBlindBoxes] = useState([false]);
   // Form state
   const [formData, setFormData] = useState({
     pakageCode: '',
@@ -26,7 +27,11 @@ function EditPackage() {
     pakageImages: [],
     blindBoxes: []
   });
-
+  useEffect(() => {
+    if (formData.blindBoxes && formData.blindBoxes.length > 0) {
+      setIsUpdateImageBlindBoxes(new Array(formData.blindBoxes.length).fill(false));
+    }
+  }, [formData.blindBoxes.length]);
   useEffect(() => {
     const fetchPackage = async () => {
       try {
@@ -131,6 +136,9 @@ function EditPackage() {
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === 'file') {
+      if (name === 'pakageImages' && files.length > 0) {
+        setIsUpdateImagePackage(true);
+      }
       setFormData({
         ...formData,
         [name]: Array.from(files)
@@ -161,6 +169,12 @@ function EditPackage() {
   };
 
   const handleBlindBoxFileChange = (index, files) => {
+    if (files.length > 0) {
+      const updatedFlags = [...isUpdateImageBlindBoxes];
+      updatedFlags[index] = true;
+      setIsUpdateImageBlindBoxes(updatedFlags);
+    }
+    
     const updatedBlindBoxes = [...formData.blindBoxes];
     updatedBlindBoxes[index] = {
       ...updatedBlindBoxes[index],
@@ -228,11 +242,12 @@ function EditPackage() {
       packageFormData.append('description', formData.description || '');
       packageFormData.append('manufacturer', formData.manufacturer || '');
       packageFormData.append('categoryId', formData.categoryId);
-      
+      packageFormData.append('IsUpdateImagePackage', isUpdateImagePackage);
       // Add retained current images
       if (currentImages && currentImages.length > 0) {
         currentImages.forEach((image, index) => {
           if (typeof image === 'object') {
+            packageFormData.append(`blindBoxes[${index}].isUpdateImageBlindBox`, isUpdateImageBlindBoxes[index]);
             packageFormData.append(`currentImages[${index}].imageId`, image.imageId || '');
             packageFormData.append(`currentImages[${index}].url`, image.url || '');
           } else {
@@ -265,6 +280,7 @@ function EditPackage() {
         packageFormData.append(`blindBoxes[${index}].number`, box.number);
         packageFormData.append(`blindBoxes[${index}].isKnowned`, isKnownPackage);
         packageFormData.append(`blindBoxes[${index}].isSpecial`, box.isSpecial);
+        packageFormData.append('IsUpdateImagePackage', isUpdateImagePackage);
         
         // Add retained current images
         if (box.currentImages && box.currentImages.length > 0) {
@@ -272,6 +288,7 @@ function EditPackage() {
             if (typeof image === 'object') {
               packageFormData.append(`blindBoxes[${index}].currentImages[${imageIndex}].imageId`, image.imageId || '');
               packageFormData.append(`blindBoxes[${index}].currentImages[${imageIndex}].url`, image.url || '');
+              packageFormData.append(`blindBoxes[${index}].isUpdateImageBlindBox`, isUpdateImageBlindBoxes[index]);
             } else {
               packageFormData.append(`blindBoxes[${index}].currentImages[${imageIndex}]`, image);
             }
@@ -284,8 +301,6 @@ function EditPackage() {
             packageFormData.append(`blindBoxes[${index}].ImageFiles`, file);
           });
         }
-        
-        // Add features
         if (box.featureIds && box.featureIds.length > 0) {
           box.featureIds.forEach(featureId => {
             packageFormData.append(`blindBoxes[${index}].featureIds`, featureId);
