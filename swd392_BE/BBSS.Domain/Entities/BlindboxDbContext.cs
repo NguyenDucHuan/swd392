@@ -447,7 +447,7 @@ public partial class BlindboxDbContext : DbContext
                 .HasColumnName("description");
             entity.Property(e => e.RelatedId).HasColumnName("related_id");
             entity.Property(e => e.Type)
-                .HasColumnType("enum('Deposit','Deduction','BlindBoxOpen')")
+                .HasColumnType("enum('Deposit','Deduction','BlindBoxOpen', 'Refund')")
                 .HasColumnName("type");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 

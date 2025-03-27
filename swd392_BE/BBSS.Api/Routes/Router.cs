@@ -144,5 +144,15 @@ namespace BBSS.Api.Routes
             public const string RedeemVoucher = $"{prefix}/redeem/{{id}}"; // Đổi voucher
         }
 
+        public static class DashboardRoute
+        {
+            public const string Dashboard = $"{prefix}dashboard";
+            public const string GetMonthlyRevenue = $"{Dashboard}/monthly-revenue";
+            public const string GetQuarterlyRevenue = $"{Dashboard}/quarterly-revenue";
+            public const string GetYearlyRevenue = $"{Dashboard}/yearly-revenue";
+            public const string GetMonthlyTotalFeedbacks = $"{Dashboard}/monthly-total-feedbacks";
+            public const string GetQuarterlyTotalFeedbacks = $"{Dashboard}/quarterly-total-feedbacks";
+            public const string GetYearlyTotalFeedbacks = $"{Dashboard}/yearly-total-feedbacks";
+        }
     }
 }

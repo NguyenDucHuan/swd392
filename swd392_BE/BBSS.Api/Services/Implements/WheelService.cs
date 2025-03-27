@@ -207,12 +207,14 @@ namespace BBSS.Api.Services.Implements
                 blindBox.IsSold = true;
 
                 _uow.GetRepository<User>().UpdateAsync(user);
+                _uow.GetRepository<BlindBox>().UpdateAsync(blindBox);
                 await CreateInventoryItem(user, blindBox.BlindBoxId);
                 _uow.GetRepository<BlindBox>().UpdateAsync(blindBox);
                 result.Add(blindBox.BlindBoxId);
                 blindBoxes.Remove(blindBox);
             }
-            
+
+            await CreateBlindBoxOpenTransactionAsync(user.UserId, times, amount);
             await _uow.CommitAsync();
 
             return new MethodResult<IEnumerable<int>>.Success(result);
@@ -228,6 +230,20 @@ namespace BBSS.Api.Services.Implements
                 Status = InventoryConstant.INVENTORY_STATUS_AVAILABLE
             };
             await _uow.GetRepository<InventoryItem>().InsertAsync(inventoryItem);
+        }
+
+        private async Task CreateBlindBoxOpenTransactionAsync(int userId, int times, decimal amount)
+        {
+            var transaction = new Transaction
+            {
+                Amount = amount,
+                CreateDate = DateTime.Now,
+                Type = TransactionConstant.TRANSACTION_TYPE_BLINDBOXOPEN,
+                UserId = userId,
+                Description = $"User có ID {userId} chơi vòng quay may mắn {times} lần với số tiền {amount}"
+            };
+
+            await _uow.GetRepository<Transaction>().InsertAsync(transaction);
         }
     }
 }
