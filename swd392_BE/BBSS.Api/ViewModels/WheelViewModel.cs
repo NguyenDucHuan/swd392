@@ -18,6 +18,7 @@ namespace BBSS.Api.ViewModels
     {        
         public decimal Price { get; set; }
         public int TotalBlindBoxes { get; set; }
+        public List<ImageViewModel> Images { get; set; } = new List<ImageViewModel>();
         public IEnumerable<WheelBlindBoxViewModel> WheelBlindBoxes { get; set; }
     }
 
