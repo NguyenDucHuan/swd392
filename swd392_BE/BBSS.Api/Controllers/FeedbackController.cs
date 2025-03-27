@@ -1,4 +1,5 @@
 ﻿using BBSS.Api.Models.FeedbackModel;
+using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,9 +32,9 @@ namespace BBSS.Api.Controllers
 
         // [User] Xem danh sách phản hồi của một sản phẩm
         [HttpGet(FeedbackRoute.GetFeedbackByProduct)]
-        public async Task<IActionResult> GetFeedbackByProduct(int productId)
+        public async Task<IActionResult> GetFeedbackByProduct(int productId, [FromQuery] PaginateModel model, DateOnly? date, int? minVote, int? maxVote)
         {
-            var result = await _feedbackService.GetFeedbackByProductAsync(productId);
+            var result = await _feedbackService.GetFeedbackByProductAsync(productId, model, date, minVote, maxVote);
             return result.Match(
                 whenLeft: (errorMessage, statusCode) => StatusCode(statusCode, errorMessage),
                 whenRight: feedbacks => Ok(feedbacks)
@@ -43,9 +44,9 @@ namespace BBSS.Api.Controllers
         // [Manager] Xem tất cả phản hồi
         [HttpGet(FeedbackRoute.GetAllFeedbacks)]
         [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> GetAllFeedbacks()
+        public async Task<IActionResult> GetAllFeedbacks([FromQuery] PaginateModel model, DateOnly? date, int? minVote, int? maxVote)
         {
-            var result = await _feedbackService.GetAllFeedbacksAsync();
+            var result = await _feedbackService.GetAllFeedbacksAsync(model, date, minVote, maxVote);
             return result.Match(
                 whenLeft: (errorMessage, statusCode) => StatusCode(statusCode, errorMessage),
                 whenRight: feedbacks => Ok(feedbacks)
