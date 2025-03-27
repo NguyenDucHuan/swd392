@@ -14,7 +14,7 @@ namespace BBSS.Api.Services.Interfaces
     {
         VnPaymentResponseModel PaymentExecute(IQueryCollection collections);
         Task<MethodResult<string>> CreatePaymentAsync(string email, int orderId, string type, HttpContext httpContext);
-        Task<MethodResult<string>> ProcessResponseAsync(VnPaymentResponseModel response);
+        Task<string> ProcessResponseAsync(VnPaymentResponseModel response);
         string GetRedirectUrl();
         Task<MethodResult<string>> AddToWalletAsync(string email, decimal amount, HttpContext httpContext);
     }

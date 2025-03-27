@@ -7,8 +7,7 @@ using BBSS.Api.Helper;
 using BBSS.Api.Routes;
 
 namespace BBSS.Api.Controllers
-{
-    [Route("api/[controller]")]
+{   
     [ApiController]
     public class PaymentController : ControllerBase
     {
@@ -53,16 +52,10 @@ namespace BBSS.Api.Controllers
             var response = _paymentService.PaymentExecute(Request.Query);
             if (response == null) return BadRequest();
 
-            var result = await _paymentService.ProcessResponseAsync(response);
-
+            var result = await _paymentService.ProcessResponseAsync(response); 
             var redirectUrl = _paymentService.GetRedirectUrl();
 
-            if (result is MethodResult<string>.Failure rs)
-            {
-                return Redirect($"{redirectUrl}/fail");
-            }
-
-            return Redirect($"{redirectUrl}/success");
+            return Redirect($"{redirectUrl}/{result}");
         }
     }
 }

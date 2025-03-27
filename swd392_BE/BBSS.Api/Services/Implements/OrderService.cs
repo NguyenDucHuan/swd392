@@ -8,6 +8,7 @@ using BBSS.Api.ViewModels;
 using BBSS.Domain.Entities;
 using BBSS.Domain.Paginate;
 using BBSS.Repository.Interfaces;
+using MailKit.Search;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq.Expressions;
@@ -458,35 +459,51 @@ namespace BBSS.Api.Services.Implements
             }
         }
 
-        public async Task<MethodResult<string>> CancelOrderAsync(int orderId)
+        public async Task<MethodResult<string>> CancelOrderAsync(string role, int userId, int orderId)
         {
             try
             {
                 var order = await _uow.GetRepository<Order>().SingleOrDefaultAsync(
-                    predicate: p => p.OrderId == orderId
+                    predicate: p => p.OrderId == orderId,
+                    include: i => i.Include(x => x.OrderDetails).ThenInclude(x => x.Package).ThenInclude(x => x.BlindBoxes)
+                                   .Include(x => x.OrderDetails).ThenInclude(x => x.BlindBox)
                 );
                 if (order == null)
                 {
                     return new MethodResult<string>.Failure("Order not found", StatusCodes.Status404NotFound);
                 }
-                
+
                 var orderStatusCurrent = await _uow.GetRepository<OrderStatus>().SingleOrDefaultAsync(
                     predicate: p => p.OrderId == orderId,
                     orderBy: o => o.OrderByDescending(x => x.UpdateTime)
                 );
-                if (orderStatusCurrent.Status != OrderConstant.ORDER_STATUS_PENDING)
+
+                if (role == Constants.UserConstant.USER_ROLE_USER)
                 {
-                    return new MethodResult<string>.Failure($"Order status is {orderStatusCurrent.Status}", StatusCodes.Status400BadRequest);
+                    if (order.UserId != userId)
+                    {
+                        return new MethodResult<string>.Failure($"You do not own this order", StatusCodes.Status403Forbidden);
+                    }
+
+                    if (orderStatusCurrent.Status != OrderConstant.ORDER_STATUS_PENDING)
+                    {
+                        return new MethodResult<string>.Failure($"Order status is {orderStatusCurrent.Status}. You can not cancel order", StatusCodes.Status400BadRequest);
+                    }
+                }
+                else
+                {
+                    if (orderStatusCurrent.Status != OrderConstant.ORDER_STATUS_PENDING && orderStatusCurrent.Status != OrderConstant.ORDER_STATUS_PAID)
+                    {
+                        return new MethodResult<string>.Failure($"Order status is {orderStatusCurrent.Status}. You can not cancel order", StatusCodes.Status400BadRequest);
+                    }
+
+                    if (orderStatusCurrent.Status != OrderConstant.ORDER_STATUS_PAID)
+                    {
+                        await RefundOrderAsync(order);
+                    }
                 }
 
-                var orderStatus = new OrderStatus
-                {
-                    OrderId = orderId,
-                    UpdateTime = DateTime.Now,
-                    Status = OrderConstant.ORDER_STATUS_CANCELED,
-                };
-
-                await _uow.GetRepository<OrderStatus>().InsertAsync(orderStatus);
+                await HandleCancelOrderAsync(order);
                 await _uow.CommitAsync();
 
                 return new MethodResult<string>.Success("Cancel order successfully");
@@ -494,6 +511,71 @@ namespace BBSS.Api.Services.Implements
             catch (Exception e)
             {
                 return new MethodResult<string>.Failure(e.ToString(), StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        private async Task RefundOrderAsync(Order order)
+        {
+            try
+            {
+                var user = await _uow.GetRepository<User>().SingleOrDefaultAsync(
+                    predicate: p => p.UserId == order.UserId
+                );
+                user.WalletBalance += order.TotalAmount;
+
+                var transaction = new Transaction
+                {
+                    UserId = user.UserId,
+                    Amount = order.TotalAmount,
+                    CreateDate = DateTime.Now,
+                    Type = TransactionConstant.TRANSACTION_TYPE_REFUND,
+                    RelatedId = order.OrderId,
+                    Description = $"Refund for order {order.OrderId} with toal amount {order.TotalAmount}"
+                };
+
+                _uow.GetRepository<User>().UpdateAsync(user);
+                _uow.GetRepository<Transaction>().UpdateAsync(transaction);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
+        }
+
+        private async Task HandleCancelOrderAsync(Order order)
+        {
+            try
+            {
+                foreach (var detail in order.OrderDetails)
+                {
+                    if (detail.BlindBoxId != null)
+                    {
+                        detail.BlindBox.IsSold = false;
+                        _uow.GetRepository<BlindBox>().UpdateAsync(detail.BlindBox);
+                    }
+                    else
+                    {
+                        foreach (var blindBox in detail.Package.BlindBoxes)
+                        {
+                            blindBox.IsSold = false;
+                        }
+                        _uow.GetRepository<BlindBox>().UpdateRange(detail.Package.BlindBoxes);
+                    }
+                }
+
+                var orderStatus = new OrderStatus
+                {
+                    OrderId = order.OrderId,
+                    UpdateTime = DateTime.Now,
+                    Status = OrderConstant.ORDER_STATUS_CANCELED,
+                };
+
+                await _uow.GetRepository<OrderStatus>().InsertAsync(orderStatus);
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

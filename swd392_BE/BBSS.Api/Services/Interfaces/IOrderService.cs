@@ -12,7 +12,7 @@ namespace BBSS.Api.Services.Interfaces
         Task<MethodResult<IPaginate<OrderViewModel>>> GetOrdersByUserAsync(int userId, PaginateModel model, decimal? minAmount, decimal? maxAmount);
         Task<MethodResult<IPaginate<OrderViewModel>>> GetAllOrdersAsync(PaginateModel model, decimal? minAmount, decimal? maxAmount);
         Task<MethodResult<string>> CompleteOrderAsync(int userId, int orderId);
-        Task<MethodResult<string>> CancelOrderAsync(int orderId);
+        Task<MethodResult<string>> CancelOrderAsync(string role, int userId, int orderId);
         Task<MethodResult<string>> ConfirmOrderAsync(int orderId);
     }
 }

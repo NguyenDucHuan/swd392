@@ -193,37 +193,46 @@ namespace BBSS.Api.Services.Implements
             };
         }
 
-        public async Task<MethodResult<string>> ProcessResponseAsync(VnPaymentResponseModel response)
+        public async Task<string> ProcessResponseAsync(VnPaymentResponseModel response)
         {
             try
             {
+                string type;
+                string message;
+
                 if (response.VnPayResponseCode != "00")
                 {
-                    return new MethodResult<string>.Failure("Payment fail", 400);
-                }
-
-                if (response.Type == "Order")
-                {
-                    var order = await _uow.GetRepository<Order>().SingleOrDefaultAsync(
-                        predicate: p => p.OrderId == response.RelateId
-                    );
-                    await CreateOrderStatusAsync(order);
-                    await CreateDeductionTransactionAsync(order, response);
+                    type = "fail";
+                    message = $"Payment fail with VnpayRespondCode: {response.VnPayResponseCode}";
                 }
                 else
                 {
-                    await UpdateWalletUserAsync(response);
-                    await CreateWalletTransactionAsync(response);
+                    type = "success";
+
+                    if (response.Type == "Order")
+                    {
+                        var order = await _uow.GetRepository<Order>().SingleOrDefaultAsync(
+                            predicate: p => p.OrderId == response.RelateId
+                        );
+                        await CreateOrderStatusAsync(order);
+                        var transactionId = await CreateDeductionTransactionAsync(order, response);
+
+                        message = $"{transactionId}";
+                    }
+                    else
+                    {
+                        await UpdateWalletUserAsync(response);
+                        var transactionId = await CreateWalletTransactionAsync(response);
+
+                        message = $"{transactionId}";
+                    }
                 }
-                
 
-                await _uow.CommitAsync();
-
-                return new MethodResult<string>.Success("Payment success. Transaction Created");
+                return $"payment-result?type={type}&message={message}";
             }
             catch (Exception e)
             {
-                return new MethodResult<string>.Failure(e.ToString(), StatusCodes.Status500InternalServerError);
+                return $"payment-result?type=fail&message=Payment fail: {e}";
             }            
         }
 
@@ -239,7 +248,7 @@ namespace BBSS.Api.Services.Implements
             await _uow.GetRepository<OrderStatus>().InsertAsync(orderStatus);
         }
 
-        private async Task CreateDeductionTransactionAsync(Order order, VnPaymentResponseModel response)
+        private async Task<int> CreateDeductionTransactionAsync(Order order, VnPaymentResponseModel response)
         {
             var transaction = new Transaction
             {
@@ -252,9 +261,11 @@ namespace BBSS.Api.Services.Implements
             };
 
             await _uow.GetRepository<Transaction>().InsertAsync(transaction);
+            await _uow.CommitAsync();
+            return transaction.TransactionId;
         }
 
-        private async Task CreateWalletTransactionAsync(VnPaymentResponseModel response)
+        private async Task<int> CreateWalletTransactionAsync(VnPaymentResponseModel response)
         {
             var transaction = new Transaction
             {
@@ -266,6 +277,8 @@ namespace BBSS.Api.Services.Implements
             };
 
             await _uow.GetRepository<Transaction>().InsertAsync(transaction);
+            await _uow.CommitAsync();
+            return transaction.TransactionId;
         }
 
         private async Task CreateDepositTransactionAsync(Order order)
@@ -290,15 +303,11 @@ namespace BBSS.Api.Services.Implements
                     );
             user.WalletBalance += response.Amount;
             _uow.GetRepository<User>().UpdateAsync(user);
-        }
-
-        
+        }        
 
         public string GetRedirectUrl()
         {
-            return _config.RedirectUrl;
+            return _config.RedirectUrl;            
         }
-
-        
     }
 }
