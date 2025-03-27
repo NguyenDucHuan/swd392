@@ -1,6 +1,7 @@
 ﻿namespace BBSS.Api.Mapper
 {
     using AutoMapper;
+    using BBSS.Api.Constants;
     using BBSS.Api.Models.FeedbackModel;
     using BBSS.Domain.Entities;
 
@@ -10,6 +11,8 @@
         {
             // Ánh xạ từ Feedback sang FeedbackResponse
             CreateMap<Feedback, FeedbackResponse>()
+                .ForMember(dest => dest.UpVote, opt => opt.MapFrom(src => src.FeedbackVotes.Count(x => x.VoteType == FeedbackConstant.FEEDBACK_VOTETYPE_UPVOTE)))
+                .ForMember(dest => dest.DownVote, opt => opt.MapFrom(src => src.FeedbackVotes.Count(x => x.VoteType == FeedbackConstant.FEEDBACK_VOTETYPE_DOWNVOTE)))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name)) // Tên người dùng
                 .ForMember(dest => dest.BlindBoxName, opt => opt.MapFrom(src => src.BlindBox.Color)) // Tên của BlindBox
                 .ForMember(dest => dest.BlindBoxFeatures, opt => opt.MapFrom(src => src.BlindBox.BlindBoxFeatures.Select(f => f.Feature.Description))) // Danh sách tính năng

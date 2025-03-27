@@ -228,11 +228,11 @@ namespace BBSS.Api.Services.Implements
                     }
                 }
 
-                return $"{GetRedirectUrl}payment-result?type={type}&message={message}";
+                return $"payment-result?type={type}&message={message}";
             }
             catch (Exception e)
             {
-                return $"{GetRedirectUrl}payment-result?type=fail&message=Payment fail: {e}";
+                return $"payment-result?type=fail&message=Payment fail: {e}";
             }            
         }
 

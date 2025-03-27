@@ -95,7 +95,8 @@ namespace BBSS.Api.Routes
         public static class InventoryRoute
         {
             public const string Inventories = $"{prefix}inventories";
-            public const string GetInventories = $"{Inventories}";
+            public const string GetOwnInventories = $"{Inventories}/me";
+            public const string GetOtherInventories = $"{Inventories}/other";
             public const string GetInventory = $"{Inventories}/{Id}";
         }
 
