@@ -6,6 +6,7 @@ import { ManagerLayout } from "../layout/ManagerLayout";
 
 // Import pages
 import CartPage from "../pages/CartPage/CartPage";
+import DepositPage from "../pages/DepositPage";
 import Login from "../pages/Login";
 import About from "../pages/MainPage/About";
 import BlogPage from "../pages/MainPage/BlogPage";
@@ -17,6 +18,7 @@ import CreateUnknownPackage from "../pages/ManagerPage/PackageManagement/CreateU
 import EditPackage from "../pages/ManagerPage/PackageManagement/EditPackage";
 import PackageManager from "../pages/ManagerPage/PackageManagement/PackageManager";
 import Settings from "../pages/ManagerPage/Settings";
+import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import ChangePasswordPage from "../pages/ProfilePage/ChangePasswordPage";
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
 import RechargePage from "../pages/ProfilePage/RechargePage";
@@ -25,10 +27,6 @@ import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import PackageDetail from "../pages/ShoppingAndLuckyWheel/PackageDetail";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
 import Users from "../pages/Users";
-import RechargePage from "../pages/ProfilePage/RechargePage";
-import PaymentPage from "../pages/PaymentPage/PaymentPage";
-import PaymentResultPage from "../pages/PaymentPage/PaymentResultPage";
-import DepositPage from "../pages/DepositPage";
 
 
 const AppRoutes = () => {
@@ -247,16 +245,7 @@ const AppRoutes = () => {
         }
       />
 
-      <Route
-        path="/payment-result"
-        element={
-          <CustomerLayout>
-            <UserRoute>
-              <PaymentResultPage />
-            </UserRoute>
-          </CustomerLayout>
-        }
-      />
+     
 
       <Route
         path="/profile"

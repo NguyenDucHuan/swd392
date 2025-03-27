@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { FaCreditCard, FaLock } from 'react-icons/fa';
-import { toast } from 'react-toastify';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { FaCreditCard, FaLock } from 'react-icons/fa';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { BASE_URL } from '../../configs/globalVariables';
 
 function PaymentPage() {
@@ -107,7 +107,7 @@ function PaymentPage() {
     if (!orderInfo) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
             </div>
         );
     }
@@ -139,7 +139,7 @@ function PaymentPage() {
                                     value={cardInfo.cardNumber}
                                     onChange={(e) => setCardInfo({ ...cardInfo, cardNumber: e.target.value })}
                                     placeholder="Nhập số thẻ"
-                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500"
                                 />
                                 <FaCreditCard className="absolute right-3 top-3 text-gray-400" />
                             </div>
@@ -154,7 +154,7 @@ function PaymentPage() {
                                 value={cardInfo.cardName}
                                 onChange={(e) => setCardInfo({ ...cardInfo, cardName: e.target.value })}
                                 placeholder="Nhập tên chủ thẻ"
-                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500"
                             />
                         </div>
 
@@ -168,7 +168,7 @@ function PaymentPage() {
                                     value={cardInfo.expiryDate}
                                     onChange={(e) => setCardInfo({ ...cardInfo, expiryDate: e.target.value })}
                                     placeholder="MM/YY"
-                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500"
                                 />
                             </div>
                             <div>
@@ -181,7 +181,7 @@ function PaymentPage() {
                                         value={cardInfo.cvv}
                                         onChange={(e) => setCardInfo({ ...cardInfo, cvv: e.target.value })}
                                         placeholder="Nhập mã CVV"
-                                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500"
                                     />
                                     <FaLock className="absolute right-3 top-3 text-gray-400" />
                                 </div>
@@ -192,7 +192,7 @@ function PaymentPage() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400"
+                                className="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:bg-pink-400"
                             >
                                 {loading ? (
                                     <div className="flex items-center justify-center">

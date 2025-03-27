@@ -8,11 +8,10 @@ using BBSS.Api.Routes;
 
 namespace BBSS.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
+
         public PaymentController(IPaymentService paymentService)
         {
             _paymentService = paymentService;
@@ -32,6 +31,7 @@ namespace BBSS.Api.Controllers
                 Ok
             );
         }
+
         [HttpPost]
         [Route(Router.PaymentRoute.AddToWallet)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
@@ -46,8 +46,9 @@ namespace BBSS.Api.Controllers
                 Ok
             );
         }
+
         [HttpGet]
-        [Route("api/payments/payment-call-back")]
+        [Route(Router.PaymentRoute.PaymentCallBack)]
         public async Task<ActionResult> PaymentCallBack()
         {
             var response = _paymentService.PaymentExecute(Request.Query);

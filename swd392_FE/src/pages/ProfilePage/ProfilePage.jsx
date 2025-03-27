@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { FaBox, FaEdit, FaEye, FaSave, FaShoppingBag, FaUser } from 'react-icons/fa';
+import { FaBox, FaCreditCard, FaEdit, FaEye, FaSave, FaShoppingBag, FaUser, FaWallet } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../configs/globalVariables';
 import { useAuth } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 
 function ProfilePage() {
     const [userProfile, setUserProfile] = useState(null);
@@ -21,6 +21,12 @@ function ProfilePage() {
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [phone, setPhone] = useState('');
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    
+    // Payment modal states
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [orderToPayment, setOrderToPayment] = useState(null);
+    const [paymentType, setPaymentType] = useState('Order'); // Default to online payment
+    const [paymentLoading, setPaymentLoading] = useState(false);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -136,6 +142,104 @@ function ProfilePage() {
         }
     };
 
+    // Handle payment button click to show modal
+    const handlePayment = (orderId) => {
+        const order = orderHistory.find(o => o.orderId === orderId);
+        if (!order) {
+            toast.error('Không tìm thấy thông tin đơn hàng');
+            return;
+        }
+        
+        setOrderToPayment(order);
+        setShowPaymentModal(true);
+        setPaymentType('Order'); // Reset to default payment type
+    };
+
+    // Process payment with selected payment type
+    const processPayment = async () => {
+        if (!orderToPayment) return;
+        
+        // Check if wallet balance is sufficient when using wallet payment
+        if (paymentType === 'Wallet' && userProfile.walletBalance < orderToPayment.totalAmount) {
+            toast.error('Số dư trong ví không đủ để thanh toán đơn hàng này');
+            return;
+        }
+        
+        setPaymentLoading(true);
+        try {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                toast.error('Vui lòng đăng nhập để thanh toán!');
+                setShowPaymentModal(false);
+                return;
+            }
+
+            // Call payment API with the selected payment type
+            const response = await axios.post(
+                `${BASE_URL}/payments/payment?orderId=${orderToPayment.orderId}&type=${paymentType}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            // Handle different payment types
+            if (paymentType === 'Order') {
+                if (response.data) {
+                    toast.info('Đang chuyển hướng đến cổng thanh toán VNPAY...', {
+                        autoClose: 2000,
+                    });
+                    setTimeout(() => {
+                        window.location.href = response.data;
+                    }, 1500);
+                } else {
+                    toast.error('Không nhận được liên kết thanh toán');
+                    setPaymentLoading(false);
+                }
+            } else {
+                // For Wallet type, show success and refresh
+                toast.success('Thanh toán thành công!');
+                setShowPaymentModal(false);
+                
+                // Refresh order history
+                const refreshResponse = await axios.get(`${BASE_URL}/orders/user-order`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                const orders = refreshResponse.data.items?.$values || [];
+                setOrderHistory(orders);
+                
+                // Refresh user profile to get updated wallet balance
+                const profileResponse = await axios.get(BASE_URL + '/users/profile', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setUserProfile(profileResponse.data);
+                
+                // Add additional success notification with more details
+                toast.success(`Đã thanh toán ${formatCurrency(orderToPayment.totalAmount)} từ ví của bạn!`, {
+                    autoClose: 5000, // Keep this notification visible longer
+                });
+            }
+        } catch (err) {
+            console.error('Payment processing error:', err);
+            if (err.response?.status === 400 && err.response?.data?.message) {
+                toast.error(err.response.data.message);
+            } else if (err.response?.data?.detail) {
+                toast.error(err.response.data.detail);
+            } else {
+                toast.error('Có lỗi xảy ra khi xử lý thanh toán');
+            }
+        } finally {
+            if (paymentType !== 'Order') {
+                setPaymentLoading(false);
+            }
+        }
+    };
 
     const formatCurrency = (amount) => {
         return amount?.toLocaleString('vi-VN') + ' ₫';
@@ -151,54 +255,59 @@ function ProfilePage() {
         });
     };
 
+    const formatDateTime = (dateString) => {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('vi-VN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
     const getStatusBadgeClass = (status) => {
         switch (status?.toLowerCase()) {
             case 'pending':
                 return 'bg-yellow-100 text-yellow-800';
+            case 'paid':
+                return 'bg-blue-100 text-blue-800';
+            case 'shipping':
+                return 'bg-pink-100 text-pink-800';
             case 'processing':
                 return 'bg-pink-100 text-pink-800';
             case 'completed':
                 return 'bg-green-100 text-green-800';
+            case 'canceled':
             case 'cancelled':
                 return 'bg-red-100 text-red-800';
             default:
                 return 'bg-gray-100 text-gray-800';
         }
     };
-
-    const handlePayment = async (orderId) => {
-        setIsProcessingPayment(true);
-        try {
-            const token = localStorage.getItem('access_token');
-            if (!token) {
-                toast.error('Vui lòng đăng nhập để thanh toán!');
-                return;
-            }
-
-            // Get order details
-            const order = orderHistory.find(o => o.orderId === orderId);
-            if (!order) {
-                toast.error('Không tìm thấy thông tin đơn hàng');
-                return;
-            }
-
-            // Navigate to payment page with order info
-            navigate('/payment', {
-                state: {
-                    orderInfo: {
-                        orderId: order.orderId,
-                        totalAmount: order.totalAmount,
-                        items: order.details?.$values || []
-                    }
-                }
-            });
-
-        } catch (error) {
-            console.error('Payment processing error:', error);
-            toast.error('Có lỗi xảy ra khi xử lý thanh toán');
-        } finally {
-            setIsProcessingPayment(false);
+    
+    // Get current status of an order
+    const getCurrentStatus = (order) => {
+        if (!order.statuses || !order.statuses.$values || order.statuses.$values.length === 0) {
+            return 'Pending';
         }
+        
+        // Sort by updateTime descending and get the most recent status
+        const sortedStatuses = [...order.statuses.$values].sort((a, b) => 
+            new Date(b.updateTime) - new Date(a.updateTime)
+        );
+        
+        return sortedStatuses[0].status;
+    };
+
+    // Check if order is already paid
+    const isOrderPaid = (order) => {
+        if (!order.statuses || !order.statuses.$values) return false;
+        
+        return order.statuses.$values.some(
+            status => status.status.toLowerCase() === 'paid'
+        );
     };
 
     if (loading) {
@@ -210,7 +319,6 @@ function ProfilePage() {
     }
 
     return (
-
         <div className="max-w-6xl mx-auto p-4">
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
                 {/* Tabs */}
@@ -336,9 +444,12 @@ function ProfilePage() {
                                                     <span className="font-medium">Đơn hàng #{order.orderId}</span>
                                                     <span className="mx-3 text-gray-400">|</span>
                                                     <span className="text-gray-600">{formatDate(order.orderDate)}</span>
+                                                    <span className="mx-3 text-gray-400">|</span>
+                                                    <span className={`px-2 py-1 text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(getCurrentStatus(order))}`}>
+                                                        {getCurrentStatus(order)}
+                                                    </span>
                                                 </div>
                                                 <div className="flex items-center gap-3">
-
                                                     <button 
                                                         className="text-pink-600 hover:text-pink-800 flex items-center"
                                                         onClick={() => setExpandedOrder(expandedOrder === order.orderId ? null : order.orderId)}
@@ -351,20 +462,67 @@ function ProfilePage() {
 
                                             {expandedOrder === order.orderId && (
                                                 <div className="p-4">
+                                                    {/* Order status timeline */}
+                                                    <div className="mb-6">
+                                                        <h4 className="font-medium mb-2">Trạng thái đơn hàng:</h4>
+                                                        <div className="relative">
+                                                            {/* Status History Timeline */}
+                                                            <div className="flex flex-col space-y-4">
+                                                                {order.statuses?.$values
+                                                                    ?.sort((a, b) => new Date(b.updateTime) - new Date(a.updateTime))
+                                                                    .map((status, index) => (
+                                                                        <div key={index} className="flex items-start">
+                                                                            <div className="relative">
+                                                                                <div className={`w-4 h-4 rounded-full ${getStatusBadgeClass(status.status)} border border-white`}></div>
+                                                                                {index < (order.statuses.$values.length - 1) && (
+                                                                                    <div className="absolute top-4 left-1/2 w-0.5 h-5 -ml-px bg-gray-200"></div>
+                                                                                )}
+                                                                            </div>
+                                                                            <div className="ml-4">
+                                                                                <div className="flex items-center">
+                                                                                    <span className={`px-2 py-1 text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(status.status)}`}>
+                                                                                        {status.status}
+                                                                                    </span>
+                                                                                    <span className="ml-2 text-xs text-gray-500">
+                                                                                        {formatDateTime(status.updateTime)}
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Shipping details */}
                                                     <div className="mb-4">
                                                         <h4 className="font-medium mb-2">Chi tiết vận chuyển:</h4>
-                                                        <div className="text-sm text-gray-600">
+                                                        <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-md">
                                                             <p>Địa chỉ: {order.address || 'N/A'}</p>
                                                             <p>Số điện thoại: {order.phone || 'N/A'}</p>
                                                         </div>
                                                     </div>
 
+                                                    {/* Transaction details if available */}
+                                                    {order.transaction && (
+                                                        <div className="mb-4">
+                                                            <h4 className="font-medium mb-2">Thông tin thanh toán:</h4>
+                                                            <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-md">
+                                                                <p>Loại giao dịch: {order.transaction.type}</p>
+                                                                <p>Thời gian: {formatDateTime(order.transaction.createDate)}</p>
+                                                                <p>Mô tả: {order.transaction.description}</p>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Order products */}
                                                     <h4 className="font-medium mb-2">Sản phẩm:</h4>
-                                                    <div className="overflow-x-auto">
-                                                        <table className="min-w-full divide-y divide-gray-200">
+                                                    <div className="overflow-x-auto mb-4">
+                                                        <table className="min-w-full divide-y divide-gray-200 border">
                                                             <thead className="bg-gray-50">
                                                                 <tr>
-                                                                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sản phẩm</th>
+                                                                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã sản phẩm</th>
+                                                                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Loại</th>
                                                                     <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Đơn giá</th>
                                                                 </tr>
                                                             </thead>
@@ -372,11 +530,10 @@ function ProfilePage() {
                                                                 {order.details?.$values?.map((detail, index) => (
                                                                     <tr key={index}>
                                                                         <td className="px-3 py-2 whitespace-nowrap">
-                                                                            <div className="flex items-center">
-                                                                                <div>
-                                                                                    <div className="font-medium">Chi tiết đơn hàng #{detail.orderDetailId}</div>
-                                                                                </div>
-                                                                            </div>
+                                                                            #{detail.orderDetailId}
+                                                                        </td>
+                                                                        <td className="px-3 py-2 whitespace-nowrap">
+                                                                            {detail.packageId ? 'Package' : 'BlindBox'}
                                                                         </td>
                                                                         <td className="px-3 py-2 whitespace-nowrap text-right font-medium">
                                                                             {formatCurrency(detail.price)}
@@ -387,22 +544,27 @@ function ProfilePage() {
                                                         </table>
                                                     </div>
 
+                                                    {/* Total and payment button */}
                                                     <div className="mt-4 text-right">
                                                         <div className="text-lg font-bold">Tổng cộng: {formatCurrency(order.totalAmount)}</div>
-                                                        <button
-                                                            onClick={() => handlePayment(order.orderId)}
-                                                            disabled={isProcessingPayment}
-                                                            className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 flex items-center justify-center"
-                                                        >
-                                                            {isProcessingPayment ? (
-                                                                <>
-                                                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                                                    Đang xử lý...
-                                                                </>
-                                                            ) : (
-                                                                'Tiến hành thanh toán'
-                                                            )}
-                                                        </button>
+                                                        
+                                                        {/* Only show payment button if not already paid */}
+                                                        {!isOrderPaid(order) && (
+                                                            <button
+                                                                onClick={() => handlePayment(order.orderId)}
+                                                                disabled={isProcessingPayment}
+                                                                className="mt-2 px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:bg-pink-400 flex items-center justify-center ml-auto"
+                                                            >
+                                                                {isProcessingPayment ? (
+                                                                    <>
+                                                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                                                        Đang xử lý...
+                                                                    </>
+                                                                ) : (
+                                                                    'Tiến hành thanh toán'
+                                                                )}
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             )}
@@ -472,9 +634,10 @@ function ProfilePage() {
                             )}
                         </div>
                     )}
-
                 </div>
             </div>
+
+            {/* Profile update confirmation modal */}
             {showConfirmModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 max-w-md w-full">
@@ -497,9 +660,159 @@ function ProfilePage() {
                     </div>
                 </div>
             )}
+
+            {/* Payment Modal */}
+            {showPaymentModal && orderToPayment && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <h3 className="text-xl font-semibold mb-4">Thanh toán đơn hàng #{orderToPayment.orderId}</h3>
+                        
+                        {/* Order summary */}
+                        <div className="mb-6">
+                            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                                <div className="flex justify-between mb-2">
+                                    <span className="text-gray-700">Ngày đặt:</span>
+                                    <span>{formatDateTime(orderToPayment.orderDate)}</span>
+                                </div>
+                                <div className="flex justify-between mb-2">
+                                    <span className="text-gray-700">Địa chỉ:</span>
+                                    <span>{orderToPayment.address || 'N/A'}</span>
+                                </div>
+                                <div className="flex justify-between mb-2">
+                                    <span className="text-gray-700">Số điện thoại:</span>
+                                    <span>{orderToPayment.phone || 'N/A'}</span>
+                                </div>
+                                <div className="flex justify-between text-lg font-semibold mt-2 pt-2 border-t">
+                                    <span>Tổng tiền:</span>
+                                    <span className="text-pink-600">{formatCurrency(orderToPayment.totalAmount)}</span>
+                                </div>
+                            </div>
+                            
+                            {/* Product details */}
+                            <h4 className="font-medium mb-2">Chi tiết sản phẩm:</h4>
+                            <div className="overflow-x-auto mb-4">
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sản phẩm</th>
+                                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Loại</th>
+                                            <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Đơn giá</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-gray-200">
+                                        {orderToPayment.details?.$values?.map((detail, index) => (
+                                            <tr key={index}>
+                                                <td className="px-3 py-2 whitespace-nowrap">
+                                                    Chi tiết #{detail.orderDetailId}
+                                                </td>
+                                                <td className="px-3 py-2 whitespace-nowrap">
+                                                    {detail.packageId ? 'Package' : 'BlindBox'}
+                                                </td>
+                                                <td className="px-3 py-2 whitespace-nowrap text-right font-medium">
+                                                    {formatCurrency(detail.price)}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        {/* Payment method selection */}
+                        <div className="mb-6">
+                            <h4 className="font-medium mb-3">Chọn phương thức thanh toán:</h4>
+                            
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div 
+                                    className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                                        paymentType === 'Order' 
+                                            ? 'border-pink-500 bg-pink-50' 
+                                            : 'border-gray-200 hover:border-pink-300'
+                                    }`}
+                                    onClick={() => setPaymentType('Order')}
+                                >
+                                    <div className="flex items-center">
+                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                                            paymentType === 'Order' ? 'border-pink-500' : 'border-gray-400'
+                                        }`}>
+                                            {paymentType === 'Order' && <div className="w-3 h-3 rounded-full bg-pink-500"></div>}
+                                        </div>
+                                        <div className="ml-3">
+                                            <span className="font-medium flex items-center">
+                                                <FaCreditCard className="mr-2 text-gray-600" />
+                                                Thanh toán trực tuyến
+                                            </span>
+                                            <p className="text-sm text-gray-500 mt-1">
+                                                Thanh toán qua VNPAY (ATM, Visa, MasterCard)
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div 
+                                    className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                                        paymentType === 'Wallet' 
+                                            ? 'border-pink-500 bg-pink-50' 
+                                            : 'border-gray-200 hover:border-pink-300'
+                                    }`}
+                                    onClick={() => setPaymentType('Wallet')}
+                                >
+                                    <div className="flex items-center">
+                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                                            paymentType === 'Wallet' ? 'border-pink-500' : 'border-gray-400'
+                                        }`}>
+                                            {paymentType === 'Wallet' && <div className="w-3 h-3 rounded-full bg-pink-500"></div>}
+                                        </div>
+                                        <div className="ml-3">
+                                            <span className="font-medium flex items-center">
+                                                <FaWallet className="mr-2 text-gray-600" />
+                                                Thanh toán bằng ví
+                                            </span>
+                                            <p className="text-sm text-gray-500 mt-1">
+                                                Số dư ví: {formatCurrency(userProfile.walletBalance || 0)}
+                                            </p>
+                                            {/* Show warning if wallet balance is insufficient */}
+                                            {paymentType === 'Wallet' && userProfile.walletBalance < orderToPayment.totalAmount && (
+                                                <p className="text-xs text-red-500 mt-1">
+                                                    Số dư không đủ để thanh toán đơn hàng này
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Action buttons */}
+                        <div className="flex justify-end space-x-3">
+                            <button 
+                                onClick={() => setShowPaymentModal(false)}
+                                className="px-4 py-2 border text-gray-700 border-gray-300 rounded-lg hover:bg-gray-50"
+                            >
+                                Hủy
+                            </button>
+                            <button 
+                                onClick={processPayment}
+                                disabled={paymentLoading || (paymentType === 'Wallet' && userProfile.walletBalance < orderToPayment.totalAmount)}
+                                className={`px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 flex items-center justify-center ${
+                                    (paymentLoading || (paymentType === 'Wallet' && userProfile.walletBalance < orderToPayment.totalAmount)) ? 'opacity-70 cursor-not-allowed' : ''
+                                }`}
+                            >
+                                {paymentLoading ? (
+                                    <>
+                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                        Đang xử lý...
+                                    </>
+                                ) : (
+                                    'Tiến hành thanh toán'
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
-    
 }
 
 export default ProfilePage;

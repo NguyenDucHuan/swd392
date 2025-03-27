@@ -230,7 +230,7 @@ function OrderManagerPage() {
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
       case 'paid':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-pink-100 text-pink-800';
       case 'shipping':
         return 'bg-pink-100 text-pink-800';
       case 'processing':
@@ -718,7 +718,7 @@ function OrderManagerPage() {
                   onClick={() => updateOrderStatus(selectedOrder.orderId, 'Paid')}
                   className={`px-4 py-2 text-sm rounded-lg border ${
                     getCurrentStatus(selectedOrder)?.toLowerCase() === 'paid' 
-                      ? 'bg-blue-100 border-blue-300 text-blue-800' 
+                      ? 'bg-pink-100 border-pink-300 text-pink-800' 
                       : 'border-gray-300 hover:bg-gray-50'
                   }`}
                 >

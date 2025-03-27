@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
-import { RiLockPasswordLine, RiLoginCircleLine, RiLogoutBoxLine, RiUserLine, RiMoneyDollarCircleLine } from 'react-icons/ri';
+import { RiLockPasswordLine, RiLoginCircleLine, RiLogoutBoxLine, RiMoneyDollarCircleLine, RiUserLine } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../configs/globalVariables';
@@ -65,7 +65,7 @@ function Navbar() {
       <div className="flex items-center">
         <Link to="/" className="flex items-center space-x-3">
           <img src='/assets/logo.jpg' alt="Logo" className="h-8 w-auto" />
-          <span className="text-xl font-semibold">PaneWay</span>
+          <span className="text-xl font-semibold">BlindBoxShop</span>
         </Link>
       </div>
 

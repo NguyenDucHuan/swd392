@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../configs/globalVariables';
@@ -55,7 +55,7 @@ function DepositPage() {
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
                                     placeholder="Nhập số tiền"
-                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500"
                                     required
                                     min="1000"
                                 />
@@ -66,7 +66,7 @@ function DepositPage() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400"
+                                className="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:bg-pink-400"
                             >
                                 {loading ? (
                                     <div className="flex items-center justify-center">

@@ -52,10 +52,9 @@ function ManegerSidebar() {
 
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center">
-          <img src="https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/476330707_122104752284750484_5215047765037178064_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeGcMEnwVDGNYm6BMBSkqdiHc26spGUkh89zbqykZSSHz0vnM8QtB7XTzJe98t0fMX3FMxnmXouQ4lG1D7Y67UAm&_nc_ohc=KJmesXmESXMQ7kNvgF3vHtn&_nc_oc=AdgXn4CnGa15fpCoWR55QcmgSNRhXWDDpm6eNGnOOP8rIFjeMdrMmWBMwT2LPcjPVdE&_nc_zt=23&_nc_ht=scontent.fsgn2-11.fna&_nc_gid=A8g48XRSR3rS-ycViEn3qXZ&oh=00_AYCe0Y_bKPnXE3WT6KEmfhnz695niRsHt_YnLJFGBvBrSQ&oe=67BBDBE8" alt="PaneWay" className="h-8" />
-          {!isCollapsed && (
+         {!isCollapsed && (
             <div className="ml-2">
-              <span className="font-semibold text-xl">PaneWay</span>
+              <span className="font-semibold text-xl">BlindBoxShop</span>
               {!isCollapsed && <p className="text-xs text-gray-500">{isAdmin ? 'Admin' : 'Staff'}</p>}
             </div>
           )}
