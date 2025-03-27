@@ -62,7 +62,10 @@ namespace BBSS.Api.Controllers
         [Authorize(Roles = $"{UserConstant.USER_ROLE_USER}, {UserConstant.USER_ROLE_STAFF}")]
         public async Task<ActionResult> CancelOrder(int orderId)
         {
-            var result = await _orderService.CancelOrderAsync(orderId);
+            var role = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
+            var userId = Int32.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+
+            var result = await _orderService.CancelOrderAsync(role, userId, orderId);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok
