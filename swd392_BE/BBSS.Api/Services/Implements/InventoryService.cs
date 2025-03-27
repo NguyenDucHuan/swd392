@@ -26,12 +26,14 @@ namespace BBSS.Api.Services.Implements
         {
             int page = model.page > 0 ? model.page : 1;
             int size = model.size > 0 ? model.size : 10;
+            string search = model.search?.ToLower() ?? string.Empty;
+            string filter = model.filter?.ToLower() ?? string.Empty;
 
             Expression<Func<InventoryItem, bool>> predicate = p =>
-                (string.IsNullOrEmpty(model.search) || p.BlindBox.Package.PakageCode.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 || 
-                                                       p.BlindBox.Package.Name.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
-                                                       p.BlindBox.Package.Description.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0) &&
-                (string.IsNullOrEmpty(model.filter) || string.Equals(model.filter, p.Status, StringComparison.OrdinalIgnoreCase)) &&
+                (string.IsNullOrEmpty(search) || p.BlindBox.Package.PakageCode.Contains(search) || 
+                                                 p.BlindBox.Package.Name.Contains(search) ||
+                                                 p.BlindBox.Package.Description.Contains(search)) &&
+                (string.IsNullOrEmpty(filter) || string.Equals(model.filter, p.Status.ToLower())) &&
                 (minAmount == null || p.BlindBox.Price * (1 - p.BlindBox.Discount / 100) >= minAmount) &&
                 (maxAmount == null || p.BlindBox.Price * (1 - p.BlindBox.Discount / 100) <= maxAmount) &&
                 p.UserId == userId;

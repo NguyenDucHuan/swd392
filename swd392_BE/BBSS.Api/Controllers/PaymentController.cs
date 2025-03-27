@@ -54,10 +54,10 @@ namespace BBSS.Api.Controllers
             var response = _paymentService.PaymentExecute(Request.Query);
             if (response == null) return BadRequest();
 
-            var result = await _paymentService.ProcessResponseAsync(response); 
+            var result = await _paymentService.ProcessResponseAsync(response);
             var redirectUrl = _paymentService.GetRedirectUrl();
 
-            return Redirect($"{redirectUrl}/{result}");
+            return Redirect($"{redirectUrl}{result}");
         }
     }
 }

@@ -8,6 +8,8 @@
         public string? Image { get; set; }
         public string UserName { get; set; }
         public string BlindBoxName { get; set; }
+        public int UpVote { get; set; }
+        public int DownVote { get; set; }
         public List<string> BlindBoxFeatures { get; set; } = new List<string>();
         public List<string> BlindBoxImages { get; set; } = new List<string>();
         public DateTime CreateDate { get; set; }
