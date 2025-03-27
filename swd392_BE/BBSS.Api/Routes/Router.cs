@@ -88,6 +88,7 @@ namespace BBSS.Api.Routes
             public const string Transactions = $"{prefix}transactions";
             public const string GetAllTransactions = $"{Transactions}";
             public const string GetUserTransactions = $"{Transactions}/me";
+            public const string GetTransaction = $"{Transactions}/{Id}";
         }
 
         public static class InventoryRoute

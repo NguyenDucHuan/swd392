@@ -112,7 +112,7 @@ namespace BBSS.Api.Services.Implements
                 var blindBox = blindBoxes.ToList()[index];                
                 blindBox.IsSold = true;
 
-                _uow.GetRepository<BlindBox>().UpdateAsync(blindBox);
+                _uow.GetRepository<User>().UpdateAsync(user);
                 await CreateInventoryItem(user, blindBox.BlindBoxId);
                 result.Add(blindBox.BlindBoxId);
                 blindBoxes.Remove(blindBox);
