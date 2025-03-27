@@ -46,7 +46,7 @@ namespace BBSS.Api.Controllers
 
         [HttpPost]
         [Route(Router.OrderRoute.CompleteOrder)]
-        [Authorize(Roles = UserConstant.USER_ROLE_USER)]
+        [Authorize(Roles = $"{UserConstant.USER_ROLE_USER}, {UserConstant.USER_ROLE_STAFF}")]
         public async Task<ActionResult> CompleteOrder(int orderId)
         {
             var userId = Int32.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);

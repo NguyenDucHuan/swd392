@@ -1,8 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import { AdminRoute, StaffRoute, UserRoute } from "../components/RoleBasedRoute";
+import {
+  AdminRoute,
+  StaffRoute,
+  UserRoute,
+} from "../components/RoleBasedRoute";
 import { CustomerLayout } from "../layout/CustomerLayout";
 import { ManagerLayout } from "../layout/ManagerLayout";
-
 
 // Import pages
 import CartPage from "../pages/CartPage/CartPage";
@@ -20,14 +23,13 @@ import PackageManager from "../pages/ManagerPage/PackageManagement/PackageManage
 import Settings from "../pages/ManagerPage/Settings";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import ChangePasswordPage from "../pages/ProfilePage/ChangePasswordPage";
-import ProfilePage from '../pages/ProfilePage/ProfilePage';
+import ProfilePage from "../pages/ProfilePage/ProfilePage";
 import RechargePage from "../pages/ProfilePage/RechargePage";
 import Register from "../pages/Register";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import PackageDetail from "../pages/ShoppingAndLuckyWheel/PackageDetail";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
 import Users from "../pages/Users";
-
 
 const AppRoutes = () => {
   return (
@@ -49,14 +51,16 @@ const AppRoutes = () => {
           </CustomerLayout>
         }
       />
-      <Route path="/manage-orders"
+      <Route
+        path="/manage-orders"
         element={
           <ManagerLayout>
             <StaffRoute>
-              <OrderManager/>
+              <OrderManager />
             </StaffRoute>
           </ManagerLayout>
-        }/>
+        }
+      />
       <Route
         path="/about"
         element={
@@ -124,8 +128,7 @@ const AppRoutes = () => {
       />
       <Route
         path="/register"
-        element=
-        {
+        element={
           <CustomerLayout>
             <Register />
           </CustomerLayout>
@@ -245,8 +248,6 @@ const AppRoutes = () => {
         }
       />
 
-     
-
       <Route
         path="/profile"
         element={
@@ -263,7 +264,9 @@ const AppRoutes = () => {
         element={
           <ManagerLayout>
             <div className="p-8">
-              <h1 className="text-2xl font-bold text-red-500">Unauthorized Access</h1>
+              <h1 className="text-2xl font-bold text-red-500">
+                Unauthorized Access
+              </h1>
               <p>You do not have permission to access this resource.</p>
             </div>
           </ManagerLayout>
