@@ -50,6 +50,9 @@ namespace BBSS.Api.Mapper
                 .ForMember(dest => dest.PackageImages, opt => opt.Ignore())
                 .ForMember(dest => dest.BlindBoxes, opt => opt.MapFrom(src => src.BlindBoxes));
             CreateMap<BlindBoxUpdateRequest, BlindBox>();
+
+            CreateMap<Package, WheelViewModel>()
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.PackageImages));
         }
     }
 }

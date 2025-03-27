@@ -1,4 +1,5 @@
 ﻿using BBSS.Api.Constants;
+using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Routes;
 using BBSS.Api.Services.Implements;
 using BBSS.Api.Services.Interfaces;
@@ -20,9 +21,19 @@ namespace BBSS.Api.Controllers
         }
 
         [HttpGet(Router.WheelRoute.GetWheel)]
-        public async Task<IActionResult> GetWheel(string packageCode)
+        public async Task<IActionResult> GetWheel(PaginateModel model)
         {
-            var result = await _wheelService.GetWheelAsync(packageCode);
+            var result = await _wheelService.GetWheelAsync(model);
+            return result.Match(
+                (errorMessage, statusCode) => Problem(detail: errorMessage, statusCode: statusCode),
+                Ok
+            );
+        }
+
+        [HttpGet(Router.WheelRoute.GetWheelDetail)]
+        public async Task<IActionResult> GetWheelDetail(string packageCode)
+        {
+            var result = await _wheelService.GetWheelDetailAsync(packageCode);
             return result.Match(
                 (errorMessage, statusCode) => Problem(detail: errorMessage, statusCode: statusCode),
                 Ok

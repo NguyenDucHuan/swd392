@@ -2,6 +2,7 @@
 using BBSS.Api.Constants;
 using BBSS.Api.Helper;
 using BBSS.Api.Models.Configurations;
+using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Models.VnPayModel;
 using BBSS.Api.Services.Interfaces;
 using BBSS.Api.ViewModels;
@@ -11,6 +12,7 @@ using BBSS.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Linq.Expressions;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace BBSS.Api.Services.Implements
@@ -26,7 +28,91 @@ namespace BBSS.Api.Services.Implements
             _mapper = mapper;
         }
 
-        public async Task<MethodResult<WheelViewModel>> GetWheelAsync(string packageCode)
+        public async Task<MethodResult<IPaginate<WheelViewModel>>> GetWheelAsync(PaginateModel model)
+        {
+            int page = model.page > 0 ? model.page : 1;
+            int size = model.size > 0 ? model.size : 10;
+            string search = model.search?.ToLower() ?? string.Empty;
+            string filter = model.filter?.ToLower() ?? string.Empty;
+
+            Expression<Func<Package, bool>> predicate = p =>
+                    // Search filter
+                    (string.IsNullOrEmpty(search) ||
+                     p.PakageCode.ToLower().Contains(search) ||
+                     p.Name.ToLower().Contains(search) ||
+                     p.Description.ToLower().Contains(search)) &&
+                    (string.IsNullOrEmpty(filter) ||
+                     (filter.Contains(p.CategoryId.ToString()))) &&
+                     p.BlindBoxes.Any(bb => !bb.IsSold && bb.IsKnowned);
+
+            var packages = await _uow.GetRepository<Package>().GetListAsync(
+                        predicate: predicate,
+                        include: i => i.Include(p => p.BlindBoxes)
+                                       .Include(p => p.PackageImages),
+                        orderBy: BuildOrderBy(model.sortBy)
+                        );
+
+            var groupedPackages = packages.GroupBy(p => p.PakageCode).ToDictionary(
+                        g => g.Key,
+                        g => new { Packages = g.ToList() }
+                    );
+
+            var processedGroups = new Dictionary<string, WheelViewModel>();
+            foreach (var group in groupedPackages)
+            {
+                var allPackagesInGroup = group.Value.Packages;
+                var representativePackage = allPackagesInGroup.OrderByDescending(p => p.BlindBoxes.Count(bb => !bb.IsSold)).First();
+                var allBlindBoxes = allPackagesInGroup
+                    .SelectMany(p => p.BlindBoxes)
+                    .Where(bb => !bb.IsSold && bb.IsKnowned)
+                    .ToList();
+                var totalBlindBoxes = allBlindBoxes.Count;
+                var rate = (float) allBlindBoxes.Count(bb => bb.IsSpecial) / totalBlindBoxes;
+                var price = allBlindBoxes.Average(bb => bb.Price * (1 - bb.Discount / 100));
+
+                var wheel = _mapper.Map<WheelViewModel>(representativePackage);
+                wheel.PackageCode = group.Key;
+                wheel.Price = price;
+                wheel.TotalBlindBoxes = totalBlindBoxes;
+                wheel.Rate = rate;
+                
+                processedGroups.Add(group.Key, wheel);
+            }
+
+            var pagedGroups = processedGroups
+                        .OrderBy(g => g.Key)
+                        .Skip((page - 1) * size)
+                        .Take(size)
+                        .Select(g => g.Value)
+                        .ToList();
+
+            var result = new Paginate<WheelViewModel>
+            {
+                Page = page,
+                Size = size,
+                Total = groupedPackages.Count,
+                TotalPages = (int)Math.Ceiling(groupedPackages.Count / (double)size),
+                Items = pagedGroups
+            };
+            
+            return new MethodResult<IPaginate<WheelViewModel>>.Success(result);
+        }
+
+        private Func<IQueryable<Package>, IOrderedQueryable<Package>> BuildOrderBy(string sortBy)
+        {
+            if (string.IsNullOrEmpty(sortBy)) return null;
+
+            return sortBy.ToLower() switch
+            {
+                "name" => q => q.OrderBy(p => p.Name),
+                "name_desc" => q => q.OrderByDescending(p => p.Name),
+                "code" => q => q.OrderBy(p => p.PakageCode),
+                "code_desc" => q => q.OrderByDescending(p => p.PakageCode),
+                _ => q => q.OrderByDescending(p => p.PackageId) // Default sort
+            };
+        }
+
+        public async Task<MethodResult<WheelDetailViewModel>> GetWheelDetailAsync(string packageCode)
         {
             var blindBoxes = await _uow.GetRepository<BlindBox>().GetListAsync(
                 selector: s => _mapper.Map<BlindBoxViewModel>(s),
@@ -71,14 +157,14 @@ namespace BBSS.Api.Services.Implements
                 whellBlindBoxes.Add(wheelBlindBoxViewModel);
             }
 
-            var result = new WheelViewModel
+            var result = new WheelDetailViewModel
             {                               
                 Price = blindBoxes.Average(b => b.DiscountedPrice),
                 TotalBlindBoxes = totalBlindBoxes,
                 WheelBlindBoxes = whellBlindBoxes
             };
 
-            return new MethodResult<WheelViewModel>.Success(result);
+            return new MethodResult<WheelDetailViewModel>.Success(result);
         }
 
         public async Task<MethodResult<IEnumerable<int>>> PlayWheelAsync(string email, string packageCode, int times, decimal amount)
