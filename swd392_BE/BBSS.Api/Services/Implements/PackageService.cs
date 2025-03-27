@@ -398,20 +398,20 @@ namespace BBSS.Api.Services.Implements
                         }
 
                         //Update feature
-                        if (blindBoxRequest.FeatureIds != null && blindBoxRequest.FeatureIds.Count != 0)
-                        {
-                            var featureDbs = await _uow.GetRepository<BlindBoxFeature>().GetListAsync(
+                        var featureDbs = await _uow.GetRepository<BlindBoxFeature>().GetListAsync(
                                 predicate: p => p.BlindBoxId == blindBoxRequest.BlindBoxId
                             );
 
-                            foreach (var featureDb in featureDbs)
+                        foreach (var featureDb in featureDbs)
+                        {
+                            if (!blindBoxRequest.FeatureIds.Contains(featureDb.FeatureId))
                             {
-                                if (!blindBoxRequest.FeatureIds.Contains(featureDb.FeatureId))
-                                {
-                                    _uow.GetRepository<BlindBoxFeature>().DeleteAsync(featureDb);
-                                }
+                                _uow.GetRepository<BlindBoxFeature>().DeleteAsync(featureDb);
                             }
+                        }
 
+                        if (blindBoxRequest.FeatureIds != null && blindBoxRequest.FeatureIds.Count != 0)
+                        {
                             foreach (var featureId in blindBoxRequest.FeatureIds)
                             {
                                 if (!featureDbs.Select(x => x.FeatureId).Contains(featureId))
@@ -465,6 +465,7 @@ namespace BBSS.Api.Services.Implements
                 var package = await _uow.GetRepository<Package>().SingleOrDefaultAsync(
                     predicate: p => p.PackageId == id,
                     include: i => i.Include(p => p.BlindBoxes).ThenInclude(bb => bb.BlindBoxImages)
+                                   .Include(p => p.BlindBoxes).ThenInclude(bb => bb.BlindBoxFeatures)
                                    .Include(p => p.PackageImages)
                 );
 
@@ -490,6 +491,10 @@ namespace BBSS.Api.Services.Implements
                     foreach (var blindBoxImage in blindBox.BlindBoxImages.ToList())
                     {
                         _uow.GetRepository<BlindBoxImage>().DeleteAsync(blindBoxImage);
+                    }
+                    foreach (var blindBoxfeature in blindBox.BlindBoxFeatures.ToList())
+                    {
+                        _uow.GetRepository<BlindBoxFeature>().DeleteAsync(blindBoxfeature);
                     }
                     _uow.GetRepository<BlindBox>().DeleteAsync(blindBox);
                 }
@@ -616,6 +621,14 @@ namespace BBSS.Api.Services.Implements
                 await _uow.RollbackTransactionAsync();
                 return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
             }
+        }
+
+        public async Task<MethodResult<IEnumerable<string>>> GetPackageCodesAsync()
+        {
+            var result = await _uow.GetRepository<Package>().GetListAsync(
+                selector: p => p.PakageCode
+            );
+            return new MethodResult<IEnumerable<string>>.Success(result.Distinct());
         }
     }
 }

@@ -1,9 +1,9 @@
 import React from 'react';
-import { RiFileTextLine, RiUserLine, RiLineChartLine,RiAdvertisementLine,RiArticleLine   } from 'react-icons/ri';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { TbCircleDashedPlus } from "react-icons/tb";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { IoReload } from "react-icons/io5";
+import { RiAdvertisementLine, RiArticleLine, RiFileTextLine, RiUserLine } from 'react-icons/ri';
+import { TbCircleDashedPlus } from "react-icons/tb";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 const data = [
   { name: '25k', value: 40 },
   { name: '199k', value: 84 },
@@ -18,8 +18,8 @@ const StatCard = ({ title, value, change, icon: Icon, changeType = 'up' }) => (
   <div className="bg-white p-6 rounded-lg shadow-sm">
     <div className="flex items-center justify-between mb-4">
       <h3 className="text-gray-500 text-sm">{title}</h3>
-      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-        <Icon className="w-6 h-6 text-blue-500" />
+      <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
+        <Icon className="w-6 h-6 text-pink-500" />
       </div>
     </div>
     <div className="flex items-baseline">
@@ -38,15 +38,15 @@ function Dashboard() {
     <div className="flex-1 bg-gray-50 p-8">
       <div className="mb-8">
       <div className="grid grid-cols-4 gap-6 mb-6">
-          <button className="flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-lg col-span-2">
+          <button className="flex items-center justify-center px-4 py-2 bg-pink-500 text-white rounded-lg col-span-2">
             <RiArticleLine  className="mr-2" />
             Tạo Bài viết
           </button>
-          <button className="flex items-center justify-center px-4 py-2 border border-blue-500 text-blue-500 rounded-lg">
+          <button className="flex items-center justify-center px-4 py-2 border border-pink-500 text-pink-500 rounded-lg">
             <RiAdvertisementLine  className="mr-2" />
             Tạo Quảng cáo
           </button>
-          <button className="flex items-center justify-center px-4 py-2 border border-blue-500 text-blue-500 rounded-lg">
+          <button className="flex items-center justify-center px-4 py-2 border border-pink-500 text-pink-500 rounded-lg">
             <TbCircleDashedPlus className="mr-2" />
             Tạo Tin
           </button>

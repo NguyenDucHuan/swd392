@@ -18,21 +18,31 @@ function ProfilePage() {
     const [isProcessingPayment, setIsProcessingPayment] = useState(false);
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [dateOfBirth, setDateOfBirth] = useState('');
+    const [phone, setPhone] = useState('');
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
                 const token = localStorage.getItem('access_token');
                 if (!token) return;
-
+    
                 const response = await axios.get(BASE_URL + '/users/profile', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
-
+    
                 setUserProfile(response.data);
-                setName(response.data.name);
+                setName(response.data.name || '');
+                setPhone(response.data.phone || '');
+                // Format date for input if it exists
+                if (response.data.dateOfBirth) {
+                    const date = new Date(response.data.dateOfBirth);
+                    const formattedDate = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+                    setDateOfBirth(formattedDate);
+                }
                 setLoading(false);
             } catch (error) {
                 console.error('Failed to fetch profile:', error);
@@ -87,28 +97,45 @@ function ProfilePage() {
         setIsEditing(true);
     };
 
-    const handleSaveClick = async () => {
-        const confirmed = window.confirm('Bạn có chắc thực hiện thay đổi này chứ?');
-        if (!confirmed) return;
-
+    const handleSaveClick = () => {
+        setShowConfirmModal(true);
+    };
+    
+    const handleConfirmSave = async () => {
         try {
             const token = localStorage.getItem('access_token');
             if (!token) return;
-
-            await axios.put(BASE_URL + '/users/profile', { name }, {
+    
+            // Build the query parameters 
+            const params = new URLSearchParams();
+            if (name) params.append('Name', name);
+            if (dateOfBirth) params.append('DateOfBirth', dateOfBirth);
+            if (phone) params.append('Phone', phone);
+    
+            await axios.patch(`${BASE_URL}/users/update-profile?${params.toString()}`, null, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-
-            setUserProfile(prevProfile => ({ ...prevProfile, name }));
+    
+            // Update the local state with the new values
+            setUserProfile(prevProfile => ({ 
+                ...prevProfile, 
+                name,
+                dateOfBirth,
+                phone
+            }));
+            
             setIsEditing(false);
-            toast.success('Profile updated successfully');
+            toast.success('Thông tin cá nhân đã được cập nhật');
         } catch (error) {
             console.error('Failed to update profile:', error);
-            toast.error('Failed to update profile');
+            toast.error('Không thể cập nhật thông tin: ' + (error.response?.data?.message || 'Lỗi không xác định'));
+        } finally {
+            setShowConfirmModal(false);
         }
     };
+
 
     const formatCurrency = (amount) => {
         return amount?.toLocaleString('vi-VN') + ' ₫';
@@ -120,9 +147,7 @@ function ProfilePage() {
         return date.toLocaleDateString('vi-VN', {
             year: 'numeric',
             month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
+            day: '2-digit'
         });
     };
 
@@ -131,7 +156,7 @@ function ProfilePage() {
             case 'pending':
                 return 'bg-yellow-100 text-yellow-800';
             case 'processing':
-                return 'bg-blue-100 text-blue-800';
+                return 'bg-pink-100 text-pink-800';
             case 'completed':
                 return 'bg-green-100 text-green-800';
             case 'cancelled':
@@ -179,30 +204,31 @@ function ProfilePage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
             </div>
         );
     }
 
     return (
+
         <div className="max-w-6xl mx-auto p-4">
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
                 {/* Tabs */}
                 <div className="flex border-b">
                     <button
-                        className={`px-6 py-3 flex items-center ${activeTab === 'profile' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
+                        className={`px-6 py-3 flex items-center ${activeTab === 'profile' ? 'border-b-2 border-pink-500 text-pink-500' : 'text-gray-500'}`}
                         onClick={() => setActiveTab('profile')}
                     >
                         <FaUser className="mr-2" /> Thông tin tài khoản
                     </button>
                     <button
-                        className={`px-6 py-3 flex items-center ${activeTab === 'orders' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
+                        className={`px-6 py-3 flex items-center ${activeTab === 'orders' ? 'border-b-2 border-pink-500 text-pink-500' : 'text-gray-500'}`}
                         onClick={() => setActiveTab('orders')}
                     >
                         <FaShoppingBag className="mr-2" /> Đơn hàng
                     </button>
                     <button
-                        className={`px-6 py-3 flex items-center ${activeTab === 'inventory' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
+                        className={`px-6 py-3 flex items-center ${activeTab === 'inventory' ? 'border-b-2 border-pink-500 text-pink-500' : 'text-gray-500'}`}
                         onClick={() => setActiveTab('inventory')}
                     >
                         <FaBox className="mr-2" /> Bộ sưu tập
@@ -224,44 +250,71 @@ function ProfilePage() {
                                                 type="text"
                                                 value={name}
                                                 onChange={(e) => setName(e.target.value)}
-                                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                             />
                                         ) : (
                                             <div className="p-3 bg-gray-50 rounded-md">{userProfile.name || 'Chưa cập nhật'}</div>
                                         )}
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                        <div className="p-3 bg-gray-50 rounded-md">{userProfile.email}</div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Số điện thoại</label>
+                                        {isEditing ? (
+                                            <input
+                                                type="tel"
+                                                value={phone}
+                                                onChange={(e) => setPhone(e.target.value)}
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                                placeholder="Nhập số điện thoại"
+                                            />
+                                        ) : (
+                                            <div className="p-3 bg-gray-50 rounded-md">{userProfile.phone || 'Chưa cập nhật'}</div>
+                                        )}
                                     </div>
                                 </div>
 
                                 <div className="space-y-4">
+                                   
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Vai trò</label>
-                                        <div className="p-3 bg-gray-50 rounded-md capitalize">{userProfile.role}</div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Ngày sinh</label>
+                                        {isEditing ? (
+                                            <input
+                                                type="date"
+                                                value={dateOfBirth}
+                                                onChange={(e) => setDateOfBirth(e.target.value)}
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                            />
+                                        ) : (
+                                            <div className="p-3 bg-gray-50 rounded-md">
+                                                {userProfile.dateOfBirth ? formatDate(userProfile.dateOfBirth) : 'N/A'}
+                                            </div>
+                                        )}
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Ngày tham gia</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Tài khoản</label>
                                         <div className="p-3 bg-gray-50 rounded-md">
-                                            {userProfile.joinDate ? formatDate(userProfile.joinDate) : 'N/A'}
+                                            {userProfile.walletBalance ? formatCurrency(userProfile.walletBalance) : formatCurrency("0")}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                            <div className="mt-6"> 
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                        <div className="p-3 bg-gray-50 rounded-md">{userProfile.email}</div>
+                                    </div>
+                            </div>
                             <div className="mt-6">
                                 {isEditing ? (
                                     <button
                                         onClick={handleSaveClick}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                                        className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 flex items-center"
                                     >
                                         <FaSave className="mr-2" /> Lưu thay đổi
                                     </button>
                                 ) : (
                                     <button
                                         onClick={handleEditClick}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                                        className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 flex items-center"
                                     >
                                         <FaEdit className="mr-2" /> Chỉnh sửa
                                     </button>
@@ -285,8 +338,9 @@ function ProfilePage() {
                                                     <span className="text-gray-600">{formatDate(order.orderDate)}</span>
                                                 </div>
                                                 <div className="flex items-center gap-3">
-                                                    <button
-                                                        className="text-blue-600 hover:text-blue-800 flex items-center"
+
+                                                    <button 
+                                                        className="text-pink-600 hover:text-pink-800 flex items-center"
                                                         onClick={() => setExpandedOrder(expandedOrder === order.orderId ? null : order.orderId)}
                                                     >
                                                         <FaEye className="mr-1" />
@@ -397,7 +451,7 @@ function ProfilePage() {
                                                     <p className="text-sm text-gray-500 mb-2">Mã: {item.blindBox.pakageCode}</p>
                                                 )}
                                                 <div className="flex justify-between items-center mt-2">
-                                                    <div className="text-blue-600 font-medium">
+                                                    <div className="text-pink-600 font-medium">
                                                         {formatCurrency(item.blindBox?.price)}
                                                     </div>
                                                     {item.blindBox?.isSpecial && (
@@ -418,10 +472,34 @@ function ProfilePage() {
                             )}
                         </div>
                     )}
+
                 </div>
             </div>
+            {showConfirmModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-md w-full">
+                        <h3 className="text-lg font-semibold mb-4">Xác nhận thay đổi</h3>
+                        <p className="mb-6">Bạn có chắc muốn cập nhật thông tin cá nhân?</p>
+                        <div className="flex justify-end space-x-3">
+                            <button 
+                                onClick={() => setShowConfirmModal(false)}
+                                className="px-4 py-2 border text-gray-700 border-gray-300 rounded-lg hover:bg-gray-50"
+                            >
+                                Hủy
+                            </button>
+                            <button 
+                                onClick={handleConfirmSave}
+                                className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+                            >
+                                Xác nhận
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
+    
 }
 
 export default ProfilePage;

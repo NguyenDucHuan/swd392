@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../configs/globalVariables';
+
 
 const LuckyWheel = () => {
   const [spinning, setSpinning] = useState(false);
@@ -16,7 +18,7 @@ const LuckyWheel = () => {
   // Các phân loại skin với màu sắc tương ứng
   const rarities = {
     common: "text-gray-400 bg-gray-800",
-    uncommon: "text-blue-400 bg-blue-900",
+    uncommon: "text-pink-400 bg-pink-900",
     rare: "text-purple-400 bg-purple-900",
     mythical: "text-pink-400 bg-pink-900",
     legendary: "text-red-400 bg-red-900",

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import QRMOMO from '../../assets/QRMOMO.png';
+import QRNH from '../../assets/QRNH.png';
+import ImageModal from '../../components/ImageModal';
 import { BASE_URL } from '../../configs/globalVariables';
 import { useAuth } from '../../contexts/AuthContext';
-import QRNH from '../../assets/QRNH.png';
-import QRMOMO from '../../assets/QRMOMO.png';
-import ImageModal from '../../components/ImageModal';
 
 function RechargePage() {
     const [amount, setAmount] = useState('');
@@ -181,7 +181,7 @@ function RechargePage() {
             <button
                 onClick={handleRecharge}
                 disabled={loading}
-                className={`px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mt-4 ${loading ? 'cursor-not-allowed' : ''}`}
+                className={`px-4 py-2 bg-pink-600 text-white rounded hover:bg-pink-700 mt-4 ${loading ? 'cursor-not-allowed' : ''}`}
             >
                 {loading ? 'Đang xử lý...' : 'Nạp tiền'}
             </button>

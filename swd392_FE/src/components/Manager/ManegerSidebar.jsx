@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { BsQuestionOctagon } from "react-icons/bs";
-import { RiAdvertisementLine, RiArrowLeftLine, RiArrowRightLine, RiBox1Fill, RiDashboardLine, RiFileTextLine, RiLogoutBoxLine, RiSettings4Line, RiUserLine } from 'react-icons/ri';
+import { RiArrowLeftLine, RiArrowRightLine, RiBox1Fill, RiDashboardLine, RiLogoutBoxLine, RiSettings4Line, RiShoppingCartLine, RiUserLine } from 'react-icons/ri';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
@@ -16,18 +15,14 @@ function ManegerSidebar() {
   // Admin menu items
   const adminMenuItems = [
     { icon: RiDashboardLine, text: 'Tổng quan', path: '/dashboard' },
-    { icon: RiFileTextLine, text: 'Nội dung', path: '/content' },
-    { icon: RiUserLine, text: 'Quản lí Người dùng', path: '/users' },
-    { icon: RiAdvertisementLine, text: 'Trung tâm Quảng cáo', path: '/ads' },
-    { icon: BsQuestionOctagon, text: 'Trung tâm Trợ giúp', path: '/help' },
+    { icon: RiUserLine, text: 'Quản lí Người dùng', path: '/users' }
   ];
 
   // Staff menu items
   const staffMenuItems = [
     { icon: RiDashboardLine, text: 'Tổng quan', path: '/dashboard' },
-    { icon: RiFileTextLine, text: 'Nội dung', path: '/content' },
-    { icon: BsQuestionOctagon, text: 'Trung tâm Trợ giúp', path: '/help' },
-    { icon: RiBox1Fill , text : 'Packages', path : '/packages'}
+    { icon: RiBox1Fill , text : 'Packages', path : '/packages'},
+    { icon: RiShoppingCartLine, text: 'Đơn hàng', path: '/manage-orders' }
   ];
 
   // Select the appropriate menu items based on user role
@@ -75,7 +70,7 @@ function ManegerSidebar() {
                 to={item.path}
                 className={`flex items-center p-2 rounded-lg ${location.pathname === item.path ||
                     (item.path === '/users' && location.pathname.startsWith('/users'))
-                    ? 'bg-blue-50 text-blue-600'
+                    ? 'bg-pink-50 text-pink-600'
                     : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 title={isCollapsed ? item.text : ''}
@@ -95,7 +90,7 @@ function ManegerSidebar() {
               <Link
                 to="/settings"
                 className={`flex items-center p-2 rounded-lg ${location.pathname === '/settings'
-                    ? 'bg-blue-50 text-blue-600'
+                    ? 'bg-pink-50 text-pink-600'
                     : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 title={isCollapsed ? 'Cài đặt' : ''}
