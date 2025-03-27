@@ -348,14 +348,16 @@ namespace BBSS.Api.Services.Implements
         {
             int page = model.page > 0 ? model.page : 1;
             int size = model.size > 0 ? model.size : 10;
+            string search = model.search?.ToLower() ?? string.Empty;
+            string filter = model.filter?.ToLower() ?? string.Empty;
 
             Expression<Func<Order, bool>> predicate = p =>
                 p.UserId == userId &&
-                (string.IsNullOrEmpty(model.search) || p.User.Name.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
-                                                       p.User.Email.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
-                                                       p.Address.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
-                                                       p.Phone.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0) &&
-                (string.IsNullOrEmpty(model.filter) || string.Equals(model.filter, p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status, StringComparison.OrdinalIgnoreCase)) &&
+                (string.IsNullOrEmpty(search) || p.User.Name.ToLower().Contains(search) ||
+                                                       p.User.Email.ToLower().Contains(search) ||
+                                                       p.Address.ToLower().Contains(search) ||
+                                                       p.Phone.ToLower().Contains(search)) &&
+                (string.IsNullOrEmpty(filter) || filter.Contains(p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status.ToLower())) &&
                 (minAmount == null || p.TotalAmount >= minAmount) &&
                 (maxAmount == null || p.TotalAmount <= maxAmount);
 
@@ -378,13 +380,16 @@ namespace BBSS.Api.Services.Implements
         {
             int page = model.page > 0 ? model.page : 1;
             int size = model.size > 0 ? model.size : 10;
+            string search = model.search?.ToLower() ?? string.Empty;
+            string filter = model.filter?.ToLower() ?? string.Empty;
 
             Expression<Func<Order, bool>> predicate = p =>
-                (string.IsNullOrEmpty(model.search) || p.User.Name.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
-                                                       p.User.Email.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
-                                                       p.Address.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0 ||
-                                                       p.Phone.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0) &&
-                (string.IsNullOrEmpty(model.filter) || string.Equals(model.filter, p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status, StringComparison.OrdinalIgnoreCase)) &&
+                (string.IsNullOrEmpty(search) || p.User.Name.Contains(search) ||
+                                                 p.User.Email.Contains(search) ||
+                                                 p.Address.Contains(search) ||
+                                                 p.Phone.Contains(search)) &&
+                (string.IsNullOrEmpty(filter) || 
+                filter.Contains(p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status.ToLower())) &&
                 (minAmount == null || p.TotalAmount >= minAmount) &&
                 (maxAmount == null || p.TotalAmount <= maxAmount);
 

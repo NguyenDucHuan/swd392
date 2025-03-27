@@ -25,10 +25,12 @@ namespace BBSS.Api.Services.Implements
         {
             int page = model.page > 0 ? model.page : 1;
             int size = model.size > 0 ? model.size : 10;
+            string search = model.search?.ToLower() ?? string.Empty;
+            string filter = model.filter?.ToLower() ?? string.Empty;
 
             Expression<Func<Transaction, bool>> predicate = p =>
-                (string.IsNullOrEmpty(model.search) || p.Description.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0) &&
-                (string.IsNullOrEmpty(model.filter) || string.Equals(model.filter, p.Type, StringComparison.OrdinalIgnoreCase)) &&
+                (string.IsNullOrEmpty(search) || p.Description.ToLower().Contains(search)) &&
+                (string.IsNullOrEmpty(filter) || filter.Contains(p.Type.ToLower())) &&
                 (minAmount == null || p.Amount >= minAmount) &&
                 (maxAmount == null || p.Amount <= maxAmount);
                  
@@ -48,10 +50,12 @@ namespace BBSS.Api.Services.Implements
         {
             int page = model.page > 0 ? model.page : 1;
             int size = model.size > 0 ? model.size : 10;
+            string search = model.search?.ToLower() ?? string.Empty;
+            string filter = model.filter?.ToLower() ?? string.Empty;
 
             Expression<Func<Transaction, bool>> predicate = p =>
-                (string.IsNullOrEmpty(model.search) || p.Description.IndexOf(model.search, StringComparison.OrdinalIgnoreCase) > 0) &&
-                (string.IsNullOrEmpty(model.filter) || string.Equals(model.filter, p.Type, StringComparison.OrdinalIgnoreCase)) &&
+                (string.IsNullOrEmpty(search) || p.Description.ToLower().Contains(search)) &&
+                (string.IsNullOrEmpty(filter) || filter.Contains(p.Type.ToLower())) &&
                 (minAmount == null || p.Amount >= minAmount) &&
                 (maxAmount == null || p.Amount <= maxAmount) &&
                 p.UserId == userId;
@@ -82,7 +86,18 @@ namespace BBSS.Api.Services.Implements
             };
         }
 
-
+        public async Task<MethodResult<TransactionViewModel>> GetTransactionByIdAsync(int transactionId)
+        {
+            var transaction = await _uow.GetRepository<Transaction>().SingleOrDefaultAsync(
+                selector: s => _mapper.Map<TransactionViewModel>(s),
+                predicate: p => p.TransactionId == transactionId
+            );
+            if (transaction == null)
+            {
+                return new MethodResult<TransactionViewModel>.Failure("Transaction not found", 404);
+            }
+            return new MethodResult<TransactionViewModel>.Success(transaction);
+        }
     }
 }
 
