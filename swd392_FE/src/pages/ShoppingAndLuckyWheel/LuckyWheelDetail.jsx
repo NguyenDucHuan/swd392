@@ -1,15 +1,22 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../configs/globalVariables";
 
 const LuckyWheelDetail = () => {
+  const { packageCode } = useParams();
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState(null);
   const [items, setItems] = useState([]);
   const [offset, setOffset] = useState(0);
-  const [wheelInfo, setWheelInfo] = useState(null);
+  const [wheelInfo, setWheelInfo] = useState({
+    price: 0,
+    totalBlindBoxes: 0,
+  });
+  const [userWallet, setUserWallet] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const spinnerRef = useRef(null);
   const navigate = useNavigate();
 
@@ -21,12 +28,45 @@ const LuckyWheelDetail = () => {
     mythical: "text-pink-400 bg-pink-900",
     legendary: "text-red-400 bg-red-900",
     ancient: "text-yellow-400 bg-yellow-900",
+    special: "text-yellow-400 bg-red-900",
   };
+
+  // Fetch thông tin ví của user
+  useEffect(() => {
+    const fetchUserWallet = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        const response = await axios.get(`${BASE_URL}/users/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.data) {
+          setUserWallet(response.data.walletBalance || 0);
+        }
+      } catch (error) {
+        console.error("Error fetching wallet:", error);
+        if (error.response?.status === 401) {
+          navigate("/login");
+        }
+      }
+    };
+
+    fetchUserWallet();
+  }, [navigate]);
 
   // Fetch danh sách items từ API
   useEffect(() => {
     const fetchItems = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const token = localStorage.getItem("access_token");
 
         if (!token) {
@@ -35,7 +75,10 @@ const LuckyWheelDetail = () => {
           return;
         }
 
-        const response = await axios.get(`${BASE_URL}/wheel`, {
+        const response = await axios.get(`${BASE_URL}/wheel-detail`, {
+          params: {
+            packageCode: packageCode,
+          },
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -43,52 +86,70 @@ const LuckyWheelDetail = () => {
 
         if (response.data) {
           setWheelInfo({
-            price: response.data.price,
-            totalBlindBoxes: response.data.totalBlindBoxes,
+            price: response.data.price || 0,
+            totalBlindBoxes: response.data.totalBlindBoxes || 0,
           });
 
+          if (!response.data.wheelBlindBoxes?.$values) {
+            throw new Error("Không có dữ liệu vòng quay");
+          }
+
           // Chuyển đổi dữ liệu wheelBlindBoxes thành định dạng hiển thị
-          const formattedItems = response.data.wheelBlindBoxes.$values.flatMap(
-            (wheelBox) =>
-              wheelBox?.blindBoxes.$values.map((box) => ({
-                id: box?.blindBoxId,
-                name: `${box?.packageName} - ${box.color}`,
-                image: box?.imageUrls.$values[0]?.url || "/placeholder.png",
-                rarity: box?.isSpecial ? "mythical" : "common",
-                price: box?.discountedPrice,
-                isSpecial: box?.isSpecial,
-                isKnowned: box?.isKnowned,
-                color: box?.color,
-                packageCode: box?.packageCode,
-                features: box?.features.$values,
-              }))
-          );
-          console.log(formattedItems);
+          const formattedItems = response.data.wheelBlindBoxes.$values
+            .filter((wheelBox) => wheelBox.blindBoxes?.$values?.length > 0)
+            .map((wheelBox) => {
+              const box = wheelBox.blindBoxes.$values[0];
+              return {
+                id: box.blindBoxId,
+                name: `${box.packageName} - ${box.color}`,
+                image: box.imageUrls?.$values?.[0]?.url || "/placeholder.png",
+                secondaryImage: box.imageUrls?.$values?.[1]?.url,
+                rarity: box.isSpecial ? "special" : "common",
+                price: box.discountedPrice || 0,
+                originalPrice: box.price || 0,
+                isSpecial: box.isSpecial || false,
+                isKnowned: box.isKnowned || false,
+                color: box.color || "",
+                packageCode: box.packageCode || "",
+                features: box.features?.$values || [],
+                rate: wheelBox.rate || 0,
+                number: box.number || 0,
+                size: box.size || 0,
+              };
+            });
 
           if (formattedItems.length === 0) {
-            toast.error("Không có sản phẩm nào khả dụng");
-            return;
+            throw new Error("Không có sản phẩm nào khả dụng");
           }
 
           setItems(formattedItems);
         }
       } catch (error) {
         console.error("Error fetching items:", error);
+        setError(error.message || "Không thể tải danh sách sản phẩm");
         if (error.response?.status === 401) {
           toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
           navigate("/login");
         } else {
-          toast.error("Không thể tải danh sách sản phẩm");
+          toast.error(error.message || "Không thể tải danh sách sản phẩm");
         }
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchItems();
-  }, [navigate]);
+  }, [navigate, packageCode]);
 
   // Hàm xử lý quay vòng quay
   const handleOpenCase = async () => {
     if (spinning) return;
+
+    // Kiểm tra số dư ví
+    if (userWallet < (wheelInfo?.price || 0)) {
+      toast.error("Số dư không đủ để quay. Vui lòng nạp thêm tiền vào ví!");
+      return;
+    }
 
     setSpinning(true);
     setResult(null);
@@ -104,6 +165,7 @@ const LuckyWheelDetail = () => {
 
       const response = await axios.post(`${BASE_URL}/wheel/spin`, null, {
         params: {
+          packageCode: packageCode,
           times: 1,
           amount: wheelInfo?.price || 0,
         },
@@ -112,47 +174,44 @@ const LuckyWheelDetail = () => {
         },
       });
 
-      if (response.data) {
-        // Tạo danh sách items mới với vị trí item trúng
-        const newItems = [];
-        for (let i = 0; i < 50; i++) {
-          newItems.push(items[Math.floor(Math.random() * items.length)]);
-        }
-
+      if (response.data?.$values?.[0]) {
         // Lấy ID của blind box trúng từ response
         const winningBlindBoxId = response.data.$values[0];
 
-        // Tìm thông tin chi tiết của blind box trúng từ danh sách items
+        // Tìm thông tin chi tiết của blind box trúng từ danh sách items gốc
         const winningItem = items.find((item) => item.id === winningBlindBoxId);
 
         if (!winningItem) {
-          toast.error("Không tìm thấy thông tin sản phẩm trúng thưởng");
-          setSpinning(false);
-          return;
+          throw new Error("Không tìm thấy thông tin sản phẩm trúng thưởng");
         }
 
-        const winningPosition = 25;
-        newItems[winningPosition] = winningItem;
+        // Tạo danh sách items mới với vị trí item trúng
+        const spinItems = Array(50)
+          .fill(null)
+          .map((_, i) => {
+            if (i === 25) return winningItem; // Vị trí giữa là item trúng
+            return items[Math.floor(Math.random() * items.length)];
+          });
 
-        setItems(newItems);
-        setOffset(0);
+        // Cập nhật số dư ví
+        setUserWallet((prev) => prev - (wheelInfo?.price || 0));
 
         // Animation quay
-        setTimeout(() => {
-          // Tạo hiệu ứng quay với tốc độ giảm dần
-          const itemWidth = 136; // Width của mỗi item (120px) + margin (16px)
-          const centerPosition = Math.floor(window.innerWidth / 2); // Vị trí giữa màn hình
-          const targetOffset =
-            -(winningPosition * itemWidth) + centerPosition - itemWidth / 2; // Điều chỉnh để item dừng ở giữa marker
+        const itemWidth = 136;
+        const centerPosition = Math.floor(window.innerWidth / 2);
+        const targetOffset = -(25 * itemWidth) + centerPosition - itemWidth / 2;
 
-          const duration = 5000; // Thời gian animation
+        setItems(spinItems);
+        setOffset(0);
+
+        setTimeout(() => {
+          const duration = 5000;
           const startTime = Date.now();
 
           const animate = () => {
             const elapsedTime = Date.now() - startTime;
             const progress = Math.min(elapsedTime / duration, 1);
 
-            // Easing function tạo hiệu ứng chậm dần
             const easeOutCubic = 1 - Math.pow(1 - progress, 3);
             const easedProgress =
               progress < 0.7
@@ -164,7 +223,6 @@ const LuckyWheelDetail = () => {
             if (progress < 1) {
               requestAnimationFrame(animate);
             } else {
-              // Hoàn thành animation
               setSpinning(false);
               setResult(winningItem);
               toast.success("Chúc mừng bạn đã nhận được phần thưởng!");
@@ -181,38 +239,68 @@ const LuckyWheelDetail = () => {
         toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
         navigate("/login");
       } else {
-        toast.error(error.response?.data?.detail || "Có lỗi xảy ra khi quay");
+        toast.error(error.message || "Có lỗi xảy ra khi quay");
       }
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-yellow-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-6">
+        <h1 className="text-3xl font-bold mb-4">Đã có lỗi xảy ra</h1>
+        <p className="text-gray-400 mb-6">{error}</p>
+        <button
+          onClick={() => navigate("/lucky-wheel")}
+          className="px-6 py-2 bg-yellow-500 text-black rounded-lg hover:bg-yellow-400"
+        >
+          Quay lại
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto bg-gray-900 text-white p-6 rounded-lg my-12">
+    <div className="flex flex-col items-center justify-center w-full max-w-6xl mx-auto bg-gray-900 text-white p-6 rounded-lg my-12">
       <h1 className="text-3xl font-bold mb-6">Vòng Quay May Mắn</h1>
 
       {/* Hiển thị thông tin vòng quay */}
       <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-4 mb-6 w-full">
         <div className="flex justify-center mb-4">
           <img
-            src="/api/placeholder/200/150"
+            src={items[0]?.image || "/placeholder.png"}
             alt="Wheel"
             className="h-32 hover:scale-105 transition-transform duration-300"
           />
         </div>
         <div className="text-center">
-          <h2 className="text-xl font-bold mb-2">Vòng Quay May Mắn</h2>
+          <h2 className="text-xl font-bold mb-2">Vòng Quay {packageCode}</h2>
           <p className="text-gray-400 text-sm">
             Có thể nhận được các sản phẩm giá trị
           </p>
-          {wheelInfo && (
-            <>
-              <p className="text-yellow-400 mt-2">
-                Giá mỗi lần quay: {wheelInfo.price.toLocaleString("vi-VN")} ₫
-              </p>
-              <p className="text-gray-400 mt-1">
-                Tổng số box: {wheelInfo.totalBlindBoxes}
-              </p>
-            </>
+          <p className="text-yellow-400 mt-2">
+            Giá mỗi lần quay: {wheelInfo.price.toLocaleString("vi-VN")} ₫
+          </p>
+          <p className="text-gray-400 mt-1">
+            Tổng số box: {wheelInfo.totalBlindBoxes}
+          </p>
+          <p className="text-blue-400 mt-1">
+            Số dư ví: {userWallet.toLocaleString("vi-VN")} ₫
+          </p>
+          {userWallet < wheelInfo.price && (
+            <button
+              onClick={() => navigate("/deposit")}
+              className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Nạp thêm tiền
+            </button>
           )}
         </div>
       </div>
@@ -253,17 +341,19 @@ const LuckyWheelDetail = () => {
       {/* Nút quay */}
       <button
         onClick={handleOpenCase}
-        disabled={spinning}
+        disabled={spinning || userWallet < wheelInfo.price}
         className={`px-8 py-3 rounded-lg text-lg font-bold transition-all duration-200 
           ${
-            spinning
+            spinning || userWallet < wheelInfo.price
               ? "bg-gray-700 cursor-not-allowed"
               : "bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 shadow-lg hover:shadow-yellow-500/30"
           }`}
       >
         {spinning
           ? "Đang quay..."
-          : `Quay (${wheelInfo?.price?.toLocaleString("vi-VN")} ₫)`}
+          : userWallet < wheelInfo.price
+          ? "Số dư không đủ"
+          : `Quay (${wheelInfo.price.toLocaleString("vi-VN")} ₫)`}
       </button>
 
       {/* Hiển thị kết quả */}
@@ -287,7 +377,18 @@ const LuckyWheelDetail = () => {
             <div>
               <p className="text-sm text-gray-300">Bạn đã nhận được</p>
               <h4 className="text-2xl font-bold">{result?.name}</h4>
-              <p className={`text-sm capitalize`}>{result?.rarity}</p>
+              <p className="text-sm">Số thứ tự: #{result?.number}</p>
+              <p className="text-sm">Kích thước: {result?.size}</p>
+              {result?.features?.map((feature, index) => (
+                <p key={index} className="text-sm text-gray-300">
+                  {feature.type}: {feature.description}
+                </p>
+              ))}
+              {result?.isSpecial && (
+                <span className="inline-block px-2 py-1 bg-yellow-500 text-black text-xs rounded mt-1">
+                  Special
+                </span>
+              )}
             </div>
           </div>
         </div>
