@@ -1,15 +1,15 @@
 // src/pages/About.jsx
+import { FaHeadset, FaShieldAlt, FaTags, FaTruck } from 'react-icons/fa';
 import logo2 from '../../assets/baby3.jpg';
 import logo4 from '../../assets/gacha.jpg';
 import logo1 from '../../assets/labubu.jpg';
 import logo3 from '../../assets/tuimu.jpg';
-import { FaShieldAlt, FaTruck, FaHeadset, FaTags } from 'react-icons/fa';
 
 function About() {
   return (
     <div className="bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20">
+      <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-20">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">
             Về Chúng Tôi
@@ -37,7 +37,7 @@ function About() {
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
-            <FaShieldAlt className="text-4xl text-blue-500 mx-auto mb-4" />
+            <FaShieldAlt className="text-4xl text-pink-500 mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-2">Sản Phẩm Chính Hãng</h3>
             <p className="text-gray-600">100% chính hãng, đầy đủ tem bảo hành</p>
           </div>

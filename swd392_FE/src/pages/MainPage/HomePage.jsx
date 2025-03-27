@@ -1,7 +1,6 @@
-import logo2 from '../../assets/logo.jpg';
-import logo1 from '../../assets/main1.jpg';
-import { FaSearch, FaShoppingCart, FaUser, FaGift, FaTruck, FaShieldAlt } from 'react-icons/fa';
+import { FaGift, FaShieldAlt, FaTruck } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import logo1 from '../../assets/main1.jpg';
 
 const HomePage = () => {
     return (
@@ -24,7 +23,7 @@ const HomePage = () => {
                             </p>
                             <Link
                                 to="/shopping"
-                                className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition-colors inline-block"
+                                className="bg-pink-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-pink-700 transition-colors inline-block"
                             >
                                 Mua Sắm Ngay
                             </Link>
@@ -38,7 +37,7 @@ const HomePage = () => {
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="text-center p-6">
-                            <FaGift className="text-4xl text-blue-500 mx-auto mb-4" />
+                            <FaGift className="text-4xl text-pink-500 mx-auto mb-4" />
                             <h3 className="text-xl font-semibold mb-2">Sản Phẩm Chính Hãng</h3>
                             <p className="text-gray-600">100% chính hãng, đầy đủ tem bảo hành</p>
                         </div>
@@ -136,9 +135,9 @@ const HomePage = () => {
                         <input
                             type="email"
                             placeholder="Nhập email của bạn"
-                            className="flex-1 px-4 py-2 rounded-full border focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="flex-1 px-4 py-2 rounded-full border focus:outline-none focus:ring-2 focus:ring-pink-500"
                         />
-                        <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors">
+                        <button className="bg-pink-600 text-white px-6 py-2 rounded-full hover:bg-pink-700 transition-colors">
                             Đăng Ký
                         </button>
                     </div>
