@@ -72,7 +72,7 @@ function Register() {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="Nguyễn Văn A"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                 required
                             />
                         </div>
@@ -87,7 +87,7 @@ function Register() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="abc@gmail.com"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                 required
                             />
                         </div>
@@ -102,7 +102,7 @@ function Register() {
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
                                 placeholder="0912345678"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                 required
                             />
                         </div>
@@ -116,7 +116,7 @@ function Register() {
                                 id="dateOfBirth"
                                 value={dateOfBirth}
                                 onChange={(e) => setDateOfBirth(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                 required
                             />
                         </div>
@@ -131,7 +131,7 @@ function Register() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="• • • • • • • •"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                 required
                             />
                         </div>
@@ -146,7 +146,7 @@ function Register() {
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 placeholder="• • • • • • • •"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                 required
                             />
                         </div>
@@ -154,7 +154,7 @@ function Register() {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70"
+                            className="w-full bg-pink-500 text-white py-2 px-4 rounded-md hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:opacity-70"
                         >
                             {isSubmitting ? 'Đang đăng ký...' : 'Đăng ký'}
                         </button>
@@ -165,7 +165,7 @@ function Register() {
                     Bạn đã có tài khoản?{' '}
                     <Link
                         to="/login"
-                        className="text-blue-500 font-bold hover:text-blue-600 underline underline-offset-2 decoration-blue-500/30 hover:decoration-blue-600"
+                        className="text-pink-500 font-bold hover:text-pink-600 underline underline-offset-2 decoration-pink-500/30 hover:decoration-pink-600"
                     >
                         Đăng nhập
                     </Link>

@@ -173,7 +173,7 @@ function PackageDetail() {
     return (
       <div className="container mx-auto p-4 flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500 mx-auto"></div>
           <p className="mt-4">Đang tải thông tin sản phẩm...</p>
         </div>
       </div>
@@ -183,7 +183,7 @@ function PackageDetail() {
     return (
       <div className="container mx-auto p-4 text-center min-h-[60vh] flex flex-col items-center justify-center">
         <p className="text-red-500 text-lg mb-4">{error}</p>
-        <Link to="/shopping" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+        <Link to="/shopping" className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600">
           <FaArrowLeft className="inline mr-2" /> Quay lại cửa hàng
         </Link>
       </div>
@@ -195,7 +195,7 @@ function PackageDetail() {
     return (
       <div className="container mx-auto p-4 text-center min-h-[60vh] flex flex-col items-center justify-center">
         <p className="text-lg mb-4">Không tìm thấy sản phẩm</p>
-        <Link to="/shopping" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+        <Link to="/shopping" className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600">
           <FaArrowLeft className="inline mr-2" /> Quay lại cửa hàng
         </Link>
       </div>
@@ -208,7 +208,7 @@ function PackageDetail() {
   return (
     <div className="container mx-auto p-4 bg-gray-50">
       <div className="mb-6">
-        <Link to="/shopping" className="inline-flex items-center text-blue-500 hover:text-blue-700">
+        <Link to="/shopping" className="inline-flex items-center text-pink-500 hover:text-pink-700">
           <FaArrowLeft className="mr-2" /> Quay lại cửa hàng
         </Link>
       </div>
@@ -251,7 +251,7 @@ function PackageDetail() {
                   <div 
                     key={index} 
                     className={`cursor-pointer border p-1 rounded ${
-                      selectedImage === image.url ? 'border-blue-500' : 'border-gray-300'
+                      selectedImage === image.url ? 'border-pink-500' : 'border-gray-300'
                     }`}
                     onClick={() => handleImageClick(image.url, index)}
                   >
@@ -317,7 +317,7 @@ function PackageDetail() {
                   onClick={() => setActiveTab('details')}
                   className={`py-2 px-4 ${
                     activeTab === 'details'
-                      ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
+                      ? 'border-b-2 border-pink-500 text-pink-600 font-medium'
                       : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
@@ -327,7 +327,7 @@ function PackageDetail() {
                   onClick={() => setActiveTab('blindboxes')}
                   className={`py-2 px-4 ${
                     activeTab === 'blindboxes'
-                      ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
+                      ? 'border-b-2 border-pink-500 text-pink-600 font-medium'
                       : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
@@ -480,7 +480,7 @@ function PackageDetail() {
               <button 
                 onClick={handleAddToCart}
                 disabled={addingToCart}
-                className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center disabled:opacity-70"
+                className="w-full py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition flex items-center justify-center disabled:opacity-70"
               >
                 {addingToCart ? (
                   <>
@@ -514,7 +514,7 @@ function PackageDetail() {
               </button>
               <button
                 onClick={handleLoginRedirect}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                className="px-4 py-2 bg-pink-600 text-white rounded-lg"
               >
                 Đăng nhập ngay
               </button>

@@ -67,7 +67,7 @@ function Login() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="abc@gmail.com"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                 required
                             />
                         </div>
@@ -79,7 +79,7 @@ function Login() {
                                 </label>
                                 <Link
                                     to="/forgot-password"
-                                    className="text-sm font-bold opacity-60 hover:opacity-100 hover:text-blue-600 transition-all duration-200"
+                                    className="text-sm font-bold opacity-60 hover:opacity-100 hover:text-pink-600 transition-all duration-200"
                                 >
                                     Quên mật khẩu?
                                 </Link>
@@ -90,7 +90,7 @@ function Login() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="• • • • • • • •"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg tracking-widest placeholder:text-lg placeholder:tracking-[0.2em]"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-lg tracking-widest placeholder:text-lg placeholder:tracking-[0.2em]"
                                 required
                             />
                         </div>
@@ -101,7 +101,7 @@ function Login() {
                                 id="remember"
                                 checked={rememberMe}
                                 onChange={(e) => setRememberMe(e.target.checked)}
-                                className="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+                                className="h-4 w-4 text-pink-500 border-gray-300 rounded focus:ring-pink-500"
                             />
                             <label htmlFor="remember" className="ml-2 text-sm text-gray-600">
                                 Nhớ mật khẩu
@@ -111,7 +111,7 @@ function Login() {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70"
+                            className="w-full bg-pink-500 text-white py-2 px-4 rounded-md hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:opacity-70"
                         >
                             {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
                         </button>
@@ -122,7 +122,7 @@ function Login() {
                     Bạn không có tài khoản?{' '}
                     <Link
                         to="/register"
-                        className="text-blue-500 font-bold hover:text-blue-600 underline underline-offset-2 decoration-blue-500/30 hover:decoration-blue-600"
+                        className="text-pink-500 font-bold hover:text-pink-600 underline underline-offset-2 decoration-pink-500/30 hover:decoration-pink-600"
                     >
                         Tạo tài khoản
                     </Link>

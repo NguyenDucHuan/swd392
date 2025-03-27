@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
-import { RiLockPasswordLine, RiLoginCircleLine, RiLogoutBoxLine, RiUserLine } from 'react-icons/ri';
+import { RiLockPasswordLine, RiLoginCircleLine, RiLogoutBoxLine, RiMoneyDollarCircleLine, RiUserLine } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../configs/globalVariables';
@@ -15,7 +15,7 @@ function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { totalItems } = useCart();
-  
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -45,8 +45,9 @@ function Navbar() {
   const profileOptions = [
     { id: 1, title: 'Quản lí Tài khoản', icon: RiUserLine, path: '/customer/profile' },
     { id: 2, title: 'Đổi mật khẩu', icon: RiLockPasswordLine, path: '/user-change-password' },
-    { id: 3, title: 'Hoạt động đăng nhập', icon: RiLoginCircleLine, path: '/login-activity' },
-    { id: 4, title: 'Đăng xuất', icon: RiLogoutBoxLine, action: 'logout' },
+    { id: 3, title: 'Nạp tiền', icon: RiMoneyDollarCircleLine, path: '/deposit' },
+    { id: 4, title: 'Hoạt động đăng nhập', icon: RiLoginCircleLine, path: '/login-activity' },
+    { id: 5, title: 'Đăng xuất', icon: RiLogoutBoxLine, action: 'logout' },
   ];
 
   const handleProfileOptionClick = (option) => {
@@ -64,19 +65,19 @@ function Navbar() {
       <div className="flex items-center">
         <Link to="/" className="flex items-center space-x-3">
           <img src='/assets/logo.jpg' alt="Logo" className="h-8 w-auto" />
-          <span className="text-xl font-semibold">PaneWay</span>
+          <span className="text-xl font-semibold">BlindBoxShop</span>
         </Link>
       </div>
 
       {/* Navigation links */}
       <div className="hidden md:flex items-center space-x-8">
-        <Link to="/about" className="text-gray-700 hover:text-blue-600">About</Link>
-        <Link to="/blog" className="text-gray-700 hover:text-blue-600">Blog</Link>
-        <Link to="/shopping" className="text-gray-700 hover:text-blue-600">Shop</Link>
-        <Link to="/lucky-wheel" className="text-gray-700 hover:text-blue-600">Lucky Wheel</Link>
+        <Link to="/about" className="text-gray-700 hover:text-pink-600">About</Link>
+        <Link to="/blog" className="text-gray-700 hover:text-pink-600">Blog</Link>
+        <Link to="/shopping" className="text-gray-700 hover:text-pink-600">Shop</Link>
+        <Link to="/lucky-wheel" className="text-gray-700 hover:text-pink-600">Lucky Wheel</Link>
       </div>
 
-      
+
       <div className="flex items-center space-x-4">
         {user ? (
           <>
@@ -89,7 +90,7 @@ function Navbar() {
                 </span>
               )}
             </Link>
-            
+
             <div className="relative">
               <button
                 className="flex items-center space-x-3 hover:bg-gray-100 rounded-lg p-2"
@@ -105,7 +106,7 @@ function Navbar() {
                     {loading ? 'Đang tải...' : (userProfile?.name || 'User')}
                   </span>
                   <span className="text-green-600 font-medium">
-                    {loading ? 'Đang tải...' :userProfile?.walletBalance?.toLocaleString('vi-VN') || 'balance'} ₫
+                    {loading ? 'Đang tải...' : userProfile?.walletBalance?.toLocaleString('vi-VN') || 'balance'} ₫
                   </span>
                 </div>
               </button>
@@ -132,13 +133,13 @@ function Navbar() {
           <>
             <Link
               to="/login"
-              className="px-4 py-2 text-blue-600 hover:text-blue-800"
+              className="px-4 py-2 text-pink-600 hover:text-pink-800"
             >
               Đăng nhập
             </Link>
             <Link
               to="/register"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
             >
               Đăng ký
             </Link>

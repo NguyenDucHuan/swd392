@@ -311,7 +311,7 @@ function CreateUnknownPackage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                  className="w-full px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 disabled:opacity-50"
                 >
                   {isSubmitting ? 'Đang tạo...' : 'Tạo Package'}
                 </button>

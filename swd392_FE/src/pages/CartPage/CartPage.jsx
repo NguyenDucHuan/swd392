@@ -160,7 +160,7 @@ function CartPage() {
           </div>
           <h2 className="text-2xl font-semibold mb-2">Giỏ hàng của bạn đang trống</h2>
           <p className="text-gray-500 mb-6">Hãy thêm sản phẩm vào giỏ hàng để tiến hành mua hàng</p>
-          <Link to="/shopping" className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 inline-flex items-center">
+          <Link to="/shopping" className="px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 inline-flex items-center">
             <FaArrowLeft className="mr-2" /> Tiếp tục mua sắm
           </Link>
         </div>
@@ -255,7 +255,7 @@ function CartPage() {
           </div>
 
           <div className="flex justify-between items-center mb-6">
-            <Link to="/shopping" className="text-blue-600 hover:text-blue-800 flex items-center">
+            <Link to="/shopping" className="text-pink-600 hover:text-pink-800 flex items-center">
               <FaArrowLeft className="mr-2" /> Tiếp tục mua sắm
             </Link>
             <button
@@ -292,7 +292,7 @@ function CartPage() {
             <button
               onClick={handleCheckout}
               disabled={isProcessing}
-              className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center disabled:bg-blue-400"
+              className="w-full py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 flex items-center justify-center disabled:bg-pink-400"
             >
               {isProcessing ? (
                 <>
@@ -369,7 +369,7 @@ function CartPage() {
 
                     <div className="text-right">
                       <p className="text-sm text-gray-700 mb-1">Tổng cộng:</p>
-                      <p className="text-lg font-bold text-blue-600">{formatCurrency(calculateSubtotal())}</p>
+                      <p className="text-lg font-bold text-pink-600">{formatCurrency(calculateSubtotal())}</p>
                     </div>
                   </div>
 
@@ -384,7 +384,7 @@ function CartPage() {
                     <button
                       onClick={processOrder}
                       disabled={isProcessing}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                      className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
                     >
                       {isProcessing ? "Đang xử lý..." : "Tiến hành thanh toán"}
                     </button>
