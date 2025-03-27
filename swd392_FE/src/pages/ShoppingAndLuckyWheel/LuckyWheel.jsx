@@ -1,14 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { BASE_URL } from '../../configs/globalVariables';
+
 
 const LuckyWheel = () => {
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState(null);
   const [items, setItems] = useState([]);
   const [offset, setOffset] = useState(0);
+  const [wheelInfo, setWheelInfo] = useState(null);
   const spinnerRef = useRef(null);
-
-  // Token được cung cấp
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoidGFubG1zZTE3MDU4N0BmcHQuZWR1LnZuIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsIm5iZiI6MTc0Mjc1MDczNiwiZXhwIjoxNzQyNzU5NzM2LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3Mjk1IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI5NSJ9.TOShAT0mFCaULoEOhw5dJOVQxzhGpOGzPefihsaahH4";
+  const navigate = useNavigate();
 
   // Các phân loại skin với màu sắc tương ứng
   const rarities = {
@@ -24,23 +29,67 @@ const LuckyWheel = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch('/api/wheel', {
-          method: 'GET',
+        const token = localStorage.getItem('access_token');
+        console.log('Token:', token); // Debug log
+
+        if (!token) {
+          toast.error('Vui lòng đăng nhập để sử dụng tính năng này');
+          navigate('/login');
+          return;
+        }
+
+        const response = await axios.get(`${BASE_URL}/wheel`, {
           headers: {
-            'Authorization': 'Bearer ' + token
+            'Authorization': `Bearer ${token}`
           }
         });
-        const data = await response.json();
-        setItems(data.packages);
+
+        console.log('API Response:', response.data); // Debug log
+
+        if (response.data) {
+          setWheelInfo({
+            price: response.data.price
+          });
+
+          // Chuyển đổi dữ liệu packages thành định dạng hiển thị
+          const formattedItems = response.data.packages.$values.flatMap(pkg =>
+            pkg.blindBoxes.$values
+              .filter(box => !box.isSold) // Chỉ lấy các box chưa bán
+              .map(box => ({
+                id: box.blindBoxId,
+                name: `${box.packageName} - ${box.color}`,
+                image: box.imageUrls.$values[0] || '/placeholder.png',
+                rarity: box.isSpecial ? 'mythical' : 'common',
+                price: box.discountedPrice,
+                isSpecial: box.isSpecial,
+                isKnowned: box.isKnowned
+              }))
+          );
+
+          console.log('Formatted Items:', formattedItems); // Debug log
+
+          if (formattedItems.length === 0) {
+            toast.error('Không có sản phẩm nào khả dụng');
+            return;
+          }
+
+          setItems(formattedItems);
+        }
       } catch (error) {
         console.error('Error fetching items:', error);
+        if (error.response?.status === 401) {
+          toast.error('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại');
+          navigate('/login');
+        } else {
+          toast.error('Không thể tải danh sách sản phẩm');
+        }
       }
     };
 
     fetchItems();
-  }, [token]);
+  }, [navigate]);
 
-  // Hàm xử lý mở rương
+  // Hàm xử lý quay vòng quay
   const handleOpenCase = async () => {
     if (spinning) return;
 
@@ -48,77 +97,102 @@ const LuckyWheel = () => {
     setResult(null);
 
     try {
-      const response = await fetch(`/api/wheel/play?times=1&amount=2.49`, {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Content-Type': 'application/json'
-        }
-      });
-      const data = await response.json();
+      const token = localStorage.getItem('access_token');
+      console.log('Token for spin:', token); // Debug log
 
-      // Tạo danh sách items mới với vị trí item trúng
-      const newItems = [];
-      for (let i = 0; i < 50; i++) {
-        newItems.push(items[Math.floor(Math.random() * items.length)]);
+      if (!token) {
+        toast.error('Vui lòng đăng nhập để sử dụng tính năng này');
+        navigate('/login');
+        return;
       }
 
-      // Chèn item trúng vào vị trí xác định (item ở giữa khi dừng)
-      const winningItem = data[0]; // Giả sử API trả về mảng các item trúng
-      const winningPosition = 25;
-      newItems[winningPosition] = winningItem;
+      const response = await axios.post(`${BASE_URL}/wheel/spin`, null, {
+        params: {
+          times: 1,
+          amount: wheelInfo?.price || 0
+        },
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-      setItems(newItems);
-      setOffset(0);
+      console.log('Spin Response:', response.data); // Debug log
 
-      // Animation mở rương
-      setTimeout(() => {
-        // Tạo hiệu ứng quay với tốc độ giảm dần
-        const targetOffset = (winningPosition - 2) * -120; // Số pixel để di chuyển đến vị trí item trúng
-        const duration = 5000; // Thời gian animation
-        const startTime = Date.now();
+      if (response.data) {
+        // Tạo danh sách items mới với vị trí item trúng
+        const newItems = [];
+        for (let i = 0; i < 50; i++) {
+          newItems.push(items[Math.floor(Math.random() * items.length)]);
+        }
 
-        const animate = () => {
-          const elapsedTime = Date.now() - startTime;
-          const progress = Math.min(elapsedTime / duration, 1);
+        // Chèn item trúng vào vị trí xác định (item ở giữa khi dừng)
+        const winningItem = items.find(item => item.id === response.data[0]);
+        console.log('Winning Item:', winningItem); // Debug log
+        const winningPosition = 25;
+        newItems[winningPosition] = winningItem;
 
-          // Easing function tạo hiệu ứng chậm dần
-          const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-          const easedProgress = progress < 0.7
-            ? progress
-            : 0.7 + (easeOutCubic - 0.7) * (1 / 0.3) * (progress - 0.7);
+        setItems(newItems);
+        setOffset(0);
 
-          setOffset(targetOffset * easedProgress);
+        // Animation quay
+        setTimeout(() => {
+          // Tạo hiệu ứng quay với tốc độ giảm dần
+          const targetOffset = (winningPosition - 2) * -120; // Số pixel để di chuyển đến vị trí item trúng
+          const duration = 5000; // Thời gian animation
+          const startTime = Date.now();
 
-          if (progress < 1) {
-            requestAnimationFrame(animate);
-          } else {
-            // Hoàn thành animation
-            setSpinning(false);
-            setResult(winningItem);
-          }
-        };
+          const animate = () => {
+            const elapsedTime = Date.now() - startTime;
+            const progress = Math.min(elapsedTime / duration, 1);
 
-        requestAnimationFrame(animate);
-      }, 500);
+            // Easing function tạo hiệu ứng chậm dần
+            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+            const easedProgress = progress < 0.7
+              ? progress
+              : 0.7 + (easeOutCubic - 0.7) * (1 / 0.3) * (progress - 0.7);
+
+            setOffset(targetOffset * easedProgress);
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              // Hoàn thành animation
+              setSpinning(false);
+              setResult(winningItem);
+              toast.success('Chúc mừng bạn đã nhận được phần thưởng!');
+            }
+          };
+
+          requestAnimationFrame(animate);
+        }, 500);
+      }
     } catch (error) {
       console.error('Error playing wheel:', error);
       setSpinning(false);
+      if (error.response?.status === 401) {
+        toast.error('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại');
+        navigate('/login');
+      } else {
+        toast.error(error.response?.data?.detail || 'Có lỗi xảy ra khi quay');
+      }
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto bg-gray-900 text-white p-6 rounded-lg my-12">
-      <h1 className="text-3xl font-bold mb-6">Blindbox Case Opener</h1>
+      <h1 className="text-3xl font-bold mb-6">Vòng Quay May Mắn</h1>
 
-      {/* Hiển thị rương */}
+      {/* Hiển thị thông tin vòng quay */}
       <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-4 mb-6 w-full">
         <div className="flex justify-center mb-4">
-          <img src="/api/placeholder/200/150" alt="Case" className="h-32 hover:scale-105 transition-transform duration-300" />
+          <img src="/api/placeholder/200/150" alt="Wheel" className="h-32 hover:scale-105 transition-transform duration-300" />
         </div>
         <div className="text-center">
-          <h2 className="text-xl font-bold mb-2">Dreams & Nightmares Case</h2>
-          <p className="text-gray-400 text-sm">Có thể nhận được các skin hiếm và dao</p>
+          <h2 className="text-xl font-bold mb-2">Vòng Quay May Mắn</h2>
+          <p className="text-gray-400 text-sm">Có thể nhận được các sản phẩm giá trị</p>
+          {wheelInfo && (
+            <p className="text-yellow-400 mt-2">Giá mỗi lần quay: {wheelInfo.price.toLocaleString('vi-VN')} ₫</p>
+          )}
         </div>
       </div>
 
@@ -149,7 +223,7 @@ const LuckyWheel = () => {
         </div>
       </div>
 
-      {/* Nút mở rương */}
+      {/* Nút quay */}
       <button
         onClick={handleOpenCase}
         disabled={spinning}
@@ -159,7 +233,7 @@ const LuckyWheel = () => {
             : 'bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 shadow-lg hover:shadow-yellow-500/30'
           }`}
       >
-        {spinning ? 'Đang mở...' : 'Mở rương (2.49$)'}
+        {spinning ? 'Đang quay...' : `Quay (${wheelInfo?.price?.toLocaleString('vi-VN')} ₫)`}
       </button>
 
       {/* Hiển thị kết quả */}
