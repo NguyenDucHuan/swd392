@@ -124,6 +124,13 @@ namespace BBSS.Api.Services.Implements
             );
             var totalBlindBoxes = blindBoxes.Count;
 
+            var package = await _uow.GetRepository<Package>().SingleOrDefaultAsync(
+                predicate: p => string.IsNullOrEmpty(packageCode) || p.PakageCode == packageCode,
+                include: i => i.Include(p => p.PackageImages),
+                orderBy: o => o.OrderByDescending(p => p.PackageImages.Count)
+            );
+            var images = package.PackageImages.Select(p => _mapper.Map<ImageViewModel>(p)).ToList();
+
             var whellBlindBoxes = new List<WheelBlindBoxViewModel>();
 
             var groupedBlindBoxes = new Dictionary<(string, string), List<BlindBoxViewModel>> ();
@@ -161,6 +168,7 @@ namespace BBSS.Api.Services.Implements
             {                               
                 Price = blindBoxes.Average(b => b.DiscountedPrice),
                 TotalBlindBoxes = totalBlindBoxes,
+                Images = images,
                 WheelBlindBoxes = whellBlindBoxes
             };
 
