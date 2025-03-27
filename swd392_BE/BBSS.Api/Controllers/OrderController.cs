@@ -20,7 +20,7 @@ namespace BBSS.Api.Controllers
         [HttpPost]
         [Route(Router.OrderRoute.CreateOrder)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
-        public async Task<ActionResult> CreateOrder(int? voucherId, [FromBody]OrderCreateRequest request)
+        public async Task<ActionResult> CreateOrder(int? voucherId, [FromBody] OrderCreateRequest request)
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (email == null) return Unauthorized();

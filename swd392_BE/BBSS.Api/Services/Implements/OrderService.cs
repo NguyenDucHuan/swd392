@@ -31,7 +31,7 @@ namespace BBSS.Api.Services.Implements
         {
             await _uow.BeginTransactionAsync();
             try
-            {            
+            {
                 var user = await _uow.GetRepository<User>().SingleOrDefaultAsync(
                     predicate: p => p.Email == email
                 );
@@ -61,7 +61,7 @@ namespace BBSS.Api.Services.Implements
                     else
                     {
                         return new MethodResult<string>.Failure("Invalid type product", StatusCodes.Status400BadRequest);
-                    }                    
+                    }
                 }
 
                 if (voucherId.HasValue)
@@ -208,7 +208,7 @@ namespace BBSS.Api.Services.Implements
                     order.TotalAmount += orderDetail.UnitPrice;
                 }
 
-                _uow.GetRepository<BlindBox>().UpdateRange(packageWithAtLeastBB.BlindBoxes);                
+                _uow.GetRepository<BlindBox>().UpdateRange(packageWithAtLeastBB.BlindBoxes);
 
                 if (numOfPackageNext == 1)
                 {
@@ -223,7 +223,7 @@ namespace BBSS.Api.Services.Implements
                         throw new Exception("Do not enough blind box");
                     }
 
-                    var blindBoxIds = package.BlindBoxes                                                                
+                    var blindBoxIds = package.BlindBoxes
                                                         .Take(numOfBBLeft)
                                                         .Select(bb => bb.BlindBoxId)
                                                         .ToList();
@@ -388,7 +388,7 @@ namespace BBSS.Api.Services.Implements
                                                  p.User.Email.Contains(search) ||
                                                  p.Address.Contains(search) ||
                                                  p.Phone.Contains(search)) &&
-                (string.IsNullOrEmpty(filter) || 
+                (string.IsNullOrEmpty(filter) ||
                 filter.Contains(p.OrderStatuses.OrderByDescending(x => x.UpdateTime).FirstOrDefault().Status.ToLower())) &&
                 (minAmount == null || p.TotalAmount >= minAmount) &&
                 (maxAmount == null || p.TotalAmount <= maxAmount);
@@ -545,7 +545,7 @@ namespace BBSS.Api.Services.Implements
             {
                 throw;
             }
-            
+
         }
 
         private async Task HandleCancelOrderAsync(Order order)
@@ -595,7 +595,7 @@ namespace BBSS.Api.Services.Implements
                 {
                     return new MethodResult<string>.Failure("Order not found", StatusCodes.Status404NotFound);
                 }
-               
+
                 var orderStatusCurrent = await _uow.GetRepository<OrderStatus>().SingleOrDefaultAsync(
                     predicate: p => p.OrderId == orderId,
                     orderBy: o => o.OrderByDescending(x => x.UpdateTime)
