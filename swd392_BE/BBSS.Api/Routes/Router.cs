@@ -59,6 +59,7 @@ namespace BBSS.Api.Routes
         {
             public const string Wheel = $"{prefix}wheel";
             public const string GetWheel = $"{Wheel}";
+            public const string GetWheelDetail = $"{Wheel}-detail";
             public const string PlayWheel = $"{Wheel}/spin";
         }
         public static class PackageRoute
@@ -88,6 +89,7 @@ namespace BBSS.Api.Routes
             public const string Transactions = $"{prefix}transactions";
             public const string GetAllTransactions = $"{Transactions}";
             public const string GetUserTransactions = $"{Transactions}/me";
+            public const string GetTransaction = $"{Transactions}/{Id}";
         }
 
         public static class InventoryRoute

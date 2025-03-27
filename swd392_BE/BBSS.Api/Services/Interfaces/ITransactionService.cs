@@ -9,5 +9,6 @@ namespace BBSS.Api.Services.Interfaces
     {
         Task<MethodResult<IPaginate<TransactionViewModel>>> GetAllTransactionsAsync(PaginateModel model, decimal? minAmount, decimal? maxAmount);
         Task<MethodResult<IPaginate<TransactionViewModel>>> GetUserTransactionsAsync(int userId, PaginateModel model, decimal? minAmount, decimal? maxAmount);
+        Task<MethodResult<TransactionViewModel>> GetTransactionByIdAsync(int transactionId);
     }
 }

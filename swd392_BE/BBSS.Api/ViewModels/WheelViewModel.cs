@@ -3,6 +3,18 @@
 namespace BBSS.Api.ViewModels
 {
     public class WheelViewModel
+    {
+        public string PackageCode { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public string? Manufacturer { get; set; }
+        public int CategoryId { get; set; }
+        public float Rate { get; set; }
+        public decimal Price { get; set; }
+        public int TotalBlindBoxes { get; set; }
+        public List<ImageViewModel> Images { get; set; } = new List<ImageViewModel>();
+    }
+    public class WheelDetailViewModel
     {        
         public decimal Price { get; set; }
         public int TotalBlindBoxes { get; set; }
