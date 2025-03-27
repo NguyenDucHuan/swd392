@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RiAddLine, RiCloseFill, RiDeleteBin6Line, RiEditLine, RiFilter3Line, RiInformationLine, RiSearchLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -22,8 +22,9 @@ function PackageManager() {
   const [isKnownFilter, setIsKnownFilter] = useState(null); // null means "all"
   const [showIsKnownDropdown, setShowIsKnownDropdown] = useState(false);
   
-  // Simple expanded state - just store the ID of the expanded package
+  // For the dropdown UI
   const [expandedPackageId, setExpandedPackageId] = useState(null);
+  const detailsDropdownRef = useRef(null);
   
   // Pagination
   const [pagination, setPagination] = useState({
@@ -32,6 +33,20 @@ function PackageManager() {
     totalItems: 0,
     totalPages: 1
   });
+
+  // Handle clicks outside dropdown to close it
+  useEffect(() => {
+    function handleOutsideClick(event) {
+      if (expandedPackageId !== null && 
+          detailsDropdownRef.current && 
+          !detailsDropdownRef.current.contains(event.target)) {
+        setExpandedPackageId(null);
+      }
+    }
+    
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [expandedPackageId]);
 
   // Fetch categories
   useEffect(() => {
@@ -119,7 +134,6 @@ function PackageManager() {
     setPagination({ ...pagination, currentPage: 1 });
   };
 
-  // Simple toggle function for expanding/collapsing rows
   const togglePackageDetails = (packageId, e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -152,6 +166,100 @@ function PackageManager() {
     { value: 'available', label: 'Còn hàng' },
     { value: 'sold', label: 'Đã bán' }
   ];
+
+  // Render BlindBox details similar to order details in ProfilePage
+  const renderBlindBoxDetails = (pkg) => {
+    if (!pkg.blindBoxes || !pkg.blindBoxes.$values || pkg.blindBoxes.$values.length === 0) return null;
+  
+    const blindBoxes = pkg.blindBoxes.$values;
+  
+    return (
+      <div className="p-4 bg-gray-50">
+        <div className="mb-3">
+          <h4 className="font-medium text-gray-900 mb-2">Thông tin BlindBox</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {blindBoxes.map((box, index) => (
+              <div 
+                key={index} 
+                className="border border-gray-200 rounded-lg p-3 bg-white hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium">BlindBox #{box.number}</span>
+                  <div className="flex space-x-1">
+                    {box.isSpecial && (
+                      <span className="px-2 py-0.5 bg-pink-100 text-pink-800 rounded-full text-xs">SECRET</span>
+                    )}
+                    {box.isSold && (
+                      <span className="px-2 py-0.5 bg-gray-100 text-gray-800 rounded-full text-xs">ĐÃ BÁN</span>
+                    )}
+                    {!box.status && (
+                      <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full text-xs">KO HOẠT ĐỘNG</span>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2 text-sm mb-2">
+                  <div><span className="text-gray-500">Màu:</span> {box.color || 'N/A'}</div>
+                  <div><span className="text-gray-500">Kích thước:</span> {box.size || 'N/A'}cm</div>
+                  <div><span className="text-gray-500">Giá gốc:</span> {box.price?.toLocaleString() || 'N/A'}đ</div>
+                  <div>
+                    <span className="text-gray-500">Giảm giá:</span>{' '}
+                    {box.discount > 0 ? `${box.discount}%` : 'Không giảm giá'}
+                  </div>
+                  {box.discount > 0 && (
+                    <div className="col-span-2">
+                      <span className="text-gray-500">Giá sau giảm:</span>{' '}
+                      <span className="ml-1 text-pink-600 font-medium">
+                        {box.discountedPrice?.toLocaleString() || 'N/A'}đ
+                      </span>
+                    </div>
+                  )}
+                  <div><span className="text-gray-500">Loại:</span> {box.isKnowned ? 'Known Box' : 'Unknown Box'}</div>
+                  <div>
+                    <span className="text-gray-500">Trạng thái:</span>{' '}
+                    {box.isSold ? 'Chưa bán' : 'Đã bán'}
+                  </div>
+                </div>
+                
+                {box.features && box.features.$values && box.features.$values.length > 0 && (
+                  <div className="mt-2">
+                    <span className="text-gray-500 text-sm">Đặc tính:</span>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {box.features.$values.map((feature, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full text-xs"
+                        >
+                          {feature.description || feature.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {box.imageUrls && box.imageUrls.$values && box.imageUrls.$values.length > 0 && (
+                  <div className="mt-2">
+                    <span className="text-gray-500 text-sm">Hình ảnh:</span>
+                    <div className="flex overflow-x-auto space-x-2 mt-1 pb-1">
+                      {box.imageUrls.$values.map((image, imgIdx) => (
+                        <img
+                          key={imgIdx}
+                          src={image.url}
+                          alt={`BlindBox ${box.number}`}
+                          className="w-16 h-16 object-cover rounded"
+                          loading="lazy"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="flex-1 bg-gray-50 p-8">
@@ -402,7 +510,8 @@ function PackageManager() {
                     <>
                       {packages.map(pkg => (
                         <React.Fragment key={pkg.packageId}>
-                          <tr className="hover:bg-gray-50">
+                          {/* Main package row */}
+                          <tr className={`hover:bg-gray-50 ${expandedPackageId === pkg.packageId ? 'bg-gray-50 border-b-0' : ''}`}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                               {pkg.pakageCode}
                             </td>
@@ -416,22 +525,25 @@ function PackageManager() {
                               {pkg.manufacturer || 'Không có'}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {pkg.blindBoxes?.length || pkg.totalBlindBox || 0}
+                              {pkg.blindBoxes?.$values?.length || pkg.totalBlindBox || 0}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               {pkg.price}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                              {pkg.blindBoxes && pkg.blindBoxes.length > 0 && (
-                                <div>
-                                  <button 
-                                    className={`text-pink-600 hover:text-pink-800 flex items-center justify-center mx-auto`}
-                                    onClick={(e) => togglePackageDetails(pkg.packageId, e)}
-                                  >
-                                    <RiInformationLine className="mr-1" size={18} />
-                                    {expandedPackageId === pkg.packageId ? 'Ẩn chi tiết' : 'Xem chi tiết'}
-                                  </button>
-                                </div>
+                              {pkg.blindBoxes && pkg.blindBoxes.$values && pkg.blindBoxes.$values.length > 0 ? (
+                                <button 
+                                  className="text-pink-600 hover:text-pink-800 flex items-center justify-center mx-auto"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setExpandedPackageId(expandedPackageId === pkg.packageId ? null : pkg.packageId);
+                                  }}
+                                >
+                                  <RiInformationLine className="mr-1" size={18} />
+                                  {expandedPackageId === pkg.packageId ? 'Ẩn chi tiết' : 'Xem chi tiết'}
+                                </button>
+                              ) : (
+                                <span className="text-gray-400">Không có dữ liệu</span>
                               )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -454,59 +566,12 @@ function PackageManager() {
                               </div>
                             </td>
                           </tr>
+                          
+                          {/* Expanded details row */}
                           {expandedPackageId === pkg.packageId && (
                             <tr>
-                              <td colSpan="8" className="bg-gray-50 p-0">
-                                <div className="p-4 border-t border-gray-200">
-                                  <h4 className="font-semibold text-gray-900 mb-3">Chi tiết BlindBox</h4>
-                                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {pkg.blindBoxes.map((box, index) => (
-                                      <div key={index} className="border border-gray-200 rounded-lg p-3 bg-white">
-                                        <div className="flex items-center justify-between mb-2">
-                                          <span className="font-medium">BlindBox #{box.number}</span>
-                                          {box.isSpecial && (
-                                            <span className="px-2 py-0.5 bg-pink-100 text-pink-800 rounded-full text-xs">SECRET</span>
-                                          )}
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-2 text-sm">
-                                          <div><span className="text-gray-500">Màu:</span> {box.color || "N/A"}</div>
-                                          <div><span className="text-gray-500">Kích thước:</span> {box.size || "N/A"}cm</div>
-                                          <div><span className="text-gray-500">Giá:</span> {box.price?.toLocaleString() || "N/A"}đ</div>
-                                          <div><span className="text-gray-500">Giảm giá:</span> {box.discount || "0"}%</div>
-                                        </div>
-                                        {box.features && box.features.length > 0 && (
-                                          <div className="mt-2">
-                                            <span className="text-gray-500 text-sm">Đặc tính:</span>
-                                            <div className="flex flex-wrap gap-1 mt-1">
-                                              {box.features.map((feature, idx) => (
-                                                <span key={idx} className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full text-xs">
-                                                  {feature.description || feature.name}
-                                                </span>
-                                              ))}
-                                            </div>
-                                          </div>
-                                        )}
-                                        {((box.images && box.images.length > 0) || (box.imageUrls && box.imageUrls.length > 0)) && (
-                                          <div className="mt-2 flex overflow-x-auto space-x-2 pb-1">
-                                            {(box.imageUrls || box.images || []).slice(0, 3).map((image, imgIdx) => (
-                                              <img 
-                                                key={imgIdx} 
-                                                src={image.url} 
-                                                alt={`BlindBox ${box.number}`}
-                                                className="w-12 h-12 object-cover rounded"
-                                              />
-                                            ))}
-                                            {(box.imageUrls?.length > 3 || box.images?.length > 3) && (
-                                              <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-gray-500 text-xs">
-                                                +{(box.imageUrls || box.images).length - 3}
-                                              </div>
-                                            )}
-                                          </div>
-                                        )}
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
+                              <td colSpan="8" className="px-0 py-0 border-t-0">
+                                {renderBlindBoxDetails(pkg)}
                               </td>
                             </tr>
                           )}

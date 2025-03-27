@@ -342,11 +342,13 @@ function CreateKnownPackage() {
           }
         });
       });
-      
+      const token = localStorage.getItem('access_token');
       // Send the request
       await axios.post(`${BASE_URL}/package/create-known-package`, packageFormData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
+          
         }
       });
       

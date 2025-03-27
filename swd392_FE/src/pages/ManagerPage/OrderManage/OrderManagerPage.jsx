@@ -41,8 +41,6 @@ function OrderManagerPage() {
     
     return sortedStatuses[0].status;
   };
-
-  // Fetch orders when component mounts or dependencies change
   useEffect(() => {
     fetchOrders();
   }, [pagination.currentPage, pagination.pageSize, selectedFilter]);
@@ -62,8 +60,6 @@ function OrderManagerPage() {
       if (selectedFilter) {
         params.status = selectedFilter;
       }
-      
-      // Get token from localStorage
       const token = localStorage.getItem('access_token');
       
       if (!token) {
@@ -72,8 +68,6 @@ function OrderManagerPage() {
         setLoading(false);
         return;
       }
-  
-      // Updated endpoint to match the curl command
       const response = await axios.get(`${BASE_URL}/orders/all-order`, { 
         params,
         headers: {
@@ -115,35 +109,84 @@ function OrderManagerPage() {
     }
   };
 
-  // Handle search form submission
   const handleSearch = (e) => {
     e.preventDefault();
     setPagination({ ...pagination, currentPage: 1 });
     fetchOrders();
   };
 
-  // Toggle order details
   const toggleOrderDetails = (orderId) => {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
-  // View order details
   const viewOrderDetails = (order) => {
     setSelectedOrder(order);
     setShowOrderDetailModal(true);
   };
+const updateOrderStatus = async (orderId, newStatus) => {
+  try {
+    // Get token from localStorage
+    const token = localStorage.getItem('access_token');
+    
+    if (!token) {
+      toast.error("Bạn cần đăng nhập để cập nhật trạng thái đơn hàng");
+      return;
+    }
 
-  // Update order status
-  const updateOrderStatus = async (orderId, newStatus) => {
-    try {
-      // Get token from localStorage
-      const token = localStorage.getItem('access_token');
-      
-      if (!token) {
-        toast.error("Bạn cần đăng nhập để cập nhật trạng thái đơn hàng");
-        return;
-      }
-
+    const currentStatus = getCurrentStatus(selectedOrder)?.toLowerCase();
+    
+    // Status transition validation logic
+    switch (newStatus.toLowerCase()) {
+      case 'pending':
+        // Pending can be set from any status (for reset purposes)
+        break;
+        
+      case 'paid':
+        // Only allow transition to Paid from Pending
+        if (currentStatus !== 'pending') {
+          toast.error("Chỉ đơn hàng ở trạng thái Chờ xử lý mới có thể chuyển sang Đã thanh toán");
+          return;
+        }
+        break;
+        
+      case 'shipping':
+        // Only allow transition to Shipping from Paid
+        if (currentStatus !== 'paid') {
+          toast.error("Chỉ những đơn hàng đã thanh toán mới có thể chuyển sang trạng thái vận chuyển");
+          return;
+        }
+        
+        // Use confirm-order endpoint for shipping status
+        await axios.post(`${BASE_URL}/orders/confirm-order?orderId=${orderId}`, 
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        // Return early as we've already made the API call
+        break;
+        
+      case 'completed':
+        // Only allow completion from Shipping status
+        if (currentStatus !== 'shipping') {
+          toast.error("Chỉ đơn hàng ở trạng thái Đang vận chuyển mới có thể chuyển sang Hoàn thành");
+          return;
+        }
+        break;
+        
+      case 'canceled':
+        // Only allow cancellation from Pending or Paid, not from Shipping or Completed
+        if (currentStatus !== 'pending' && currentStatus !== 'paid') {
+          toast.error("Không thể hủy đơn hàng đã vận chuyển hoặc hoàn thành");
+          return;
+        }
+        break;
+    }
+    
+    // If not shipping status (which is already handled), make the regular status update API call
+    if (newStatus.toLowerCase() !== 'shipping') {
       await axios.put(`${BASE_URL}/orders/${orderId}/status`, 
         { status: newStatus },
         {
@@ -152,54 +195,54 @@ function OrderManagerPage() {
           }
         }
       );
-      
-      // Update local state
-      const updatedOrders = orders.map(order => {
-        if (order.orderId === orderId) {
-          // Add the new status to the statuses array
-          const newStatusObj = {
-            status: newStatus,
-            updateTime: new Date().toISOString()
-          };
-          
-          return {
-            ...order,
-            statuses: {
-              $id: order.statuses?.$id || "",
-              $values: [newStatusObj, ...(order.statuses?.$values || [])]
-            }
-          };
-        }
-        return order;
-      });
-      
-      setOrders(updatedOrders);
-      
-      toast.success("Trạng thái đơn hàng đã được cập nhật!");
-      
-      if (selectedOrder?.orderId === orderId) {
+    }
+    
+    // Update local state
+    const updatedOrders = orders.map(order => {
+      if (order.orderId === orderId) {
         const newStatusObj = {
           status: newStatus,
           updateTime: new Date().toISOString()
         };
         
-        setSelectedOrder({
-          ...selectedOrder,
+        return {
+          ...order,
           statuses: {
-            $id: selectedOrder.statuses?.$id || "",
-            $values: [newStatusObj, ...(selectedOrder.statuses?.$values || [])]
+            $id: order.statuses?.$id || "",
+            $values: [newStatusObj, ...(order.statuses?.$values || [])]
           }
-        });
+        };
       }
-    } catch (err) {
-      console.error("Failed to update order status:", err);
-      if (err.response?.status === 401) {
-        toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
-      } else {
-        toast.error("Không thể cập nhật trạng thái đơn hàng");
-      }
+      return order;
+    });
+    
+    setOrders(updatedOrders);
+    
+    toast.success("Trạng thái đơn hàng đã được cập nhật!");
+    
+    if (selectedOrder?.orderId === orderId) {
+      const newStatusObj = {
+        status: newStatus,
+        updateTime: new Date().toISOString()
+      };
+      
+      setSelectedOrder({
+        ...selectedOrder,
+        statuses: {
+          $id: selectedOrder.statuses?.$id || "",
+          $values: [newStatusObj, ...(selectedOrder.statuses?.$values || [])]
+        }
+      });
     }
-  };
+  } catch (err) {
+    console.error("Failed to update order status:", err);
+    if (err.response?.status === 401) {
+      toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
+    } else {
+      toast.error("Không thể cập nhật trạng thái đơn hàng");
+    }
+  }
+};
 
   // Export orders to CSV/Excel
   const exportOrders = () => {
@@ -233,8 +276,7 @@ function OrderManagerPage() {
         return 'bg-pink-100 text-pink-800';
       case 'shipping':
         return 'bg-pink-100 text-pink-800';
-      case 'processing':
-        return 'bg-pink-100 text-pink-800';
+      
       case 'completed':
         return 'bg-green-100 text-green-800';
       case 'canceled':
@@ -251,7 +293,6 @@ function OrderManagerPage() {
     { value: 'pending', label: 'Chờ xử lý' },
     { value: 'paid', label: 'Đã thanh toán' },
     { value: 'shipping', label: 'Đang vận chuyển' },
-    { value: 'processing', label: 'Đang xử lý' },
     { value: 'completed', label: 'Hoàn thành' },
     { value: 'canceled', label: 'Đã hủy' }
   ];
@@ -380,9 +421,6 @@ function OrderManagerPage() {
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Trạng thái
                     </th>
-                    <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Chi tiết
-                    </th>
                     <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Thao tác
                     </th>
@@ -398,7 +436,7 @@ function OrderManagerPage() {
                               <div className="font-medium text-gray-900">#{order.orderId}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">{order.user?.userName || 'N/A'}</div>
+                              <div className="text-sm text-gray-900">{order.name || 'N/A'}</div>
                               <div className="text-sm text-gray-500">{order.phone}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -412,14 +450,6 @@ function OrderManagerPage() {
                                 {getCurrentStatus(order)}
                               </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">
-                              <button
-                                onClick={() => toggleOrderDetails(order.orderId)}
-                                className="text-pink-600 hover:text-pink-900"
-                              >
-                                {expandedOrderId === order.orderId ? 'Ẩn' : 'Xem'}
-                              </button>
-                            </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                               <button
                                 onClick={() => viewOrderDetails(order)}
@@ -430,87 +460,6 @@ function OrderManagerPage() {
                             </td>
                           </tr>
                           
-                          {/* Expanded row for order details */}
-                          {expandedOrderId === order.orderId && (
-                            <tr>
-                              <td colSpan="7" className="px-6 py-4 bg-gray-50">
-                                <div className="text-sm">
-                                  {/* Status Timeline/Roadmap */}
-                                  <div className="mb-4">
-                                    <h4 className="font-medium mb-3">Lịch sử trạng thái:</h4>
-                                    <div className="relative">
-                                      {/* Status Timeline */}
-                                      <div className="flex flex-col space-y-4">
-                                        {order.statuses?.$values
-                                          ?.sort((a, b) => new Date(b.updateTime) - new Date(a.updateTime))
-                                          .map((status, index) => (
-                                            <div key={index} className="flex items-start">
-                                              <div className="relative">
-                                                <div className={`w-4 h-4 rounded-full ${getStatusBadgeClass(status.status)} border border-white`}></div>
-                                                {index < (order.statuses.$values.length - 1) && (
-                                                  <div className="absolute top-4 left-1/2 w-0.5 h-5 -ml-px bg-gray-200"></div>
-                                                )}
-                                              </div>
-                                              <div className="ml-4">
-                                                <div className="flex items-center">
-                                                  <span className={`px-2 py-1 text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(status.status)}`}>
-                                                    {status.status}
-                                                  </span>
-                                                  <span className="ml-2 text-xs text-gray-500">
-                                                    {formatDate(status.updateTime)}
-                                                  </span>
-                                                </div>
-                                                {status.note && (
-                                                  <p className="mt-1 text-xs text-gray-600">{status.note}</p>
-                                                )}
-                                              </div>
-                                            </div>
-                                          ))}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  
-                                  <h4 className="font-medium mb-2">Thông tin vận chuyển:</h4>
-                                  <p className="mb-1">Địa chỉ: {order.address || 'N/A'}</p>
-                                  <p className="mb-3">Số điện thoại: {order.phone || 'N/A'}</p>
-                                  
-                                  <h4 className="font-medium mb-2">Chi tiết đơn hàng:</h4>
-                                  <div className="overflow-x-auto">
-                                    <table className="min-w-full divide-y divide-gray-200 border">
-                                      <thead className="bg-gray-100">
-                                        <tr>
-                                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">Sản phẩm</th>
-                                          <th className="px-4 py-2 text-center text-xs font-medium text-gray-500">Số lượng</th>
-                                          <th className="px-4 py-2 text-right text-xs font-medium text-gray-500">Giá</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody className="divide-y divide-gray-200">
-                                        {order.details?.$values?.map((detail, idx) => (
-                                          <tr key={idx} className="hover:bg-gray-50">
-                                            <td className="px-4 py-2">
-                                              {detail.pakageCode || 'N/A'}
-                                            </td>
-                                            <td className="px-4 py-2 text-center">
-                                              {detail.quantity || 1}
-                                            </td>
-                                            <td className="px-4 py-2 text-right">
-                                              {formatCurrency(detail.price)}
-                                            </td>
-                                          </tr>
-                                        )) || (
-                                          <tr>
-                                            <td colSpan="3" className="px-4 py-2 text-center">
-                                              Không có thông tin chi tiết
-                                            </td>
-                                          </tr>
-                                        )}
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          )}
                         </React.Fragment>
                       ))}
                     </>
@@ -714,42 +663,58 @@ function OrderManagerPage() {
                 >
                   Chờ xử lý
                 </button>
+                
                 <button
                   onClick={() => updateOrderStatus(selectedOrder.orderId, 'Paid')}
+                  disabled={getCurrentStatus(selectedOrder)?.toLowerCase() !== 'pending'}
                   className={`px-4 py-2 text-sm rounded-lg border ${
                     getCurrentStatus(selectedOrder)?.toLowerCase() === 'paid' 
                       ? 'bg-pink-100 border-pink-300 text-pink-800' 
-                      : 'border-gray-300 hover:bg-gray-50'
+                      : getCurrentStatus(selectedOrder)?.toLowerCase() !== 'pending'
+                        ? 'border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'border-gray-300 hover:bg-gray-50'
                   }`}
                 >
                   Đã thanh toán
                 </button>
+                
                 <button
                   onClick={() => updateOrderStatus(selectedOrder.orderId, 'Shipping')}
+                  disabled={getCurrentStatus(selectedOrder)?.toLowerCase() !== 'paid'}
                   className={`px-4 py-2 text-sm rounded-lg border ${
                     getCurrentStatus(selectedOrder)?.toLowerCase() === 'shipping' 
                       ? 'bg-pink-100 border-pink-300 text-pink-800' 
-                      : 'border-gray-300 hover:bg-gray-50'
+                      : getCurrentStatus(selectedOrder)?.toLowerCase() !== 'paid'
+                        ? 'border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'border-gray-300 hover:bg-gray-50'
                   }`}
                 >
                   Đang vận chuyển
                 </button>
+                
                 <button
                   onClick={() => updateOrderStatus(selectedOrder.orderId, 'Completed')}
+                  disabled={getCurrentStatus(selectedOrder)?.toLowerCase() !== 'shipping'}
                   className={`px-4 py-2 text-sm rounded-lg border ${
                     getCurrentStatus(selectedOrder)?.toLowerCase() === 'completed' 
                       ? 'bg-green-100 border-green-300 text-green-800' 
-                      : 'border-gray-300 hover:bg-gray-50'
+                      : getCurrentStatus(selectedOrder)?.toLowerCase() !== 'shipping'
+                        ? 'border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'border-gray-300 hover:bg-gray-50'
                   }`}
                 >
                   Hoàn thành
                 </button>
+                
                 <button
                   onClick={() => updateOrderStatus(selectedOrder.orderId, 'Canceled')}
+                  disabled={['shipping', 'completed'].includes(getCurrentStatus(selectedOrder)?.toLowerCase())}
                   className={`px-4 py-2 text-sm rounded-lg border ${
                     getCurrentStatus(selectedOrder)?.toLowerCase() === 'canceled' 
                       ? 'bg-red-100 border-red-300 text-red-800' 
-                      : 'border-gray-300 hover:bg-gray-50'
+                      : ['shipping', 'completed'].includes(getCurrentStatus(selectedOrder)?.toLowerCase())
+                        ? 'border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'border-gray-300 hover:bg-gray-50'
                   }`}
                 >
                   Hủy đơn
