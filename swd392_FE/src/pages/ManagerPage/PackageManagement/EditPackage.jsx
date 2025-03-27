@@ -15,7 +15,16 @@ function EditPackage() {
   const [features, setFeatures] = useState([]);
   const [currentImages, setCurrentImages] = useState([]);
   const [isKnownPackage, setIsKnownPackage] = useState(true);
-  
+  const [isUpdateImagePackage, setIsUpdateImagePackage] = useState(false);
+  const [isUpdateImageBlindBoxes, setIsUpdateImageBlindBoxes] = useState([false]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showAddFeatureModal, setShowAddFeatureModal] = useState(false);
+  const [newFeature, setNewFeature] = useState({
+    description: '',
+    type: ''
+  });
+  const [featureTypes, setFeatureTypes] = useState([]);
+  const [addingFeature, setAddingFeature] = useState(false);
   // Form state
   const [formData, setFormData] = useState({
     pakageCode: '',
@@ -26,6 +35,12 @@ function EditPackage() {
     pakageImages: [],
     blindBoxes: []
   });
+
+  useEffect(() => {
+    if (formData.blindBoxes && formData.blindBoxes.length > 0) {
+      setIsUpdateImageBlindBoxes(new Array(formData.blindBoxes.length).fill(false));
+    }
+  }, [formData.blindBoxes.length]);
 
   useEffect(() => {
     const fetchPackage = async () => {
@@ -82,7 +97,15 @@ function EditPackage() {
     
     fetchPackage();
   }, [packageId]);
-
+  useEffect(() => {
+    if (features.length > 0) {
+      const types = [...new Set(features.map(feature => feature.type))];
+      setFeatureTypes(types);
+      if (types.length > 0 && !newFeature.type) {
+        setNewFeature(prev => ({ ...prev, type: types[0] }));
+      }
+    }
+  }, [features]);
   // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
@@ -131,6 +154,9 @@ function EditPackage() {
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === 'file') {
+      if (name === 'pakageImages' && files.length > 0) {
+        setIsUpdateImagePackage(true);
+      }
       setFormData({
         ...formData,
         [name]: Array.from(files)
@@ -159,8 +185,52 @@ function EditPackage() {
       blindBoxes: updatedBlindBoxes
     });
   };
-
+  const handleNewFeatureChange = (e) => {
+    const { name, value } = e.target;
+    setNewFeature(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+  
+  const handleAddFeature = async (e) => {
+    e.preventDefault();
+    setAddingFeature(true);
+    
+    try {
+      if (!newFeature.description || !newFeature.type) {
+        toast.error('Vui lòng điền đầy đủ thông tin đặc tính');
+        return;
+      }
+      
+      const response = await axios.post(`${BASE_URL}/features`, newFeature);
+      
+      // Refresh features list
+      const featuresResponse = await axios.get(`${BASE_URL}/features`);
+      if (featuresResponse.data && Array.isArray(featuresResponse.data.$values)) {
+        setFeatures(featuresResponse.data.$values);
+      }
+      
+      toast.success('Thêm đặc tính mới thành công!');
+      setNewFeature({
+        description: '',
+        type: featureTypes[0]
+      });
+      setShowAddFeatureModal(false);
+    } catch (error) {
+      console.error('Failed to add feature:', error);
+      toast.error('Không thể thêm đặc tính mới');
+    } finally {
+      setAddingFeature(false);
+    }
+  };
   const handleBlindBoxFileChange = (index, files) => {
+    if (files.length > 0) {
+      const updatedFlags = [...isUpdateImageBlindBoxes];
+      updatedFlags[index] = true;
+      setIsUpdateImageBlindBoxes(updatedFlags);
+    }
+    
     const updatedBlindBoxes = [...formData.blindBoxes];
     updatedBlindBoxes[index] = {
       ...updatedBlindBoxes[index],
@@ -176,10 +246,19 @@ function EditPackage() {
     const updatedBlindBoxes = [...formData.blindBoxes];
     const currentFeatures = updatedBlindBoxes[boxIndex].featureIds || [];
     
+    // Find the feature and its type
+    const feature = features.find(f => f.featureId === featureId);
+    if (!feature) return;
+    
     if (currentFeatures.includes(featureId)) {
       updatedBlindBoxes[boxIndex].featureIds = currentFeatures.filter(id => id !== featureId);
     } else {
-      updatedBlindBoxes[boxIndex].featureIds = [...currentFeatures, featureId];
+      const featuresOfSameType = features
+        .filter(f => f.type === feature.type)
+        .map(f => f.featureId);
+      
+      const filteredFeatures = currentFeatures.filter(id => !featuresOfSameType.includes(id));
+      updatedBlindBoxes[boxIndex].featureIds = [...filteredFeatures, featureId];
     }
     
     setFormData({
@@ -188,7 +267,6 @@ function EditPackage() {
     });
   };
  
-
   const removeCurrentImage = (index) => {
     setCurrentImages(currentImages.filter((_, i) => i !== index));
   };
@@ -202,8 +280,12 @@ function EditPackage() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmitClick = (e) => {
     e.preventDefault();
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmSubmit = async () => {
     setIsSubmitting(true);
     
     try {
@@ -228,6 +310,7 @@ function EditPackage() {
       packageFormData.append('description', formData.description || '');
       packageFormData.append('manufacturer', formData.manufacturer || '');
       packageFormData.append('categoryId', formData.categoryId);
+      packageFormData.append('IsUpdateImagePackage', isUpdateImagePackage);
       
       // Add retained current images
       if (currentImages && currentImages.length > 0) {
@@ -240,7 +323,6 @@ function EditPackage() {
           }
         });
       }
-      
       
       // Add new package images
       if (formData.pakageImages && formData.pakageImages.length > 0) {
@@ -265,6 +347,7 @@ function EditPackage() {
         packageFormData.append(`blindBoxes[${index}].number`, box.number);
         packageFormData.append(`blindBoxes[${index}].isKnowned`, isKnownPackage);
         packageFormData.append(`blindBoxes[${index}].isSpecial`, box.isSpecial);
+        packageFormData.append(`blindBoxes[${index}].isUpdateImageBlindBox`, isUpdateImageBlindBoxes[index]);
         
         // Add retained current images
         if (box.currentImages && box.currentImages.length > 0) {
@@ -284,18 +367,17 @@ function EditPackage() {
             packageFormData.append(`blindBoxes[${index}].ImageFiles`, file);
           });
         }
-        
-        // Add features
         if (box.featureIds && box.featureIds.length > 0) {
           box.featureIds.forEach(featureId => {
             packageFormData.append(`blindBoxes[${index}].featureIds`, featureId);
           });
         }
       });
-      
+      const token = localStorage.getItem('access_token');
       await axios.put(`${BASE_URL}/package/update-package?packageId=${packageId}`, packageFormData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
         }
       });
       
@@ -306,6 +388,7 @@ function EditPackage() {
       toast.error(err.response?.data?.detail || 'Không thể cập nhật package. Vui lòng thử lại.');
     } finally {
       setIsSubmitting(false);
+      setShowConfirmModal(false);
     }
   };
 
@@ -324,7 +407,7 @@ function EditPackage() {
           <p className="text-red-500 mb-4">{error}</p>
           <button
             onClick={() => navigate('/packages')}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+            className="px-4 py-2 bg-pink-500 text-white rounded-lg"
           >
             Quay lại danh sách Package
           </button>
@@ -332,6 +415,18 @@ function EditPackage() {
       </div>
     );
   }
+  const getFeaturesByType = () => {
+    const groupedFeatures = {};
+    
+    features.forEach(feature => {
+      if (!groupedFeatures[feature.type]) {
+        groupedFeatures[feature.type] = [];
+      }
+      groupedFeatures[feature.type].push(feature);
+    });
+    
+    return groupedFeatures;
+  };
 
   return (
     <div className="flex-1 bg-gray-50 p-8">
@@ -347,7 +442,7 @@ function EditPackage() {
         </div>
         
         <div className="bg-white shadow-md rounded-lg p-6">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitClick}>
             <div className="mb-8">
               <h2 className="text-lg font-medium mb-4">Thông tin Package</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -556,10 +651,10 @@ function EditPackage() {
                           id={`special-${index}`}
                           checked={box.isSpecial}
                           onChange={(e) => handleBlindBoxChange(index, 'isSpecial', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          className="h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
                         />
                         <label htmlFor={`special-${index}`} className="ml-2 text-sm text-gray-700">
-                          Đặc biệt
+                          SECRET
                         </label>
                       </div>
                     </div>
@@ -615,22 +710,39 @@ function EditPackage() {
                   
                   {/* Features */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Tính năng đặc biệt
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Đặc tính
                     </label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                      {features.map(feature => (
-                        <div key={feature.featureId} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id={`feature-${index}-${feature.featureId}`}
-                            checked={box.featureIds?.includes(feature.featureId) || false}
-                            onChange={() => handleFeatureToggle(index, feature.featureId)}
-                            className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                          />
-                          <label htmlFor={`feature-${index}-${feature.featureId}`} className="ml-2 text-sm text-gray-700">
-                            {feature.name}
-                          </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowAddFeatureModal(true)}
+                      className="px-3 py-1 bg-pink-300 text-white text-sm rounded-md hover:bg-pink-700 flex items-center"
+                    >
+                      <span className="mr-1">+</span> Thêm đặc tính
+                    </button>
+                  </div>
+                    
+                    <div className="space-y-4">
+                      {Object.entries(getFeaturesByType()).map(([type, typeFeatures]) => (
+                        <div key={type} className="border rounded-lg p-3 bg-white">
+                          <h3 className="font-medium text-gray-800 mb-2">{type}</h3>
+                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                            {typeFeatures.map(feature => (
+                              <div key={feature.featureId} className="flex items-center">
+                                <input
+                                  type="checkbox"
+                                  id={`feature-${index}-${feature.featureId}`}
+                                  checked={box.featureIds?.includes(feature.featureId) || false}
+                                  onChange={() => handleFeatureToggle(index, feature.featureId)}
+                                  className="h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                                />
+                                <label htmlFor={`feature-${index}-${feature.featureId}`} className="ml-2 text-sm text-gray-700">
+                                  {feature.description || feature.name}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -644,7 +756,7 @@ function EditPackage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                className="w-full px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 disabled:opacity-50"
               >
                 {isSubmitting ? 'Đang cập nhật...' : 'Cập nhật Package'}
               </button>
@@ -652,6 +764,100 @@ function EditPackage() {
           </form>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-lg font-semibold mb-4">Xác nhận cập nhật</h3>
+            <p className="mb-6">Bạn có chắc muốn cập nhật thông tin package này?</p>
+            <div className="flex justify-end space-x-3">
+              <button 
+                onClick={() => setShowConfirmModal(false)}
+                className="px-4 py-2 border text-gray-700 border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Hủy
+              </button>
+              <button 
+                onClick={handleConfirmSubmit}
+                className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+              >
+                Xác nhận
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showAddFeatureModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-lg font-semibold mb-4">Thêm đặc tính mới</h3>
+            
+            <form onSubmit={handleAddFeature}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Mô tả <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="description"
+                  value={newFeature.description}
+                  onChange={handleNewFeatureChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  required
+                />
+              </div>
+              
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Loại <span className="text-red-500">*</span>
+                </label>
+                <div className="flex gap-2">
+                  <select
+                    name="type"
+                    value={newFeature.type}
+                    onChange={handleNewFeatureChange}
+                    className="flex-1 p-2 border border-gray-300 rounded-md"
+                    required
+                  >
+                    {featureTypes.map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                  
+                  <input
+                    type="text"
+                    name="type"
+                    value={newFeature.type}
+                    onChange={handleNewFeatureChange}
+                    className="flex-1 p-2 border border-gray-300 rounded-md"
+                    placeholder="Hoặc nhập loại mới"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-3">
+                <button 
+                  type="button"
+                  onClick={() => setShowAddFeatureModal(false)}
+                  className="px-4 py-2 border text-gray-700 border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  Hủy
+                </button>
+                <button 
+                  type="submit"
+                  disabled={addingFeature}
+                  className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50"
+                >
+                  {addingFeature ? 'Đang thêm...' : 'Thêm đặc tính'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
-  );}
-  export default EditPackage;
+  );
+}
+
+export default EditPackage;

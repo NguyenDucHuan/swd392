@@ -10,7 +10,16 @@ function CreateKnownPackage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [categories, setCategories] = useState([]);
   const [features, setFeatures] = useState([]);
-  
+  const [showAddFeatureModal, setShowAddFeatureModal] = useState(false);
+  const [newFeature, setNewFeature] = useState({
+    description: '',
+    type: ''
+  });
+  const [featureTypes, setFeatureTypes] = useState([]);
+  const [addingFeature, setAddingFeature] = useState(false);
+  const [showAddBlindBoxModal, setShowAddBlindBoxModal] = useState(false);
+  const [blindBoxCount, setBlindBoxCount] = useState(1);
+
   // Form state
   const [formData, setFormData] = useState({
     pakageCode: '',
@@ -26,15 +35,15 @@ function CreateKnownPackage() {
   function createEmptyBlindBox() {
     return {
       color: '',
-    status: true,
-    size: 10,
-    price: '',
-    discount: 0,
-    number: 1,
-    isKnowned: true,
-    isSpecial: false,
-    imageFiles: [], 
-    featureIds: []
+      status: true,
+      size: 10,
+      price: '',
+      discount: 0,
+      number: 1,
+      isKnowned: true,
+      isSpecial: false,
+      imageFiles: [], 
+      featureIds: []
     };
   }
 
@@ -84,6 +93,17 @@ function CreateKnownPackage() {
     fetchFeatures();
   }, []);
 
+  // Extract feature types for the dropdown
+  useEffect(() => {
+    if (features.length > 0) {
+      const types = [...new Set(features.map(feature => feature.type))];
+      setFeatureTypes(types);
+      if (types.length > 0 && !newFeature.type) {
+        setNewFeature(prev => ({ ...prev, type: types[0] }));
+      }
+    }
+  }, [features]);
+
   // Handle form field changes for package details
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -130,15 +150,29 @@ function CreateKnownPackage() {
       blindBoxes: updatedBlindBoxes
     });
   };
-  // Handle feature selection for blind box
+
+  // Handle feature selection allowing only one per type
   const handleFeatureToggle = (boxIndex, featureId) => {
     const updatedBlindBoxes = [...formData.blindBoxes];
     const currentFeatures = updatedBlindBoxes[boxIndex].featureIds || [];
     
+    // Find the feature and its type
+    const feature = features.find(f => f.featureId === featureId);
+    if (!feature) return;
+    
     if (currentFeatures.includes(featureId)) {
+      // If already selected, simply remove it
       updatedBlindBoxes[boxIndex].featureIds = currentFeatures.filter(id => id !== featureId);
     } else {
-      updatedBlindBoxes[boxIndex].featureIds = [...currentFeatures, featureId];
+      // If selecting a new feature, first remove any other feature of the same type
+      const featuresOfSameType = features
+        .filter(f => f.type === feature.type)
+        .map(f => f.featureId);
+      
+      const filteredFeatures = currentFeatures.filter(id => !featuresOfSameType.includes(id));
+      
+      // Then add the new feature
+      updatedBlindBoxes[boxIndex].featureIds = [...filteredFeatures, featureId];
     }
     
     setFormData({
@@ -147,18 +181,72 @@ function CreateKnownPackage() {
     });
   };
 
+  // Handle adding a new feature
+  const handleNewFeatureChange = (e) => {
+    const { name, value } = e.target;
+    setNewFeature(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleAddFeature = async (e) => {
+    e.preventDefault();
+    setAddingFeature(true);
+    
+    try {
+      if (!newFeature.description || !newFeature.type) {
+        toast.error('Vui lòng điền đầy đủ thông tin đặc tính');
+        return;
+      }
+      
+      const response = await axios.post(`${BASE_URL}/features`, newFeature);
+      
+      // Refresh features list
+      const featuresResponse = await axios.get(`${BASE_URL}/features`);
+      if (featuresResponse.data && Array.isArray(featuresResponse.data.$values)) {
+        setFeatures(featuresResponse.data.$values);
+      }
+      
+      toast.success('Thêm đặc tính mới thành công!');
+      setNewFeature({
+        description: '',
+        type: featureTypes[0]
+      });
+      setShowAddFeatureModal(false);
+    } catch (error) {
+      console.error('Failed to add feature:', error);
+      toast.error('Không thể thêm đặc tính mới');
+    } finally {
+      setAddingFeature(false);
+    }
+  };
+
   // Add a new blind box
-  const addBlindBox = () => {
+  const addBlindBox = (count = 1) => {
     const lastBlindBox = formData.blindBoxes[formData.blindBoxes.length - 1];
-    const newBlindBox = {
-      ...createEmptyBlindBox(),
-      number: (lastBlindBox.number || 0) + 1
-    };
+    const startNumber = (lastBlindBox.number || 0) + 1;
+    
+    const newBlindBoxes = [];
+    for (let i = 0; i < count; i++) {
+      newBlindBoxes.push({
+        ...createEmptyBlindBox(),
+        number: startNumber + i
+      });
+    }
     
     setFormData({
       ...formData,
-      blindBoxes: [...formData.blindBoxes, newBlindBox]
+      blindBoxes: [...formData.blindBoxes, ...newBlindBoxes]
     });
+    
+    setShowAddBlindBoxModal(false);
+    setBlindBoxCount(1);
+  };
+  // Handle blind box count change
+  const handleBlindBoxCountChange = (e) => {
+    const value = parseInt(e.target.value);
+    setBlindBoxCount(Math.max(1, isNaN(value) ? 1 : value));
   };
 
   // Remove a blind box
@@ -179,6 +267,20 @@ function CreateKnownPackage() {
       ...formData,
       blindBoxes: renumberedBlindBoxes
     });
+  };
+
+  // Group features by type for display
+  const getFeaturesByType = () => {
+    const groupedFeatures = {};
+    
+    features.forEach(feature => {
+      if (!groupedFeatures[feature.type]) {
+        groupedFeatures[feature.type] = [];
+      }
+      groupedFeatures[feature.type].push(feature);
+    });
+    
+    return groupedFeatures;
   };
 
   // Handle form submission
@@ -240,11 +342,13 @@ function CreateKnownPackage() {
           }
         });
       });
-      
+      const token = localStorage.getItem('access_token');
       // Send the request
       await axios.post(`${BASE_URL}/package/create-known-package`, packageFormData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
+          
         }
       });
       
@@ -381,8 +485,8 @@ function CreateKnownPackage() {
                 <h2 className="text-lg font-medium">BlindBoxes</h2>
                 <button
                   type="button"
-                  onClick={addBlindBox}
-                  className="flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  onClick={() => setShowAddBlindBoxModal(true)} 
+                  className="flex items-center px-3 py-1.5 bg-pink-500 text-white rounded-lg hover:bg-pink-600"
                 >
                   <RiAddLine className="mr-1" />
                   Thêm BlindBox
@@ -475,10 +579,10 @@ function CreateKnownPackage() {
                           id={`special-${index}`}
                           checked={box.isSpecial}
                           onChange={(e) => handleBlindBoxChange(index, 'isSpecial', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          className="h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
                         />
                         <label htmlFor={`special-${index}`} className="ml-2 text-sm text-gray-700">
-                          Đặc biệt
+                          SECRET
                         </label>
                       </div>
                     </div>
@@ -500,23 +604,41 @@ function CreateKnownPackage() {
                     </p>
                   </div>
                   
+                  {/* Features - Updated with grouped features and add button */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Tính năng đặc biệt
-                    </label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                      {features.map(feature => (
-                        <div key={feature.featureId} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id={`feature-${index}-${feature.featureId}`}
-                            checked={box.featureIds?.includes(feature.featureId) || false}
-                            onChange={() => handleFeatureToggle(index, feature.featureId)}
-                            className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                          />
-                          <label htmlFor={`feature-${index}-${feature.featureId}`} className="ml-2 text-sm text-gray-700">
-                            {feature.name}
-                          </label>
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Đặc tính
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setShowAddFeatureModal(true)}
+                        className="px-3 py-1 bg-pink-300 text-white text-sm rounded-md hover:bg-pink-700 flex items-center"
+                      >
+                        <span className="mr-1">+</span> Thêm đặc tính
+                      </button>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {Object.entries(getFeaturesByType()).map(([type, typeFeatures]) => (
+                        <div key={type} className="border rounded-lg p-3 bg-white">
+                          <h3 className="font-medium text-gray-800 mb-2">{type}</h3>
+                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                            {typeFeatures.map(feature => (
+                              <div key={feature.featureId} className="flex items-center">
+                                <input
+                                  type="checkbox"
+                                  id={`feature-${index}-${feature.featureId}`}
+                                  checked={box.featureIds?.includes(feature.featureId) || false}
+                                  onChange={() => handleFeatureToggle(index, feature.featureId)}
+                                  className="h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                                />
+                                <label htmlFor={`feature-${index}-${feature.featureId}`} className="ml-2 text-sm text-gray-700">
+                                  {feature.description || feature.name}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -530,7 +652,7 @@ function CreateKnownPackage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                className="w-full px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 disabled:opacity-50"
               >
                 {isSubmitting ? 'Đang tạo...' : 'Tạo Package'}
               </button>
@@ -538,6 +660,113 @@ function CreateKnownPackage() {
           </form>
         </div>
       </div>
+
+      {/* Add Feature Modal */}
+      {showAddFeatureModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-lg font-semibold mb-4">Thêm đặc tính mới</h3>
+            
+            <form onSubmit={handleAddFeature}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Mô tả <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="description"
+                  value={newFeature.description}
+                  onChange={handleNewFeatureChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  required
+                />
+              </div>
+              
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Loại <span className="text-red-500">*</span>
+                </label>
+                <div className="flex gap-2">
+                  <select
+                    name="type"
+                    value={newFeature.type}
+                    onChange={handleNewFeatureChange}
+                    className="flex-1 p-2 border border-gray-300 rounded-md"
+                    required
+                  >
+                    {featureTypes.map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                  
+                  <input
+                    type="text"
+                    name="type"
+                    value={newFeature.type}
+                    onChange={handleNewFeatureChange}
+                    className="flex-1 p-2 border border-gray-300 rounded-md"
+                    placeholder="Hoặc nhập loại mới"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-3">
+                <button 
+                  type="button"
+                  onClick={() => setShowAddFeatureModal(false)}
+                  className="px-4 py-2 border text-gray-700 border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  Hủy
+                </button>
+                <button 
+                  type="submit"
+                  disabled={addingFeature}
+                  className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50"
+                >
+                  {addingFeature ? 'Đang thêm...' : 'Thêm đặc tính'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {showAddBlindBoxModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-lg font-semibold mb-4">Thêm BlindBox</h3>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Số lượng BlindBox muốn thêm
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={blindBoxCount}
+                onChange={handleBlindBoxCountChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+            
+            <div className="flex justify-end space-x-3">
+              <button 
+                type="button"
+                onClick={() => setShowAddBlindBoxModal(false)}
+                className="px-4 py-2 border text-gray-700 border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Hủy
+              </button>
+              <button 
+                type="button"
+                onClick={() => addBlindBox(blindBoxCount)}
+                className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600"
+              >
+                Thêm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

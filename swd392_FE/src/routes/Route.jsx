@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import { ProtectedRoute } from "../components/ProtectedRoute";
 import { AdminRoute, StaffRoute, UserRoute } from "../components/RoleBasedRoute";
 import { CustomerLayout } from "../layout/CustomerLayout";
 import { ManagerLayout } from "../layout/ManagerLayout";
@@ -7,28 +6,29 @@ import { ManagerLayout } from "../layout/ManagerLayout";
 
 // Import pages
 import CartPage from "../pages/CartPage/CartPage";
+import DepositPage from "../pages/DepositPage";
 import Login from "../pages/Login";
 import About from "../pages/MainPage/About";
 import BlogPage from "../pages/MainPage/BlogPage";
 import HomePage from "../pages/MainPage/HomePage";
-import AdvertisingCenter from "../pages/ManagerPage/AdvertisingCenter";
-import Content from "../pages/ManagerPage/Content";
 import Dashboard from "../pages/ManagerPage/Dashboard";
-import HelpCenter from "../pages/ManagerPage/HelpCenter";
-import HelpCenterStart from "../pages/ManagerPage/HelpCenterStart";
+import OrderManager from "../pages/ManagerPage/OrderManage/OrderManagerPage";
 import CreateKnownPackage from "../pages/ManagerPage/PackageManagement/CreateKnownPackage";
 import CreateUnknownPackage from "../pages/ManagerPage/PackageManagement/CreateUnknownPackage";
 import EditPackage from "../pages/ManagerPage/PackageManagement/EditPackage";
-import PackageManager from "../pages/ManagerPage/PackageManager";
+import PackageManager from "../pages/ManagerPage/PackageManagement/PackageManager";
 import Settings from "../pages/ManagerPage/Settings";
+import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import ChangePasswordPage from "../pages/ProfilePage/ChangePasswordPage";
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
+import RechargePage from "../pages/ProfilePage/RechargePage";
 import Register from "../pages/Register";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import PackageDetail from "../pages/ShoppingAndLuckyWheel/PackageDetail";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
 import Users from "../pages/Users";
-import RechargePage from "../pages/ProfilePage/RechargePage";
+
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -48,8 +48,15 @@ const AppRoutes = () => {
             <HomePage />
           </CustomerLayout>
         }
-
       />
+      <Route path="/manage-orders"
+        element={
+          <ManagerLayout>
+            <StaffRoute>
+              <OrderManager/>
+            </StaffRoute>
+          </ManagerLayout>
+        }/>
       <Route
         path="/about"
         element={
@@ -104,47 +111,6 @@ const AppRoutes = () => {
           </ManagerLayout>
         }
       />
-      <Route
-        path="/help"
-        element={
-          <ManagerLayout>
-            <ProtectedRoute>
-              <HelpCenter />
-            </ProtectedRoute>
-          </ManagerLayout>
-        }
-      />
-      <Route
-        path="/starthelp"
-        element={
-          <ManagerLayout>
-            <ProtectedRoute>
-              <HelpCenterStart />
-            </ProtectedRoute>
-          </ManagerLayout>
-        }
-      />
-      <Route
-        path="/ads"
-        element={
-          <ManagerLayout>
-            <AdminRoute>
-              <AdvertisingCenter />
-            </AdminRoute>
-          </ManagerLayout>
-        }
-      />
-      <Route
-        path="/content"
-        element={
-          <ManagerLayout>
-            <StaffRoute>
-              <Content />
-            </StaffRoute>
-          </ManagerLayout>
-        }
-      />
-
 
       <Route
         path="/users"
@@ -180,9 +146,9 @@ const AppRoutes = () => {
         path="/cart"
         element={
           <CustomerLayout>
-          <UserRoute>
-            <CartPage />
-          </UserRoute>
+            <UserRoute>
+              <CartPage />
+            </UserRoute>
           </CustomerLayout>
         }
       />
@@ -268,6 +234,18 @@ const AppRoutes = () => {
         }
       />
 
+      <Route
+        path="/payment"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <PaymentPage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+
+     
 
       <Route
         path="/profile"
@@ -289,6 +267,17 @@ const AppRoutes = () => {
               <p>You do not have permission to access this resource.</p>
             </div>
           </ManagerLayout>
+        }
+      />
+
+      <Route
+        path="/deposit"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <DepositPage />
+            </UserRoute>
+          </CustomerLayout>
         }
       />
     </Routes>
