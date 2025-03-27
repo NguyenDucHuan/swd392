@@ -27,6 +27,8 @@ function OrderManagerPage() {
     totalItems: 0,
     totalPages: 1
   });
+  const [productDetails, setProductDetails] = useState({});
+  const [loadingProductDetails, setLoadingProductDetails] = useState(false);
 
   // Get the current (most recent) status from the statuses array
   const getCurrentStatus = (order) => {
@@ -41,6 +43,7 @@ function OrderManagerPage() {
     
     return sortedStatuses[0].status;
   };
+
   useEffect(() => {
     fetchOrders();
   }, [pagination.currentPage, pagination.pageSize, selectedFilter]);
@@ -58,7 +61,7 @@ function OrderManagerPage() {
       }
       
       if (selectedFilter) {
-        params.status = selectedFilter;
+        params.filter = selectedFilter; // Using filter instead of status to match backend
       }
       const token = localStorage.getItem('access_token');
       
@@ -109,6 +112,65 @@ function OrderManagerPage() {
     }
   };
 
+  // Fetch product details for an order item
+  const fetchProductDetails = async (detail) => {
+    if (!detail) return null;
+    
+    try {
+      const token = localStorage.getItem('access_token');
+      if (!token) return null;
+
+      // If we already have details for this item, don't fetch again
+      const cacheKey = detail.packageId ? `package_${detail.packageId}` : detail.blindBoxId ? `blindbox_${detail.blindBoxId}` : null;
+      if (cacheKey && productDetails[cacheKey]) {
+        return productDetails[cacheKey];
+      }
+
+      setLoadingProductDetails(true);
+      
+      let response;
+      if (detail.packageId) {
+        // Fetch package details
+        response = await axios.get(`${BASE_URL}/package`, {
+          params: { packageId: detail.packageId },
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (response.data) {
+          const packageData = response.data;
+          setProductDetails(prev => ({
+            ...prev,
+            [`package_${detail.packageId}`]: packageData
+          }));
+          return packageData;
+        }
+      } 
+      else if (detail.blindBoxId) {
+        // Fetch blindbox details
+        response = await axios.get(`${BASE_URL}/blindBoxes/id`, {
+          params: { id: detail.blindBoxId },
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (response.data) {
+          const blindBoxData = response.data;
+          setProductDetails(prev => ({
+            ...prev,
+            [`blindbox_${detail.blindBoxId}`]: blindBoxData
+          }));
+          return blindBoxData;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error("Error fetching product details:", error);
+      return null;
+    } finally {
+      setLoadingProductDetails(false);
+    }
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     setPagination({ ...pagination, currentPage: 1 });
@@ -119,130 +181,140 @@ function OrderManagerPage() {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
-  const viewOrderDetails = (order) => {
+  const viewOrderDetails = async (order) => {
     setSelectedOrder(order);
     setShowOrderDetailModal(true);
+    
+    // Clear previous product details
+    setProductDetails({});
+    
+    // If the order has details, fetch product info for each
+    if (order.details?.$values?.length > 0) {
+      order.details.$values.forEach(detail => {
+        fetchProductDetails(detail);
+      });
+    }
   };
-const updateOrderStatus = async (orderId, newStatus) => {
-  try {
-    // Get token from localStorage
-    const token = localStorage.getItem('access_token');
-    
-    if (!token) {
-      toast.error("Bạn cần đăng nhập để cập nhật trạng thái đơn hàng");
-      return;
-    }
 
-    const currentStatus = getCurrentStatus(selectedOrder)?.toLowerCase();
-    
-    // Status transition validation logic
-    switch (newStatus.toLowerCase()) {
-      case 'pending':
-        // Pending can be set from any status (for reset purposes)
-        break;
-        
-      case 'paid':
-        // Only allow transition to Paid from Pending
-        if (currentStatus !== 'pending') {
-          toast.error("Chỉ đơn hàng ở trạng thái Chờ xử lý mới có thể chuyển sang Đã thanh toán");
-          return;
-        }
-        break;
-        
-      case 'shipping':
-        // Only allow transition to Shipping from Paid
-        if (currentStatus !== 'paid') {
-          toast.error("Chỉ những đơn hàng đã thanh toán mới có thể chuyển sang trạng thái vận chuyển");
-          return;
-        }
-        
-        // Use confirm-order endpoint for shipping status
-        await axios.post(`${BASE_URL}/orders/confirm-order?orderId=${orderId}`, 
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      const token = localStorage.getItem('access_token');
+      
+      if (!token) {
+        toast.error("Bạn cần đăng nhập để cập nhật trạng thái đơn hàng");
+        return;
+      }
+
+      const currentStatus = getCurrentStatus(selectedOrder)?.toLowerCase();
+      switch (newStatus.toLowerCase()) {
+        case 'pending':
+          break;
+          
+        case 'paid':
+          if (currentStatus !== 'pending') {
+            toast.error("Chỉ đơn hàng ở trạng thái Chờ xử lý mới có thể chuyển sang Đã thanh toán");
+            return;
+          }
+          break;
+          
+        case 'shipping':
+          if (currentStatus !== 'paid') {
+            toast.error("Chỉ những đơn hàng đã thanh toán mới có thể chuyển sang trạng thái vận chuyển");
+            return;
+          }
+          
+          await axios.post(`${BASE_URL}/orders/confirm-order?orderId=${orderId}`, 
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
             }
+          );
+          break;
+          
+        case 'completed':
+          if (currentStatus !== 'shipping') {
+            toast.error("Chỉ đơn hàng ở trạng thái Đang vận chuyển mới có thể chuyển sang Hoàn thành");
+            return;
           }
-        );
-        // Return early as we've already made the API call
-        break;
-        
-      case 'completed':
-        // Only allow completion from Shipping status
-        if (currentStatus !== 'shipping') {
-          toast.error("Chỉ đơn hàng ở trạng thái Đang vận chuyển mới có thể chuyển sang Hoàn thành");
-          return;
-        }
-        break;
-        
-      case 'canceled':
-        // Only allow cancellation from Pending or Paid, not from Shipping or Completed
-        if (currentStatus !== 'pending' && currentStatus !== 'paid') {
-          toast.error("Không thể hủy đơn hàng đã vận chuyển hoặc hoàn thành");
-          return;
-        }
-        break;
-    }
-    
-    // If not shipping status (which is already handled), make the regular status update API call
-    if (newStatus.toLowerCase() !== 'shipping') {
-      await axios.put(`${BASE_URL}/orders/${orderId}/status`, 
-        { status: newStatus },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
+          const isStorePickup = selectedOrder.address && selectedOrder.address.toLowerCase().includes("nhận tại cửa hàng");
+          if (!isStorePickup) {
+            toast.error("Chỉ đơn hàng có địa chỉ 'Nhận tại cửa hàng' mới có thể chuyển sang Hoàn thành");
+            return;
           }
+          await axios.post(`${BASE_URL}/orders/complete-order?orderId=${orderId}`, 
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+          break;
+          
+        case 'canceled':
+         
+          if (currentStatus !== 'pending' && currentStatus !== 'paid') {
+            toast.error("Không thể hủy đơn hàng đã vận chuyển hoặc hoàn thành");
+            return;
+          }
+          await axios.post(`${BASE_URL}/orders/cancel-order?orderId=${orderId}`, 
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+          break;
+      }
+      
+      const updatedOrders = orders.map(order => {
+        if (order.orderId === orderId) {
+          const newStatusObj = {
+            status: newStatus,
+            updateTime: new Date().toISOString()
+          };
+          
+          return {
+            ...order,
+            statuses: {
+              $id: order.statuses?.$id || "",
+              $values: [newStatusObj, ...(order.statuses?.$values || [])]
+            }
+          };
         }
-      );
-    }
-    
-    // Update local state
-    const updatedOrders = orders.map(order => {
-      if (order.orderId === orderId) {
+        return order;
+      });
+      
+      setOrders(updatedOrders);
+      
+      toast.success("Trạng thái đơn hàng đã được cập nhật!");
+      
+      if (selectedOrder?.orderId === orderId) {
         const newStatusObj = {
           status: newStatus,
           updateTime: new Date().toISOString()
         };
         
-        return {
-          ...order,
+        setSelectedOrder({
+          ...selectedOrder,
           statuses: {
-            $id: order.statuses?.$id || "",
-            $values: [newStatusObj, ...(order.statuses?.$values || [])]
+            $id: selectedOrder.statuses?.$id || "",
+            $values: [newStatusObj, ...(selectedOrder.statuses?.$values || [])]
           }
-        };
+        });
       }
-      return order;
-    });
-    
-    setOrders(updatedOrders);
-    
-    toast.success("Trạng thái đơn hàng đã được cập nhật!");
-    
-    if (selectedOrder?.orderId === orderId) {
-      const newStatusObj = {
-        status: newStatus,
-        updateTime: new Date().toISOString()
-      };
-      
-      setSelectedOrder({
-        ...selectedOrder,
-        statuses: {
-          $id: selectedOrder.statuses?.$id || "",
-          $values: [newStatusObj, ...(selectedOrder.statuses?.$values || [])]
-        }
-      });
+    } catch (err) {
+      console.error("Failed to update order status:", err);
+      if (err.response?.status === 401) {
+        toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
+      } else {
+        toast.error("Không thể cập nhật trạng thái đơn hàng");
+      }
     }
-  } catch (err) {
-    console.error("Failed to update order status:", err);
-    if (err.response?.status === 401) {
-      toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
-    } else {
-      toast.error("Không thể cập nhật trạng thái đơn hàng");
-    }
-  }
-};
+  };
 
   // Export orders to CSV/Excel
   const exportOrders = () => {
@@ -330,7 +402,7 @@ const updateOrderStatus = async (orderId, newStatus) => {
                   <RiSearchLine className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Tìm theo mã đơn hàng hoặc số điện thoại..."
+                    placeholder="Tìm theo tên khách hàng, email, địa chỉ hoặc số điện thoại..."
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-l-lg"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -369,6 +441,7 @@ const updateOrderStatus = async (orderId, newStatus) => {
                           setSelectedFilter(option.value);
                           setShowFilterDropdown(false);
                           setPagination({ ...pagination, currentPage: 1 });
+                          fetchOrders(); // Fetch orders immediately when filter changes
                         }}
                       >
                         {option.label}
@@ -530,8 +603,8 @@ const updateOrderStatus = async (orderId, newStatus) => {
               <div>
                 <h4 className="font-medium mb-2 text-gray-700">Thông tin khách hàng</h4>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="mb-1"><span className="font-medium">Tên:</span> {selectedOrder.user?.userName || 'N/A'}</p>
-                  <p className="mb-1"><span className="font-medium">Email:</span> {selectedOrder.user?.email || 'N/A'}</p>
+                  <p className="mb-1"><span className="font-medium">Tên:</span> {selectedOrder.name || 'N/A'}</p>
+                  <p className="mb-1"><span className="font-medium">Email:</span> {selectedOrder.email || 'N/A'}</p>
                   <p className="mb-1"><span className="font-medium">Số điện thoại:</span> {selectedOrder.phone || 'N/A'}</p>
                   <p><span className="font-medium">Địa chỉ:</span> {selectedOrder.address || 'N/A'}</p>
                 </div>
@@ -615,10 +688,72 @@ const updateOrderStatus = async (orderId, newStatus) => {
                     <tr key={idx}>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">{detail.pakageCode || 'N/A'}</div>
-                            <div className="text-sm text-gray-500">{detail.type || 'N/A'}</div>
-                          </div>
+                          {detail.packageId && productDetails[`package_${detail.packageId}`]?.images?.$values?.[0]?.url && (
+                            <div className="flex-shrink-0 h-10 w-10 mr-3">
+                              <img 
+                                className="h-10 w-10 rounded-md object-cover" 
+                                src={productDetails[`package_${detail.packageId}`].images.$values[0].url} 
+                                alt={productDetails[`package_${detail.packageId}`].name || 'Package image'} 
+                              />
+                            </div>
+                          )}
+                          {detail.blindBoxId && productDetails[`blindbox_${detail.blindBoxId}`]?.imageUrls?.$values?.[0] && (
+                            <div className="flex-shrink-0 h-10 w-10 mr-3">
+                              <img 
+                                className="h-10 w-10 rounded-md object-cover" 
+                                src={productDetails[`blindbox_${detail.blindBoxId}`].imageUrls.$values[0]} 
+                                alt={productDetails[`blindbox_${detail.blindBoxId}`].packageName || 'BlindBox image'} 
+                              />
+                            </div>
+                          )}
+                          
+                          {loadingProductDetails ? (
+                            <div className="animate-pulse">
+                              <div className="h-4 bg-gray-200 rounded w-20 mb-1"></div>
+                              <div className="h-3 bg-gray-100 rounded w-16"></div>
+                            </div>
+                          ) : (
+                            <div>
+                              {detail.packageId ? (
+                                // Package information
+                                <>
+                                  <div className="text-sm font-medium text-gray-900">
+                                    {productDetails[`package_${detail.packageId}`]?.pakageCode || detail.pakageCode || 'N/A'}
+                                  </div>
+                                  <div className="text-sm text-gray-500">
+                                    {productDetails[`package_${detail.packageId}`]?.name || detail.type || 'Package'}
+                                  </div>
+                                  {productDetails[`package_${detail.packageId}`]?.blindBoxes?.$values && (
+                                    <div className="text-xs text-pink-500 mt-1">
+                                      {productDetails[`package_${detail.packageId}`].blindBoxes.$values.length} BlindBox
+                                    </div>
+                                  )}
+                                </>
+                              ) : detail.blindBoxId ? (
+                                // BlindBox information
+                                <>
+                                  <div className="text-sm font-medium text-gray-900">
+                                    {productDetails[`blindbox_${detail.blindBoxId}`]?.packageCode || detail.pakageCode || 'N/A'}
+                                  </div>
+                                  <div className="text-sm text-gray-500">
+                                    {productDetails[`blindbox_${detail.blindBoxId}`]?.packageName || detail.type || 'BlindBox'} 
+                                    {productDetails[`blindbox_${detail.blindBoxId}`]?.number ? ` #${productDetails[`blindbox_${detail.blindBoxId}`].number}` : ''}
+                                  </div>
+                                  {productDetails[`blindbox_${detail.blindBoxId}`]?.isSpecial && (
+                                    <div className="text-xs text-yellow-500 mt-1">
+                                      Special Edition
+                                    </div>
+                                  )}
+                                </>
+                              ) : (
+                                // Default fallback
+                                <>
+                                  <div className="text-sm font-medium text-gray-900">{detail.pakageCode || 'N/A'}</div>
+                                  <div className="text-sm text-gray-500">{detail.type || 'N/A'}</div>
+                                </>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-center text-sm text-gray-500">
