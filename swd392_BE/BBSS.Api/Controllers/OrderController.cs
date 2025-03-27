@@ -34,7 +34,7 @@ namespace BBSS.Api.Controllers
 
         [HttpPost]
         [Route(Router.OrderRoute.ConfirmOrder)]
-        [Authorize(Roles = "{UserConstant.USER_ROLE_STAFF}")]
+        [Authorize(Roles = UserConstant.USER_ROLE_STAFF)]
         public async Task<ActionResult> ConfirmOrder(int orderId)
         {
             var result = await _orderService.ConfirmOrderAsync(orderId);
