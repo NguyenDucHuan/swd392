@@ -37,7 +37,7 @@ namespace BBSS.Api.Controllers
 
         [HttpGet]
         [Route(Router.UserRoute.Users)]
-        //[Authorize(Roles = UserConstant.USER_ROLE_ADMIN)]
+        [Authorize(Roles = UserConstant.USER_ROLE_ADMIN)]
         public async Task<IActionResult> GetAllUsers([FromQuery] PaginateModel model)
         {
             var result = await _userService.GetAllUsersAsync(model);

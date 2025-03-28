@@ -118,7 +118,7 @@ namespace BBSS.Api.Services.Implements
                     return new MethodResult<string>.Failure("User not found", StatusCodes.Status404NotFound);
 
                 // Cập nhật trạng thái
-                _mapper.Map(request, user);
+                user.Status = request.Status;
 
                 _uow.GetRepository<User>().UpdateAsync(user);
                 await _uow.CommitAsync();
