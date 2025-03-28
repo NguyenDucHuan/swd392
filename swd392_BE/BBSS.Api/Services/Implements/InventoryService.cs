@@ -30,20 +30,20 @@ namespace BBSS.Api.Services.Implements
             string filter = model.filter?.ToLower() ?? string.Empty;
 
             Expression<Func<InventoryItem, bool>> predicate = p =>
-                (string.IsNullOrEmpty(search) || p.BlindBox.Package.PakageCode.Contains(search) || 
+                (string.IsNullOrEmpty(search) || p.BlindBox.Package.PakageCode.Contains(search) ||
                                                  p.BlindBox.Package.Name.Contains(search) ||
                                                  p.BlindBox.Package.Description.Contains(search)) &&
                 (string.IsNullOrEmpty(filter) || string.Equals(model.filter, p.Status.ToLower())) &&
                 (minAmount == null || p.BlindBox.Price * (1 - p.BlindBox.Discount / 100) >= minAmount) &&
                 (maxAmount == null || p.BlindBox.Price * (1 - p.BlindBox.Discount / 100) <= maxAmount) &&
                 p.UserId == userId;
-            
+
 
             var result = await _uow.GetRepository<InventoryItem>().GetPagingListAsync<InventoryViewModel>(
                     selector: s => _mapper.Map<InventoryViewModel>(s),
                     predicate: predicate,
                     orderBy: BuildOrderBy(model.sortBy),
-                    include: i => i.Include(p => p.BlindBox.Package),
+                    include: i => i.Include(p => p.BlindBox.Package).Include(b => b.BlindBox.BlindBoxImages).Include(b => b.BlindBox.BlindBoxFeatures).ThenInclude(b => b.Feature),
                     page: page,
                     size: size
                 );
@@ -52,7 +52,7 @@ namespace BBSS.Api.Services.Implements
         }
 
         public async Task<MethodResult<InventoryViewModel>> GetInventoryAsync(int inventoryId)
-        {            
+        {
             var result = await _uow.GetRepository<InventoryItem>().SingleOrDefaultAsync<InventoryViewModel>(
                     selector: s => _mapper.Map<InventoryViewModel>(s),
                     predicate: p => p.InventoryItemId == inventoryId,
