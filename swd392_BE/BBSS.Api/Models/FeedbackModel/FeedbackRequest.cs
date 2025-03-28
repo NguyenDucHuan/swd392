@@ -1,12 +1,17 @@
-﻿namespace BBSS.Api.Models.FeedbackModel
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BBSS.Api.Models.FeedbackModel
 {
     public class FeedbackRequest
     {
-        public int UserId { get; set; }
-        public int BlindBoxId { get; set; }
+        [Required]
+        public int OrderId { get; set; }
+        //public int? BlindBoxId { get; set; }
+        //public int? PackageId { get; set; }
+        [Required]
         public string Title { get; set; }
+        [Required]
         public string Content { get; set; }
-        public string? Image { get; set; }
+        public IFormFile Image { get; set; }
     }
-
 }

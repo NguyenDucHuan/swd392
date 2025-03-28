@@ -266,15 +266,22 @@ namespace BBSS.Api.Services.Implements
                         UnitPrice = request.TotalAmount / request.BlindBoxIds.Count
                     };
                     await _uow.GetRepository<OrderDetail>().InsertAsync(orderDetail);
+
+                    var inventoryItem = await _uow.GetRepository<InventoryItem>().SingleOrDefaultAsync(
+                        predicate: p => p.UserId == userId && p.BlindBoxId == blindBoxId && p.Status == InventoryConstant.INVENTORY_STATUS_AVAILABLE
+                    );
+
+                    inventoryItem.Status = InventoryConstant.INVENTORY_STATUS_OWNED;
+                    _uow.GetRepository<InventoryItem>().UpdateAsync(inventoryItem);
                 }
 
                 var orderStatus = new OrderStatus
                 {
                     OrderId = order.OrderId,
-                    Status = OrderConstant.ORDER_STATUS_SHIPPING,
+                    Status = OrderConstant.ORDER_STATUS_PAID,
                     UpdateTime = DateTime.Now
                 };
-                await _uow.GetRepository<OrderStatus>().InsertAsync(orderStatus);
+                await _uow.GetRepository<OrderStatus>().InsertAsync(orderStatus);                
 
                 await _uow.CommitAsync();
                 await _uow.CommitTransactionAsync();

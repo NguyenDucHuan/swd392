@@ -1,8 +1,10 @@
-﻿using BBSS.Api.Models.FeedbackModel;
+﻿using BBSS.Api.Constants;
+using BBSS.Api.Models.FeedbackModel;
 using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using static BBSS.Api.Routes.Router;
 
 namespace BBSS.Api.Controllers
@@ -20,10 +22,11 @@ namespace BBSS.Api.Controllers
 
         // [User] Tạo phản hồi
         [HttpPost(FeedbackRoute.CreateFeedback)]
-        [Authorize]
-        public async Task<IActionResult> CreateFeedback([FromBody] FeedbackRequest request)
+        [Authorize(Roles = UserConstant.USER_ROLE_USER)]
+        public async Task<IActionResult> CreateFeedback(FeedbackRequest request)
         {
-            var result = await _feedbackService.CreateFeedbackAsync(request);
+            int userId = int.Parse(User.FindFirst(ClaimTypes.Sid).Value);
+            var result = await _feedbackService.CreateFeedbackAsync(userId, request);
             return result.Match(
                 whenLeft: (errorMessage, statusCode) => StatusCode(statusCode, errorMessage),
                 whenRight: successMessage => Ok(successMessage)
