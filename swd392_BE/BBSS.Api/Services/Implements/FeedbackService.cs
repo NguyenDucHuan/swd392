@@ -26,17 +26,59 @@ namespace BBSS.Api.Services.Implements
         }
 
         // Tạo phản hồi
-        public async Task<MethodResult<string>> CreateFeedbackAsync(FeedbackRequest request)
+        //public async Task<MethodResult<string>> CreateFeedbackAsync(FeedbackRequest request)
+        //{
+        //    try
+        //    {                
+        //        var hasOrder = await _uow.GetRepository<Order>().GetListAsync(
+        //            predicate: o => o.UserId == request.UserId
+        //        );
+
+        //        if (!hasOrder.Any())
+        //        {
+        //            return new MethodResult<string>.Failure("Người dùng chưa mua hàng.", StatusCodes.Status400BadRequest);
+        //        }
+
+        //        var feedback = _mapper.Map<Feedback>(request);
+        //        await _uow.GetRepository<Feedback>().InsertAsync(feedback);
+        //        await _uow.CommitAsync();
+
+        //        return new MethodResult<string>.Success("Phản hồi đã được tạo thành công.");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new MethodResult<string>.Failure($"Lỗi khi tạo phản hồi: {ex.Message}", StatusCodes.Status500InternalServerError);
+        //    }
+        //}
+
+        public async Task<MethodResult<string>> CreateFeedbackAsync(int userId, FeedbackRequest request)
         {
             try
             {
-                var hasOrder = await _uow.GetRepository<Order>().GetListAsync(
-                    predicate: o => o.UserId == request.UserId
+                //if (request.BlindBoxId != null)
+                //{
+                //    var blindBox = await _uow.GetRepository<BlindBox>().SingleOrDefaultAsync(
+                //        predicate: b => b.BlindBoxId == request.BlindBoxId
+                //    );
+
+                //    if (blindBox == null)
+                //    {
+                //        return new MethodResult<string>.Failure($"Không tìm thấy BlindBox", StatusCodes.Status404NotFound);
+                //    }
+
+                //    var feedback = await _uow.GetRepository<BlindBox>().SingleOrDefaultAsync(
+                //        predicate: b => b.BlindBoxId == request.BlindBoxId &&
+                //    );
+                //}
+                var order = await _uow.GetRepository<Order>().SingleOrDefaultAsync(
+                    predicate: o => o.OrderId == request.OrderId,
+                    include: i => i.Include(x => x.OrderDetails).ThenInclude(od => od.Package).ThenInclude(p => p.BlindBoxes)
+                                   .Include(x => x.OrderDetails).ThenInclude(od => od.BlindBox)
                 );
 
-                if (!hasOrder.Any())
+                if (order == null)
                 {
-                    return new MethodResult<string>.Failure("Người dùng chưa mua hàng.", StatusCodes.Status400BadRequest);
+                    return new MethodResult<string>.Failure("Đơn hàng không tồn tại.", StatusCodes.Status404NotFound);
                 }
 
                 // Upload ảnh lên Cloudinary nếu có
@@ -51,7 +93,23 @@ namespace BBSS.Api.Services.Implements
                 }
 
                 var feedback = _mapper.Map<Feedback>(request);
+                feedback.UserId = userId;
+
+                
+
+                var orderDetail = order.OrderDetails.FirstOrDefault();
+
+                if (orderDetail.BlindBoxId != null)
+                {                    
+                    feedback.BlindBoxId = (int) orderDetail.BlindBoxId;
+                }
+                else
+                {                 
+                    feedback.BlindBoxId = orderDetail.Package.BlindBoxes.FirstOrDefault().BlindBoxId;                    
+                }
+
                 feedback.Image = imageUrl;
+
                 await _uow.GetRepository<Feedback>().InsertAsync(feedback);
                 await _uow.CommitAsync();
 

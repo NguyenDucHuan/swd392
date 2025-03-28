@@ -269,7 +269,7 @@ public partial class BlindboxDbContext : DbContext
                 .HasColumnName("add_date");
             entity.Property(e => e.BlindBoxId).HasColumnName("blind_box_id");
             entity.Property(e => e.Status)
-                .HasColumnType("enum('Available','Used','etc')")
+                .HasColumnType("enum('Available','Sold','Owned')")
                 .HasColumnName("status");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 

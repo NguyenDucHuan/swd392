@@ -10,7 +10,7 @@ namespace BBSS.Api.Services.Interfaces
         /// <summary>
         /// Tạo phản hồi mới (Feedback) nếu người dùng đã mua hàng.
         /// </summary>
-        Task<MethodResult<string>> CreateFeedbackAsync(FeedbackRequest request);
+        Task<MethodResult<string>> CreateFeedbackAsync(int userId, FeedbackRequest request);
 
         /// <summary>
         /// Lấy danh sách phản hồi của một sản phẩm theo ProductId.

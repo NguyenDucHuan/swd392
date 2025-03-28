@@ -20,12 +20,11 @@ namespace BBSS.Api.Controllers
 
         // [User] Tạo phản hồi
         [HttpPost(FeedbackRoute.CreateFeedback)]
-        [Authorize]
-        public async Task<IActionResult> CreateFeedback([FromForm] FeedbackRequest request)
+        [Authorize(Roles = UserConstant.USER_ROLE_USER)]
+        public async Task<IActionResult> CreateFeedback(FeedbackRequest request)
         {
-            var userId = Int32.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            request.UserId = userId;
-            var result = await _feedbackService.CreateFeedbackAsync(request);
+            int userId = int.Parse(User.FindFirst(ClaimTypes.Sid).Value);
+            var result = await _feedbackService.CreateFeedbackAsync(userId, request);
             return result.Match(
                 whenLeft: (errorMessage, statusCode) => StatusCode(statusCode, errorMessage),
                 whenRight: successMessage => Ok(successMessage)
