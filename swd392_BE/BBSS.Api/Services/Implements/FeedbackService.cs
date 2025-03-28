@@ -16,11 +16,13 @@ namespace BBSS.Api.Services.Implements
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public FeedbackService(IUnitOfWork uow, IMapper mapper)
+        public FeedbackService(IUnitOfWork uow, IMapper mapper, ICloudinaryService cloudinaryService)
         {
             _uow = uow;
             _mapper = mapper;
+            _cloudinaryService = cloudinaryService;
         }
 
         // Tạo phản hồi
@@ -37,7 +39,19 @@ namespace BBSS.Api.Services.Implements
                     return new MethodResult<string>.Failure("Người dùng chưa mua hàng.", StatusCodes.Status400BadRequest);
                 }
 
+                // Upload ảnh lên Cloudinary nếu có
+                string imageUrl = null;
+                if (request.Image != null)
+                {
+                    imageUrl = await _cloudinaryService.UploadImageAsync(request.Image);
+                    if (string.IsNullOrEmpty(imageUrl))
+                    {
+                        return new MethodResult<string>.Failure("Không thể upload ảnh.", StatusCodes.Status500InternalServerError);
+                    }
+                }
+
                 var feedback = _mapper.Map<Feedback>(request);
+                feedback.Image = imageUrl;
                 await _uow.GetRepository<Feedback>().InsertAsync(feedback);
                 await _uow.CommitAsync();
 

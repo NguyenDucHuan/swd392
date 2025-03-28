@@ -50,7 +50,8 @@ namespace BBSS.Api.Controllers
         public async Task<ActionResult> CompleteOrder(int orderId)
         {
             var userId = Int32.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            var result = await _orderService.CompleteOrderAsync(userId, orderId);
+            var role = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
+            var result = await _orderService.CompleteOrderAsync(userId, orderId , role);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok

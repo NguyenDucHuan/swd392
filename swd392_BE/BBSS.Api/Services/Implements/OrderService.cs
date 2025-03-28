@@ -12,6 +12,7 @@ using MailKit.Search;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq.Expressions;
+using System.Reflection.Metadata;
 using System.Security.Claims;
 
 namespace BBSS.Api.Services.Implements
@@ -421,7 +422,7 @@ namespace BBSS.Api.Services.Implements
             };
         }
 
-        public async Task<MethodResult<string>> CompleteOrderAsync(int userId, int orderId)
+        public async Task<MethodResult<string>> CompleteOrderAsync(int userId, int orderId, string role)
         {
             try
             {
@@ -432,7 +433,7 @@ namespace BBSS.Api.Services.Implements
                 {
                     return new MethodResult<string>.Failure("Order not found", StatusCodes.Status404NotFound);
                 }
-                if (order.UserId != userId)
+                if (order.UserId != userId && role == UserConstant.USER_ROLE_USER)
                 {
                     return new MethodResult<string>.Failure("User do not have this order", StatusCodes.Status404NotFound);
                 }

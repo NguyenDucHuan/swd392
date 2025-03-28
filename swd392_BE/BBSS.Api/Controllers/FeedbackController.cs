@@ -1,14 +1,14 @@
-﻿using BBSS.Api.Models.FeedbackModel;
+﻿using BBSS.Api.Constants;
+using BBSS.Api.Models.FeedbackModel;
 using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using static BBSS.Api.Routes.Router;
 
 namespace BBSS.Api.Controllers
 {
-    [ApiController]
-    [Route(FeedbackRoute.Feedbacks)]
     public class FeedbackController : ControllerBase
     {
         private readonly IFeedbackService _feedbackService;
@@ -21,8 +21,10 @@ namespace BBSS.Api.Controllers
         // [User] Tạo phản hồi
         [HttpPost(FeedbackRoute.CreateFeedback)]
         [Authorize]
-        public async Task<IActionResult> CreateFeedback([FromBody] FeedbackRequest request)
+        public async Task<IActionResult> CreateFeedback([FromForm] FeedbackRequest request)
         {
+            var userId = Int32.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            request.UserId = userId;
             var result = await _feedbackService.CreateFeedbackAsync(request);
             return result.Match(
                 whenLeft: (errorMessage, statusCode) => StatusCode(statusCode, errorMessage),
@@ -30,7 +32,6 @@ namespace BBSS.Api.Controllers
             );
         }
 
-        // [User] Xem danh sách phản hồi của một sản phẩm
         [HttpGet(FeedbackRoute.GetFeedbackByProduct)]
         public async Task<IActionResult> GetFeedbackByProduct(int productId, [FromQuery] PaginateModel model, DateOnly? date, int? minVote, int? maxVote)
         {
@@ -41,9 +42,8 @@ namespace BBSS.Api.Controllers
             );
         }
 
-        // [Manager] Xem tất cả phản hồi
         [HttpGet(FeedbackRoute.GetAllFeedbacks)]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = $" {UserConstant.USER_ROLE_STAFF}, {UserConstant.USER_ROLE_USER}")]
         public async Task<IActionResult> GetAllFeedbacks([FromQuery] PaginateModel model, DateOnly? date, int? minVote, int? maxVote)
         {
             var result = await _feedbackService.GetAllFeedbacksAsync(model, date, minVote, maxVote);

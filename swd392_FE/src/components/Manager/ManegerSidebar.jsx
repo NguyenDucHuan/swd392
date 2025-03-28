@@ -35,7 +35,6 @@ function ManegerSidebar() {
 
   // Staff menu items
   const staffMenuItems = [
-    { icon: RiDashboardLine, text: "Tổng quan", path: "/dashboard" },
     { icon: RiBox1Fill, text: "Packages", path: "/packages" },
     { icon: RiShoppingCartLine, text: "Đơn hàng", path: "/manage-orders" },
   ];
