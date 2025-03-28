@@ -21,6 +21,8 @@ import CreateUnknownPackage from "../pages/ManagerPage/PackageManagement/CreateU
 import EditPackage from "../pages/ManagerPage/PackageManagement/EditPackage";
 import PackageManager from "../pages/ManagerPage/PackageManagement/PackageManager";
 import Settings from "../pages/ManagerPage/Settings";
+import Transactions from "../pages/ManagerPage/Transactions";
+import Users from "../pages/ManagerPage/Users";
 import PaymentResult from "../pages/Payment/PaymentResult";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import ChangePasswordPage from "../pages/ProfilePage/ChangePasswordPage";
@@ -31,7 +33,6 @@ import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
 import LuckyWheelDetail from "../pages/ShoppingAndLuckyWheel/LuckyWheelDetail";
 import PackageDetail from "../pages/ShoppingAndLuckyWheel/PackageDetail";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
-import Users from "../pages/Users";
 
 const AppRoutes = () => {
   return (
@@ -288,6 +289,16 @@ const AppRoutes = () => {
         }
       />
 
+      <Route
+        path="/transactions"
+        element={
+          <ManagerLayout>
+            <AdminRoute>
+              <Transactions />
+            </AdminRoute>
+          </ManagerLayout>
+        }
+      />
       {/* Error Routes */}
       <Route
         path="/unauthorized"
