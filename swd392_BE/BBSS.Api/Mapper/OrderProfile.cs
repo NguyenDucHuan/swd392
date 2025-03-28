@@ -27,6 +27,8 @@ namespace BBSS.Api.Mapper
                     Price = x.UnitPrice
                 })));
             CreateMap<OrderStatus, OrderStatusViewModel>();
+            CreateMap<OrderWheelCreateRequest, Order>()
+                .ForMember(dest => dest.OrderDate, opt => opt.MapFrom(src => DateTime.Now));
         }
     }
 }
