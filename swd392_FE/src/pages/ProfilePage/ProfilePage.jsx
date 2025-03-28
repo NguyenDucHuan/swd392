@@ -1056,11 +1056,24 @@ function ProfilePage() {
                                   item.blindBox?.price
                               )}
                             </div>
-                            {item.blindBox?.isSpecial && (
-                              <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                                Đặc biệt
+                            <div className="flex items-center gap-2">
+                              {item.blindBox?.isSpecial && (
+                                <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                  Đặc biệt
+                                </span>
+                              )}
+                              <span
+                                className={`text-xs font-medium px-2.5 py-0.5 rounded ${
+                                  item.status === "Available"
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-red-100 text-red-800"
+                                }`}
+                              >
+                                {item.status === "Available"
+                                  ? "Khả dụng"
+                                  : "Không khả dụng"}
                               </span>
-                            )}
+                            </div>
                           </div>
                           {item.blindBox?.discount > 0 && (
                             <div className="mt-2">
