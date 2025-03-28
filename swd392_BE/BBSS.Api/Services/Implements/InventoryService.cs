@@ -43,7 +43,9 @@ namespace BBSS.Api.Services.Implements
                     selector: s => _mapper.Map<InventoryViewModel>(s),
                     predicate: predicate,
                     orderBy: BuildOrderBy(model.sortBy),
-                    include: i => i.Include(p => p.BlindBox.Package).Include(b => b.BlindBox.BlindBoxImages).Include(b => b.BlindBox.BlindBoxFeatures).ThenInclude(b => b.Feature),
+                    include: i => i.Include(p => p.BlindBox.Package)
+                                   .Include(p => p.BlindBox.BlindBoxFeatures).ThenInclude(f => f.Feature)
+                                   .Include(p => p.BlindBox.BlindBoxImages),
                     page: page,
                     size: size
                 );

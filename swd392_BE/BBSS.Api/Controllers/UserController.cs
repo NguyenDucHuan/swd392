@@ -1,5 +1,6 @@
 ﻿using BBSS.Api.Constants;
 using BBSS.Api.Models.AuthenticationModel;
+using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Models.UserModel;
 using BBSS.Api.Routes;
 using BBSS.Api.Services.Implements;
@@ -22,7 +23,7 @@ namespace BBSS.Api.Controllers
 
         [HttpGet]
         [Route(Router.UserRoute.Profile)]
-        public async Task<IActionResult> GetProfilea()
+        public async Task<IActionResult> GetProfile()
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (email == null) return Unauthorized();
@@ -32,7 +33,19 @@ namespace BBSS.Api.Controllers
                 (errorMessage, statusCode) => Problem(detail: errorMessage, statusCode: statusCode),
                 Ok
             );
-        }       
+        }
+
+        [HttpGet]
+        [Route(Router.UserRoute.Users)]
+        //[Authorize(Roles = UserConstant.USER_ROLE_ADMIN)]
+        public async Task<IActionResult> GetAllUsers([FromQuery] PaginateModel model)
+        {
+            var result = await _userService.GetAllUsersAsync(model);
+            return result.Match(
+                (errorMessage, statusCode) => Problem(detail: errorMessage, statusCode: statusCode),
+                Ok
+            );
+        }
 
         [HttpPatch]
         [Route(Router.UserRoute.UpdateProfile)]

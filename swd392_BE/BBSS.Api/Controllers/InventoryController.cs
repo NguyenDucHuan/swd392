@@ -33,7 +33,6 @@ namespace BBSS.Api.Controllers
 
         [HttpGet]
         [Route(Router.InventoryRoute.GetOtherInventories)]
-        [Authorize(Roles = UserConstant.USER_ROLE_USER)]
         public async Task<ActionResult> GetOtherInventories(int userId, [FromQuery] PaginateModel model, decimal? minAmount, decimal? maxAmount)
         {
             var result = await _inventoryService.GetInventoriesAsync(userId, model, minAmount, maxAmount);

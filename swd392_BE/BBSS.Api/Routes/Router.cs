@@ -61,6 +61,7 @@ namespace BBSS.Api.Routes
             public const string GetWheel = $"{Wheel}";
             public const string GetWheelDetail = $"{Wheel}-detail";
             public const string PlayWheel = $"{Wheel}/spin";
+            public const string CreateOrderWheel = $"{Wheel}/order-wheel";
         }
         public static class PackageRoute
         {
