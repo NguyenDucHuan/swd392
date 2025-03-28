@@ -2,6 +2,7 @@
 using BBSS.Api.Constants;
 using BBSS.Api.Helper;
 using BBSS.Api.Models.Configurations;
+using BBSS.Api.Models.OrderModel;
 using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Models.VnPayModel;
 using BBSS.Api.Services.Interfaces;
@@ -244,5 +245,20 @@ namespace BBSS.Api.Services.Implements
 
             await _uow.GetRepository<Transaction>().InsertAsync(transaction);
         }
+
+        //public async Task<string> CreateOrderWheelAsync(string userId, OrderWheelCreateRequest request)
+        //{
+        //    try
+        //    {
+        //        await _uow.BeginTransactionAsync();
+        //        var order = _mapper.Map<Order>(request);
+
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
     }
 }

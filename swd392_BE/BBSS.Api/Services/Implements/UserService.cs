@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using BBSS.Api.Helper;
 using BBSS.Api.Models.AuthenticationModel;
+using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Models.UserModel;
 using BBSS.Api.Services.Interfaces;
 using BBSS.Api.ViewModels;
 using BBSS.Domain.Entities;
+using BBSS.Domain.Paginate;
 using BBSS.Repository.Interfaces;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BBSS.Api.Services.Implements
 {
@@ -125,6 +129,44 @@ namespace BBSS.Api.Services.Implements
             {
                 return new MethodResult<string>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
             }
+        }
+
+        public async Task<MethodResult<IPaginate<UserViewModel>>> GetAllUsersAsync(PaginateModel model)
+        {
+            int page = model.page > 0 ? model.page : 1;
+            int size = model.size > 0 ? model.size : 10;
+            string search = model.search?.ToLower() ?? string.Empty;
+            string filter = model.filter?.ToLower() ?? string.Empty;
+
+            Expression<Func<User, bool>> predicate = p =>
+                (string.IsNullOrEmpty(search) || p.Name.Contains(search) ||
+                                                 p.Email.Contains(search)) &&
+                (string.IsNullOrEmpty(filter) || filter == p.Role.ToLower());
+
+            var users = await _uow.GetRepository<User>().GetPagingListAsync(
+                selector: s => _mapper.Map<UserViewModel>(s),
+                predicate: predicate,
+                include: i => i.Include(p => p.InventoryItems),
+                orderBy: BuildOrderBy(model.sortBy),
+                page: page,
+                size: size
+            );
+
+            return new MethodResult<IPaginate<UserViewModel>>.Success(users);
+        }
+
+        private Func<IQueryable<User>, IOrderedQueryable<User>> BuildOrderBy(string sortBy)
+        {
+            if (string.IsNullOrEmpty(sortBy)) return null;
+
+            return sortBy.ToLower() switch
+            {
+                "wallet" => q => q.OrderBy(p => p.WalletBalance),
+                "wallet_desc" => q => q.OrderByDescending(p => p.WalletBalance),
+                "date" => q => q.OrderBy(p => p.DateOfBirth),
+                "date_desc" => q => q.OrderByDescending(p => p.DateOfBirth),
+                _ => q => q.OrderByDescending(p => p.UserId) // Default sort
+            };
         }
     }
 }

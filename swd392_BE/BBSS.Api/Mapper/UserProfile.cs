@@ -21,6 +21,8 @@ namespace BBSS.Api.Mapper
                   .ForMember(dest => dest.Status, opt => opt.MapFrom(src => UserConstant.USER_STATUS_ACTIVE));
             CreateMap<User, ProfileViewModel>();
             CreateMap<UpdateProfileRequest, User>();
+            CreateMap<User, UserViewModel>()
+                .ForMember(dest => dest.AmountInventoryItems, opt => opt.MapFrom(src => src.InventoryItems.Count()));
         }
     }
 }
