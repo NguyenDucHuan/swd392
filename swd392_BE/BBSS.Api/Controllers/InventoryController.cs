@@ -22,7 +22,7 @@ namespace BBSS.Api.Controllers
         [HttpGet]
         [Route(Router.InventoryRoute.GetOwnInventories)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
-        public async Task<ActionResult> GetOwnInventories([FromQuery] PaginateModel model, decimal? minAmount, decimal? maxAmount)
+        public async Task<ActionResult> GetOwnInventories([FromQuery] PaginateModel? model, decimal? minAmount, decimal? maxAmount)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.Sid).Value);
             var result = await _inventoryService.GetInventoriesAsync(userId, model, minAmount, maxAmount);

@@ -1,7 +1,11 @@
-import { Navigate } from 'react-router-dom';
-import { getUserRole } from '../utils/authUtils';
+import { Navigate } from "react-router-dom";
+import { getUserRole } from "../utils/authUtils";
 
-const RoleBasedRoute = ({ children, allowedRoles, redirectTo = "/unauthorized" }) => {
+const RoleBasedRoute = ({
+  children,
+  allowedRoles,
+  redirectTo = "/unauthorized",
+}) => {
   const token = localStorage.getItem("access_token");
   const userRole = getUserRole();
 
@@ -20,8 +24,8 @@ const RoleBasedRoute = ({ children, allowedRoles, redirectTo = "/unauthorized" }
   // }
 
   // Case insensitive role checking
-  const hasPermission = allowedRoles.some(role =>
-    userRole && userRole.toLowerCase() === role.toLowerCase()
+  const hasPermission = allowedRoles.some(
+    (role) => userRole && userRole.toLowerCase() === role.toLowerCase()
   );
 
   if (!hasPermission) {
@@ -35,13 +39,28 @@ const RoleBasedRoute = ({ children, allowedRoles, redirectTo = "/unauthorized" }
 
 // Specific role-based components
 export const AdminRoute = ({ children }) => {
-  return <RoleBasedRoute allowedRoles={["Admin"]} redirectTo="/unauthorized">{children}</RoleBasedRoute>;
+  return (
+    <RoleBasedRoute allowedRoles={["Admin"]} redirectTo="/unauthorized">
+      {children}
+    </RoleBasedRoute>
+  );
 };
 
 export const StaffRoute = ({ children }) => {
-  return <RoleBasedRoute allowedRoles={["Admin", "Staff"]} redirectTo="/unauthorized">{children}</RoleBasedRoute>;
+  return (
+    <RoleBasedRoute
+      allowedRoles={["Admin", "Staff"]}
+      redirectTo="/unauthorized"
+    >
+      {children}
+    </RoleBasedRoute>
+  );
 };
 
 export const UserRoute = ({ children }) => {
-  return <RoleBasedRoute allowedRoles={["User"]} redirectTo="/about">{children}</RoleBasedRoute>;
+  return (
+    <RoleBasedRoute allowedRoles={["User"]} redirectTo="/">
+      {children}
+    </RoleBasedRoute>
+  );
 };

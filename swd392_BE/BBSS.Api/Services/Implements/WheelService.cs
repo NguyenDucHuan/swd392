@@ -210,6 +210,7 @@ namespace BBSS.Api.Services.Implements
                 _uow.GetRepository<User>().UpdateAsync(user);
                 _uow.GetRepository<BlindBox>().UpdateAsync(blindBox);
                 await CreateInventoryItem(user, blindBox.BlindBoxId);
+                _uow.GetRepository<BlindBox>().UpdateAsync(blindBox);
                 result.Add(blindBox.BlindBoxId);
                 blindBoxes.Remove(blindBox);
             }

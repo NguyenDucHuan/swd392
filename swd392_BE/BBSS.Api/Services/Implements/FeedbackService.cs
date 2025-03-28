@@ -81,14 +81,21 @@ namespace BBSS.Api.Services.Implements
                     return new MethodResult<string>.Failure("Đơn hàng không tồn tại.", StatusCodes.Status404NotFound);
                 }
 
+                // Upload ảnh lên Cloudinary nếu có
+                string imageUrl = null;
+                if (request.Image != null)
+                {
+                    imageUrl = await _cloudinaryService.UploadImageAsync(request.Image);
+                    if (string.IsNullOrEmpty(imageUrl))
+                    {
+                        return new MethodResult<string>.Failure("Không thể upload ảnh.", StatusCodes.Status500InternalServerError);
+                    }
+                }
+
                 var feedback = _mapper.Map<Feedback>(request);
                 feedback.UserId = userId;
 
-                var imageUrl = await _cloudinaryService.UploadImageAsync(request.Image);
-                if (!string.IsNullOrEmpty(imageUrl))
-                {
-                    feedback.Image = imageUrl;
-                }
+                
 
                 var orderDetail = order.OrderDetails.FirstOrDefault();
 
@@ -100,6 +107,8 @@ namespace BBSS.Api.Services.Implements
                 {                 
                     feedback.BlindBoxId = orderDetail.Package.BlindBoxes.FirstOrDefault().BlindBoxId;                    
                 }
+
+                feedback.Image = imageUrl;
 
                 await _uow.GetRepository<Feedback>().InsertAsync(feedback);
                 await _uow.CommitAsync();

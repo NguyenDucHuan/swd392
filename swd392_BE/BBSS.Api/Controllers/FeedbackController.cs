@@ -9,8 +9,6 @@ using static BBSS.Api.Routes.Router;
 
 namespace BBSS.Api.Controllers
 {
-    [ApiController]
-    [Route(FeedbackRoute.Feedbacks)]
     public class FeedbackController : ControllerBase
     {
         private readonly IFeedbackService _feedbackService;
@@ -33,7 +31,6 @@ namespace BBSS.Api.Controllers
             );
         }
 
-        // [User] Xem danh sách phản hồi của một sản phẩm
         [HttpGet(FeedbackRoute.GetFeedbackByProduct)]
         public async Task<IActionResult> GetFeedbackByProduct(int productId, [FromQuery] PaginateModel model, DateOnly? date, int? minVote, int? maxVote)
         {
@@ -44,9 +41,8 @@ namespace BBSS.Api.Controllers
             );
         }
 
-        // [Manager] Xem tất cả phản hồi
         [HttpGet(FeedbackRoute.GetAllFeedbacks)]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = $" {UserConstant.USER_ROLE_STAFF}, {UserConstant.USER_ROLE_USER}")]
         public async Task<IActionResult> GetAllFeedbacks([FromQuery] PaginateModel model, DateOnly? date, int? minVote, int? maxVote)
         {
             var result = await _feedbackService.GetAllFeedbacksAsync(model, date, minVote, maxVote);

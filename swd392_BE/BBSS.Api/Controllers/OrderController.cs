@@ -20,7 +20,7 @@ namespace BBSS.Api.Controllers
         [HttpPost]
         [Route(Router.OrderRoute.CreateOrder)]
         [Authorize(Roles = UserConstant.USER_ROLE_USER)]
-        public async Task<ActionResult> CreateOrder(int? voucherId, [FromBody]OrderCreateRequest request)
+        public async Task<ActionResult> CreateOrder(int? voucherId, [FromBody] OrderCreateRequest request)
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (email == null) return Unauthorized();
@@ -46,11 +46,12 @@ namespace BBSS.Api.Controllers
 
         [HttpPost]
         [Route(Router.OrderRoute.CompleteOrder)]
-        [Authorize(Roles = UserConstant.USER_ROLE_USER)]
+        [Authorize(Roles = $"{UserConstant.USER_ROLE_USER}, {UserConstant.USER_ROLE_STAFF}")]
         public async Task<ActionResult> CompleteOrder(int orderId)
         {
             var userId = Int32.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            var result = await _orderService.CompleteOrderAsync(userId, orderId);
+            var role = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
+            var result = await _orderService.CompleteOrderAsync(userId, orderId , role);
             return result.Match(
                 (l, c) => Problem(detail: l, statusCode: c),
                 Ok

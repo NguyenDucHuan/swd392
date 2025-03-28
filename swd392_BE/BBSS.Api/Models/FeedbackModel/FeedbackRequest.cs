@@ -12,6 +12,8 @@ namespace BBSS.Api.Models.FeedbackModel
         public string Title { get; set; }
         [Required]
         public string Content { get; set; }
-        public IFormFile Image { get; set; }
+
+        public IFormFile? Image { get; set; }
     }
 }
+

@@ -1,261 +1,294 @@
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FaArrowRight, FaSearch, FaSort } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../configs/globalVariables";
 
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { BASE_URL } from '../../configs/globalVariables';
-
-
-const LuckyWheel = () => {
-  const [spinning, setSpinning] = useState(false);
-  const [result, setResult] = useState(null);
-  const [items, setItems] = useState([]);
-  const [offset, setOffset] = useState(0);
-  const [wheelInfo, setWheelInfo] = useState(null);
-  const spinnerRef = useRef(null);
+function LuckyWheel() {
+  const [wheels, setWheels] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    pageSize: 10,
+    totalItems: 0,
+    totalPages: 1,
+  });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [sortBy, setSortBy] = useState("");
   const navigate = useNavigate();
 
-  // Các phân loại skin với màu sắc tương ứng
-  const rarities = {
-    common: "text-gray-400 bg-gray-800",
-    uncommon: "text-pink-400 bg-pink-900",
-    rare: "text-purple-400 bg-purple-900",
-    mythical: "text-pink-400 bg-pink-900",
-    legendary: "text-red-400 bg-red-900",
-    ancient: "text-yellow-400 bg-yellow-900",
-  };
-
-  // Fetch danh sách items từ API
+  // Fetch categories
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchCategories = async () => {
       try {
-        const token = localStorage.getItem('access_token');
-        console.log('Token:', token); // Debug log
+        const response = await axios.get(`${BASE_URL}/categories`);
+        const categoryItems = response.data.$values || [];
+        setCategories(categoryItems);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        toast.error("Không thể tải danh sách danh mục");
+      }
+    };
 
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchWheels = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
         if (!token) {
-          toast.error('Vui lòng đăng nhập để sử dụng tính năng này');
-          navigate('/login');
+          toast.error("Vui lòng đăng nhập để sử dụng tính năng này");
+          navigate("/login");
           return;
         }
 
         const response = await axios.get(`${BASE_URL}/wheel`, {
+          params: {
+            page: pagination.currentPage,
+            size: pagination.pageSize,
+            search: searchTerm,
+            filter: filterCategory,
+            sortBy: sortBy,
+          },
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
-        console.log('API Response:', response.data); // Debug log
-
-        if (response.data) {
-          setWheelInfo({
-            price: response.data.price
-          });
-
-          // Chuyển đổi dữ liệu packages thành định dạng hiển thị
-          const formattedItems = response.data.packages.$values.flatMap(pkg =>
-            pkg.blindBoxes.$values
-              .filter(box => !box.isSold) // Chỉ lấy các box chưa bán
-              .map(box => ({
-                id: box.blindBoxId,
-                name: `${box.packageName} - ${box.color}`,
-                image: box.imageUrls.$values[0] || '/placeholder.png',
-                rarity: box.isSpecial ? 'mythical' : 'common',
-                price: box.discountedPrice,
-                isSpecial: box.isSpecial,
-                isKnowned: box.isKnowned
-              }))
-          );
-
-          console.log('Formatted Items:', formattedItems); // Debug log
-
-          if (formattedItems.length === 0) {
-            toast.error('Không có sản phẩm nào khả dụng');
-            return;
-          }
-
-          setItems(formattedItems);
-        }
+        // Handle the nested response structure
+        const wheelItems = response.data.items?.$values || [];
+        setWheels(wheelItems);
+        setPagination((prev) => ({
+          ...prev,
+          totalItems: response.data.total || 0,
+          totalPages: response.data.totalPages || 1,
+        }));
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching items:', error);
+        console.error("Error fetching wheels:", error);
         if (error.response?.status === 401) {
-          toast.error('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại');
-          navigate('/login');
+          toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
+          navigate("/login");
         } else {
-          toast.error('Không thể tải danh sách sản phẩm');
+          toast.error("Không thể tải danh sách vòng quay");
         }
+        setLoading(false);
       }
     };
 
-    fetchItems();
-  }, [navigate]);
+    fetchWheels();
+  }, [
+    navigate,
+    pagination.currentPage,
+    pagination.pageSize,
+    searchTerm,
+    filterCategory,
+    sortBy,
+  ]);
 
-  // Hàm xử lý quay vòng quay
-  const handleOpenCase = async () => {
-    if (spinning) return;
-
-    setSpinning(true);
-    setResult(null);
-
-    try {
-      const token = localStorage.getItem('access_token');
-      console.log('Token for spin:', token); // Debug log
-
-      if (!token) {
-        toast.error('Vui lòng đăng nhập để sử dụng tính năng này');
-        navigate('/login');
-        return;
-      }
-
-      const response = await axios.post(`${BASE_URL}/wheel/spin`, null, {
-        params: {
-          times: 1,
-          amount: wheelInfo?.price || 0
-        },
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      console.log('Spin Response:', response.data); // Debug log
-
-      if (response.data) {
-        // Tạo danh sách items mới với vị trí item trúng
-        const newItems = [];
-        for (let i = 0; i < 50; i++) {
-          newItems.push(items[Math.floor(Math.random() * items.length)]);
-        }
-
-        // Chèn item trúng vào vị trí xác định (item ở giữa khi dừng)
-        const winningItem = items.find(item => item.id === response.data[0]);
-        console.log('Winning Item:', winningItem); // Debug log
-        const winningPosition = 25;
-        newItems[winningPosition] = winningItem;
-
-        setItems(newItems);
-        setOffset(0);
-
-        // Animation quay
-        setTimeout(() => {
-          // Tạo hiệu ứng quay với tốc độ giảm dần
-          const targetOffset = (winningPosition - 2) * -120; // Số pixel để di chuyển đến vị trí item trúng
-          const duration = 5000; // Thời gian animation
-          const startTime = Date.now();
-
-          const animate = () => {
-            const elapsedTime = Date.now() - startTime;
-            const progress = Math.min(elapsedTime / duration, 1);
-
-            // Easing function tạo hiệu ứng chậm dần
-            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-            const easedProgress = progress < 0.7
-              ? progress
-              : 0.7 + (easeOutCubic - 0.7) * (1 / 0.3) * (progress - 0.7);
-
-            setOffset(targetOffset * easedProgress);
-
-            if (progress < 1) {
-              requestAnimationFrame(animate);
-            } else {
-              // Hoàn thành animation
-              setSpinning(false);
-              setResult(winningItem);
-              toast.success('Chúc mừng bạn đã nhận được phần thưởng!');
-            }
-          };
-
-          requestAnimationFrame(animate);
-        }, 500);
-      }
-    } catch (error) {
-      console.error('Error playing wheel:', error);
-      setSpinning(false);
-      if (error.response?.status === 401) {
-        toast.error('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại');
-        navigate('/login');
-      } else {
-        toast.error(error.response?.data?.detail || 'Có lỗi xảy ra khi quay');
-      }
-    }
+  const formatCurrency = (amount) => {
+    return amount?.toLocaleString("vi-VN") + " ₫";
   };
 
-  return (
-    <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto bg-gray-900 text-white p-6 rounded-lg my-12">
-      <h1 className="text-3xl font-bold mb-6">Vòng Quay May Mắn</h1>
+  const handleWheelClick = (packageCode) => {
+    navigate(`/lucky-wheel/${packageCode}`);
+  };
 
-      {/* Hiển thị thông tin vòng quay */}
-      <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-4 mb-6 w-full">
-        <div className="flex justify-center mb-4">
-          <img src="/api/placeholder/200/150" alt="Wheel" className="h-32 hover:scale-105 transition-transform duration-300" />
-        </div>
-        <div className="text-center">
-          <h2 className="text-xl font-bold mb-2">Vòng Quay May Mắn</h2>
-          <p className="text-gray-400 text-sm">Có thể nhận được các sản phẩm giá trị</p>
-          {wheelInfo && (
-            <p className="text-yellow-400 mt-2">Giá mỗi lần quay: {wheelInfo.price.toLocaleString('vi-VN')} ₫</p>
-          )}
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+  };
+
+  const handleFilterChange = (e) => {
+    setFilterCategory(e.target.value);
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+  };
+
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-6xl mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-8">Vòng Quay May Mắn</h1>
+
+      {/* Search and Filter Section */}
+      <div className="mb-6 bg-white p-4 rounded-lg shadow-md">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Search */}
+          <form onSubmit={handleSearch} className="relative">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Tìm kiếm vòng quay..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+            />
+            <FaSearch className="absolute left-3 top-3 text-gray-400" />
+          </form>
+
+          {/* Category Filter */}
+          <div className="relative">
+            <select
+              value={filterCategory}
+              onChange={handleFilterChange}
+              className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 appearance-none"
+            >
+              <option value="">Tất cả danh mục</option>
+              {categories.map((category) => (
+                <option key={category.categoryId} value={category.categoryId}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Sort */}
+          <div className="relative">
+            <select
+              value={sortBy}
+              onChange={handleSortChange}
+              className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 appearance-none"
+            >
+              <option value="">Sắp xếp theo</option>
+              <option value="name">Tên (A-Z)</option>
+              <option value="name_desc">Tên (Z-A)</option>
+              <option value="code">Mã (A-Z)</option>
+              <option value="code_desc">Mã (Z-A)</option>
+            </select>
+            <FaSort className="absolute right-3 top-3 text-gray-400" />
+          </div>
         </div>
       </div>
 
-      {/* Khu vực quay spinner */}
-      <div className="relative w-full h-32 border-4 border-gray-700 rounded-lg mb-6 overflow-hidden">
-        {/* Marker chỉ vị trí trúng */}
-        <div className="absolute top-0 left-1/2 h-full w-1 bg-yellow-500 z-10 transform -translate-x-1/2"></div>
-
-        {/* Bộ spinner chứa các items */}
-        <div
-          ref={spinnerRef}
-          className="absolute flex h-full transition-transform duration-100"
-          style={{ transform: `translateX(${offset}px)` }}
-        >
-          {items.map((item, index) => (
+      {/* Wheels Grid */}
+      {wheels.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {wheels.map((wheel) => (
             <div
-              key={`${item.id}-${index}`}
-              className={`flex flex-col items-center justify-center flex-shrink-0 w-32 h-full ${rarities[item.rarity]} p-2 mx-1 rounded-md border border-gray-600`}
+              key={wheel.packageCode}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+              onClick={() => handleWheelClick(wheel.packageCode)}
             >
-              <div className="h-16 w-full flex items-center justify-center">
-                <img src={item.image} alt={item.name} className="max-h-full max-w-full object-contain" />
+              {/* Wheel Image */}
+              <div className="relative h-48 bg-gray-100">
+                {wheel.images?.$values?.[0]?.url ? (
+                  <img
+                    src={wheel.images.$values[0].url}
+                    alt={wheel.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.src = "/placeholder.png";
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-gray-400">Không có hình ảnh</span>
+                  </div>
+                )}
+                {/* Rate Badge */}
+                <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded-full text-sm font-semibold">
+                  {(wheel.rate * 100).toFixed(1)}% Đặc biệt
+                </div>
               </div>
-              <div className="text-center mt-1">
-                <p className="text-xs font-medium truncate">{item.name}</p>
+
+              {/* Wheel Info */}
+              <div className="p-4">
+                <h3 className="text-xl font-bold mb-2">{wheel.name}</h3>
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  {wheel.description}
+                </p>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-sm text-gray-500">Giá mỗi lần quay:</p>
+                    <p className="text-lg font-bold text-pink-600">
+                      {formatCurrency(wheel.price)}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-500">Tổng số box:</p>
+                    <p className="text-lg font-bold">{wheel.totalBlindBoxes}</p>
+                  </div>
+                </div>
+                <button className="w-full mt-4 bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 flex items-center justify-center">
+                  Quay ngay <FaArrowRight className="ml-2" />
+                </button>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      ) : (
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <p className="text-gray-600">Không có vòng quay nào khả dụng.</p>
+        </div>
+      )}
 
-      {/* Nút quay */}
-      <button
-        onClick={handleOpenCase}
-        disabled={spinning}
-        className={`px-8 py-3 rounded-lg text-lg font-bold transition-all duration-200 
-          ${spinning
-            ? 'bg-gray-700 cursor-not-allowed'
-            : 'bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 shadow-lg hover:shadow-yellow-500/30'
-          }`}
-      >
-        {spinning ? 'Đang quay...' : `Quay (${wheelInfo?.price?.toLocaleString('vi-VN')} ₫)`}
-      </button>
+      {/* Pagination */}
+      {pagination.totalPages > 1 && (
+        <div className="flex justify-center mt-8">
+          <nav className="flex items-center">
+            <button
+              disabled={pagination.currentPage === 1}
+              onClick={() =>
+                setPagination((prev) => ({
+                  ...prev,
+                  currentPage: prev.currentPage - 1,
+                }))
+              }
+              className="px-3 py-1 rounded border mr-2 disabled:opacity-50"
+            >
+              Trước
+            </button>
 
-      {/* Hiển thị kết quả */}
-      {result && (
-        <div className="mt-8 w-full">
-          <div className="text-center mb-2">
-            <h3 className="text-xl font-bold">Bạn đã nhận được!</h3>
-          </div>
-          <div className={`flex items-center justify-center p-6 ${rarities[result.rarity]} rounded-lg border border-gray-600`}>
-            <div className="mr-4">
-              <img src={result.image} alt={result.name} className="w-32 h-24 object-contain" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-300">Bạn đã nhận được</p>
-              <h4 className="text-2xl font-bold">{result.name}</h4>
-              <p className={`text-sm capitalize`}>{result.rarity}</p>
-            </div>
-          </div>
+            {[...Array(pagination.totalPages).keys()].map((page) => (
+              <button
+                key={page}
+                onClick={() =>
+                  setPagination((prev) => ({
+                    ...prev,
+                    currentPage: page + 1,
+                  }))
+                }
+                className={`px-3 py-1 rounded border mx-1 ${
+                  pagination.currentPage === page + 1
+                    ? "bg-pink-500 text-white"
+                    : ""
+                }`}
+              >
+                {page + 1}
+              </button>
+            ))}
+
+            <button
+              disabled={pagination.currentPage === pagination.totalPages}
+              onClick={() =>
+                setPagination((prev) => ({
+                  ...prev,
+                  currentPage: prev.currentPage + 1,
+                }))
+              }
+              className="px-3 py-1 rounded border ml-2 disabled:opacity-50"
+            >
+              Tiếp
+            </button>
+          </nav>
         </div>
       )}
     </div>
   );
-};
+}
 
 export default LuckyWheel;

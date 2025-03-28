@@ -1,8 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import { AdminRoute, StaffRoute, UserRoute } from "../components/RoleBasedRoute";
+import {
+  AdminRoute,
+  StaffRoute,
+  UserRoute,
+} from "../components/RoleBasedRoute";
 import { CustomerLayout } from "../layout/CustomerLayout";
 import { ManagerLayout } from "../layout/ManagerLayout";
-
 
 // Import pages
 import CartPage from "../pages/CartPage/CartPage";
@@ -18,29 +21,23 @@ import CreateUnknownPackage from "../pages/ManagerPage/PackageManagement/CreateU
 import EditPackage from "../pages/ManagerPage/PackageManagement/EditPackage";
 import PackageManager from "../pages/ManagerPage/PackageManagement/PackageManager";
 import Settings from "../pages/ManagerPage/Settings";
+import Transactions from "../pages/ManagerPage/Transactions";
+import Users from "../pages/ManagerPage/Users";
+import PaymentResult from "../pages/Payment/PaymentResult";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import ChangePasswordPage from "../pages/ProfilePage/ChangePasswordPage";
-import ProfilePage from '../pages/ProfilePage/ProfilePage';
+import ProfilePage from "../pages/ProfilePage/ProfilePage";
 import RechargePage from "../pages/ProfilePage/RechargePage";
 import Register from "../pages/Register";
 import LuckyWheel from "../pages/ShoppingAndLuckyWheel/LuckyWheel";
+import LuckyWheelDetail from "../pages/ShoppingAndLuckyWheel/LuckyWheelDetail";
 import PackageDetail from "../pages/ShoppingAndLuckyWheel/PackageDetail";
 import ShoppingPage from "../pages/ShoppingAndLuckyWheel/ShoppingPage";
-import Users from "../pages/Users";
-
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route
-        path="/login"
-        element={
-          <CustomerLayout>
-            <Login />
-          </CustomerLayout>
-        }
-      />
-      {/* Geust */}
+      {/* Guest Routes */}
       <Route
         path="/"
         element={
@@ -49,14 +46,22 @@ const AppRoutes = () => {
           </CustomerLayout>
         }
       />
-      <Route path="/manage-orders"
+      <Route
+        path="/login"
         element={
-          <ManagerLayout>
-            <StaffRoute>
-              <OrderManager/>
-            </StaffRoute>
-          </ManagerLayout>
-        }/>
+          <CustomerLayout>
+            <Login />
+          </CustomerLayout>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <CustomerLayout>
+            <Register />
+          </CustomerLayout>
+        }
+      />
       <Route
         path="/about"
         element={
@@ -77,69 +82,38 @@ const AppRoutes = () => {
         path="/shopping"
         element={
           <CustomerLayout>
-            <ShoppingPage />.
+            <ShoppingPage />
           </CustomerLayout>
         }
       />
+      <Route
+        path="/package-detail/:packageCode"
+        element={
+          <CustomerLayout>
+            <PackageDetail />
+          </CustomerLayout>
+        }
+      />
+
+      {/* User Routes */}
       <Route
         path="/lucky-wheel"
         element={
           <CustomerLayout>
-            <LuckyWheel />
+            <UserRoute>
+              <LuckyWheel />
+            </UserRoute>
           </CustomerLayout>
         }
       />
-
-      {/* Admin */}
       <Route
-        path="/dashboard"
+        path="/lucky-wheel/:packageCode"
         element={
-          <ManagerLayout>
-            <StaffRoute>
-              <Dashboard />
-            </StaffRoute>
-          </ManagerLayout>
-        }
-      />
-      <Route
-        path="/settings"
-        element={
-          <ManagerLayout>
-            <AdminRoute>
-              <Settings />
-            </AdminRoute>
-          </ManagerLayout>
-        }
-      />
-
-      <Route
-        path="/users"
-        element={
-          <ManagerLayout>
-            <AdminRoute>
-              <Users />
-            </AdminRoute>
-          </ManagerLayout>
-        }
-      />
-      <Route
-        path="/register"
-        element=
-        {
           <CustomerLayout>
-            <Register />
+            <UserRoute>
+              <LuckyWheelDetail />
+            </UserRoute>
           </CustomerLayout>
-        }
-      />
-
-      <Route
-        path="/packages"
-        element={
-          <ManagerLayout>
-            <StaffRoute>
-              <PackageManager />
-            </StaffRoute>
-          </ManagerLayout>
         }
       />
       <Route
@@ -153,11 +127,93 @@ const AppRoutes = () => {
         }
       />
       <Route
-        path="/package-detail/:packageCode"
+        path="/customer/profile"
         element={
           <CustomerLayout>
-            <PackageDetail />
+            <UserRoute>
+              <ProfilePage />
+            </UserRoute>
           </CustomerLayout>
+        }
+      />
+      <Route
+        path="/recharge"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <RechargePage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+      <Route
+        path="/payment"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <PaymentPage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+      <Route
+        path="/payment-result"
+        element={
+          <CustomerLayout>
+            <PaymentResult />
+          </CustomerLayout>
+        }
+      />
+      <Route
+        path="/deposit"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <DepositPage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+      <Route
+        path="/user-change-password"
+        element={
+          <CustomerLayout>
+            <UserRoute>
+              <ChangePasswordPage />
+            </UserRoute>
+          </CustomerLayout>
+        }
+      />
+
+      {/* Staff Routes */}
+      <Route
+        path="/manage-orders"
+        element={
+          <ManagerLayout>
+            <StaffRoute>
+              <OrderManager />
+            </StaffRoute>
+          </ManagerLayout>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ManagerLayout>
+            <StaffRoute>
+              <Dashboard />
+            </StaffRoute>
+          </ManagerLayout>
+        }
+      />
+      <Route
+        path="/packages"
+        element={
+          <ManagerLayout>
+            <StaffRoute>
+              <PackageManager />
+            </StaffRoute>
+          </ManagerLayout>
         }
       />
       <Route
@@ -191,6 +247,16 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/profile"
+        element={
+          <ManagerLayout>
+            <StaffRoute>
+              <ProfilePage />
+            </StaffRoute>
+          </ManagerLayout>
+        }
+      />
+      <Route
         path="/change-password"
         element={
           <ManagerLayout>
@@ -201,83 +267,50 @@ const AppRoutes = () => {
         }
       />
 
+      {/* Admin Routes */}
       <Route
-        path="/user-change-password"
-        element={
-          <CustomerLayout>
-            <UserRoute>
-              <ChangePasswordPage />
-            </UserRoute>
-          </CustomerLayout>
-        }
-      />
-
-      <Route
-        path="/customer/profile"
-        element={
-          <CustomerLayout>
-            <UserRoute>
-              <ProfilePage />
-            </UserRoute>
-          </CustomerLayout>
-        }
-      />
-
-      <Route
-        path="/recharge"
-        element={
-          <CustomerLayout>
-            <UserRoute>
-              <RechargePage />
-            </UserRoute>
-          </CustomerLayout>
-        }
-      />
-
-      <Route
-        path="/payment"
-        element={
-          <CustomerLayout>
-            <UserRoute>
-              <PaymentPage />
-            </UserRoute>
-          </CustomerLayout>
-        }
-      />
-
-     
-
-      <Route
-        path="/profile"
+        path="/settings"
         element={
           <ManagerLayout>
-            <StaffRoute>
-              <ProfilePage />
-            </StaffRoute>
+            <AdminRoute>
+              <Settings />
+            </AdminRoute>
+          </ManagerLayout>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <ManagerLayout>
+            <AdminRoute>
+              <Users />
+            </AdminRoute>
           </ManagerLayout>
         }
       />
 
+      <Route
+        path="/transactions"
+        element={
+          <ManagerLayout>
+            <AdminRoute>
+              <Transactions />
+            </AdminRoute>
+          </ManagerLayout>
+        }
+      />
+      {/* Error Routes */}
       <Route
         path="/unauthorized"
         element={
           <ManagerLayout>
             <div className="p-8">
-              <h1 className="text-2xl font-bold text-red-500">Unauthorized Access</h1>
+              <h1 className="text-2xl font-bold text-red-500">
+                Unauthorized Access
+              </h1>
               <p>You do not have permission to access this resource.</p>
             </div>
           </ManagerLayout>
-        }
-      />
-
-      <Route
-        path="/deposit"
-        element={
-          <CustomerLayout>
-            <UserRoute>
-              <DepositPage />
-            </UserRoute>
-          </CustomerLayout>
         }
       />
     </Routes>
