@@ -246,19 +246,45 @@ namespace BBSS.Api.Services.Implements
             await _uow.GetRepository<Transaction>().InsertAsync(transaction);
         }
 
-        //public async Task<string> CreateOrderWheelAsync(string userId, OrderWheelCreateRequest request)
-        //{
-        //    try
-        //    {
-        //        await _uow.BeginTransactionAsync();
-        //        var order = _mapper.Map<Order>(request);
+        public async Task<MethodResult<string>> CreateOrderWheelAsync(int userId, OrderWheelCreateRequest request)
+        {
+            try
+            {
+                await _uow.BeginTransactionAsync();
+                var order = _mapper.Map<Order>(request);
+                order.UserId = userId;
 
-        //    }
-        //    catch (Exception)
-        //    {
+                await _uow.GetRepository<Order>().InsertAsync(order);
+                await _uow.CommitAsync();
 
-        //        throw;
-        //    }
-        //}
+                foreach (var blindBoxId in request.BlindBoxIds)
+                {
+                    var orderDetail = new OrderDetail
+                    {
+                        OrderId = order.OrderId,
+                        BlindBoxId = blindBoxId,
+                        UnitPrice = request.TotalAmount / request.BlindBoxIds.Count
+                    };
+                    await _uow.GetRepository<OrderDetail>().InsertAsync(orderDetail);
+                }
+
+                var orderStatus = new OrderStatus
+                {
+                    OrderId = order.OrderId,
+                    Status = OrderConstant.ORDER_STATUS_SHIPPING,
+                    UpdateTime = DateTime.Now
+                };
+                await _uow.GetRepository<OrderStatus>().InsertAsync(orderStatus);
+
+                await _uow.CommitAsync();
+                await _uow.CommitTransactionAsync();
+                return new MethodResult<string>.Success("Create order wheel successfully");
+            }
+            catch (Exception e)
+            {
+                await _uow.RollbackTransactionAsync();
+                return new MethodResult<string>.Failure(e.ToString(), StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

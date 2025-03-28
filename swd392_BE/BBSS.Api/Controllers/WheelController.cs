@@ -1,4 +1,5 @@
 ﻿using BBSS.Api.Constants;
+using BBSS.Api.Models.OrderModel;
 using BBSS.Api.Models.PackageModel;
 using BBSS.Api.Routes;
 using BBSS.Api.Services.Implements;
@@ -54,5 +55,18 @@ namespace BBSS.Api.Controllers
             );
         }
 
+        [HttpPost(Router.WheelRoute.CreateOrderWheel)]
+        [Authorize(Roles = UserConstant.USER_ROLE_USER)]
+        public async Task<IActionResult> CreateOrderWheel(OrderWheelCreateRequest request)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.Sid).Value);
+            if (userId == null) return Unauthorized();
+
+            var result = await _wheelService.CreateOrderWheelAsync(userId, request);
+            return result.Match(
+                (errorMessage, statusCode) => Problem(detail: errorMessage, statusCode: statusCode),
+                Ok
+            );
+        }
     }
 }
