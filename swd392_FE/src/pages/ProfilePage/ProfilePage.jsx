@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   FaBox,
   FaCreditCard,
@@ -31,6 +31,21 @@ function ProfilePage() {
     totalItems: 0,
     totalPages: 1,
   });
+  const [inventoryPagination, setInventoryPagination] = useState({
+    currentPage: 1,
+    pageSize: 12,
+    totalItems: 0,
+    totalPages: 1,
+  });
+  const [transactionPagination, setTransactionPagination] = useState({
+    currentPage: 1,
+    pageSize: 10,
+    totalItems: 0,
+    totalPages: 1,
+  });
+  const [transactions, setTransactions] = useState([]);
+  const [inventoryLoading, setInventoryLoading] = useState(false);
+  const [transactionLoading, setTransactionLoading] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const [dateOfBirth, setDateOfBirth] = useState("");
@@ -43,6 +58,84 @@ function ProfilePage() {
   const [orderToPayment, setOrderToPayment] = useState(null);
   const [paymentType, setPaymentType] = useState("Order"); // Default to online payment
   const [paymentLoading, setPaymentLoading] = useState(false);
+
+  // Add new state for filters
+  const [transactionFilters, setTransactionFilters] = useState({
+    type: "",
+    minAmount: "",
+    maxAmount: "",
+    search: "",
+  });
+
+  // Move fetchInventory and fetchTransactions outside useEffect
+  const fetchInventory = useCallback(async () => {
+    try {
+      setInventoryLoading(true);
+      const token = localStorage.getItem("access_token");
+      if (!token) return;
+
+      const response = await axios.get(`${BASE_URL}/inventories/me`, {
+        params: {
+          page: inventoryPagination.currentPage,
+          size: inventoryPagination.pageSize,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Update to handle the correct response structure
+      setInventory(response.data.items?.$values || []);
+      setInventoryPagination((prev) => ({
+        ...prev,
+        totalItems: response.data.total || 0,
+        totalPages: response.data.totalPages || 1,
+      }));
+    } catch (error) {
+      console.error("Failed to fetch inventory:", error);
+      toast.error("Failed to load inventory items");
+    } finally {
+      setInventoryLoading(false);
+    }
+  }, [inventoryPagination.currentPage, inventoryPagination.pageSize]);
+
+  const fetchTransactions = useCallback(async () => {
+    try {
+      setTransactionLoading(true);
+      const token = localStorage.getItem("access_token");
+      if (!token) return;
+
+      const response = await axios.get(`${BASE_URL}/transactions/me`, {
+        params: {
+          page: transactionPagination.currentPage,
+          size: transactionPagination.pageSize,
+          filter: transactionFilters.type,
+          minAmount: transactionFilters.minAmount || undefined,
+          maxAmount: transactionFilters.maxAmount || undefined,
+          search: transactionFilters.search || undefined,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setTransactions(response.data.items?.$values || []);
+      setTransactionPagination((prev) => ({
+        ...prev,
+        totalItems: response.data.total || 0,
+        totalPages: response.data.totalPages || 1,
+      }));
+    } catch (error) {
+      console.error("Failed to fetch transactions:", error);
+      toast.error("Failed to load transaction history");
+    } finally {
+      setTransactionLoading(false);
+    }
+  }, [
+    transactionPagination.currentPage,
+    transactionPagination.pageSize,
+    transactionFilters,
+  ]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -101,28 +194,20 @@ function ProfilePage() {
       }
     };
 
-    const fetchInventory = async () => {
-      try {
-        const token = localStorage.getItem("access_token");
-        if (!token) return;
-
-        const response = await axios.get(`${BASE_URL}/inventories`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setInventory(response.data);
-      } catch (error) {
-        console.error("Failed to fetch inventory:", error);
-        toast.error("Failed to load inventory items");
-      }
-    };
-
     fetchUserProfile();
     fetchOrderHistory();
     fetchInventory();
-  }, [orderPagination.currentPage, orderPagination.pageSize]);
+    fetchTransactions();
+  }, [
+    orderPagination.currentPage,
+    orderPagination.pageSize,
+    inventoryPagination.currentPage,
+    inventoryPagination.pageSize,
+    transactionPagination.currentPage,
+    transactionPagination.pageSize,
+    fetchInventory,
+    fetchTransactions,
+  ]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -415,6 +500,55 @@ function ProfilePage() {
     }
   };
 
+  // First, add a helper function to get transaction type styling
+  const getTransactionTypeStyle = (type) => {
+    switch (type?.toLowerCase()) {
+      case "deposit":
+        return "text-pink-600";
+      case "deduction":
+        return "text-red-600";
+      case "wallet":
+        return "text-blue-600";
+      case "refund":
+        return "text-orange-600";
+      case "blindboxopen":
+        return "text-purple-600";
+      default:
+        return "text-gray-600";
+    }
+  };
+
+  const getTransactionPrefix = (type) => {
+    switch (type?.toLowerCase()) {
+      case "wallet":
+      case "refund":
+        return "+";
+      case "deposit":
+      case "deduction":
+      case "blindboxopen":
+        return "-";
+      default:
+        return "";
+    }
+  };
+
+  const getTransactionTypeLabel = (type) => {
+    switch (type?.toLowerCase()) {
+      case "deposit":
+        return "Thanh toán bằng ví";
+      case "deduction":
+        return "Thanh toán chuyển khoản";
+      case "wallet":
+        return "Nạp tiền vào ví";
+      case "refund":
+        return "Hoàn tiền";
+      case "blindboxopen":
+        return "Mở hộp quà";
+      default:
+        return type;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -457,6 +591,16 @@ function ProfilePage() {
             onClick={() => setActiveTab("inventory")}
           >
             <FaBox className="mr-2" /> Bộ sưu tập
+          </button>
+          <button
+            className={`px-6 py-3 flex items-center ${
+              activeTab === "transactions"
+                ? "border-b-2 border-pink-500 text-pink-500"
+                : "text-gray-500"
+            }`}
+            onClick={() => setActiveTab("transactions")}
+          >
+            <FaWallet className="mr-2" /> Lịch sử giao dịch
           </button>
         </div>
 
@@ -855,64 +999,414 @@ function ProfilePage() {
           {activeTab === "inventory" && (
             <div>
               <h2 className="text-2xl font-bold mb-6">Bộ sưu tập</h2>
-              {inventory.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {inventory.map((item) => (
-                    <div
-                      key={item.inventoryItemId}
-                      className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
-                    >
-                      <div className="h-48 bg-gray-100 relative overflow-hidden">
-                        {item.blindBox?.image ? (
-                          <img
-                            src={item.blindBox.image}
-                            alt={item.blindBox.name}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.target.src =
-                                "https://via.placeholder.com/300x200?text=No+Image";
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <FaBox className="text-gray-300 text-5xl" />
+              {inventoryLoading ? (
+                <div className="flex justify-center items-center h-64">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+                </div>
+              ) : inventory.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {inventory.map((item) => (
+                      <div
+                        key={item.inventoryItemId}
+                        className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                      >
+                        <div className="h-48 bg-gray-100 relative overflow-hidden">
+                          {item.blindBox?.imageUrls?.$values?.[0]?.url ? (
+                            <img
+                              src={item.blindBox.imageUrls.$values[0].url}
+                              alt={item.blindBox.packageName}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.src =
+                                  "https://via.placeholder.com/300x200?text=No+Image";
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <FaBox className="text-gray-300 text-5xl" />
+                            </div>
+                          )}
+                          {item.addDate && (
+                            <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+                              {new Date(item.addDate).toLocaleDateString()}
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-4">
+                          <h3 className="font-bold text-lg mb-1">
+                            {item.blindBox?.packageName || "Unknown Package"}
+                          </h3>
+                          <div className="flex items-center gap-2 mb-2">
+                            {item.blindBox?.packageCode && (
+                              <span className="text-sm text-gray-500">
+                                Mã: {item.blindBox.packageCode}
+                              </span>
+                            )}
+                            {item.blindBox?.color && (
+                              <span className="text-sm text-gray-500">
+                                | Màu: {item.blindBox.color}
+                              </span>
+                            )}
                           </div>
-                        )}
-                        {item.addDate && (
-                          <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
-                            {new Date(item.addDate).toLocaleDateString()}
+                          <div className="flex justify-between items-center mt-2">
+                            <div className="text-pink-600 font-medium">
+                              {formatCurrency(
+                                item.blindBox?.discountedPrice ||
+                                  item.blindBox?.price
+                              )}
+                            </div>
+                            {item.blindBox?.isSpecial && (
+                              <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                Đặc biệt
+                              </span>
+                            )}
                           </div>
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-bold text-lg mb-1">
-                          {item.blindBox?.name || "Unknown BlindBox"}
-                        </h3>
-                        {item.blindBox?.pakageCode && (
-                          <p className="text-sm text-gray-500 mb-2">
-                            Mã: {item.blindBox.pakageCode}
-                          </p>
-                        )}
-                        <div className="flex justify-between items-center mt-2">
-                          <div className="text-pink-600 font-medium">
-                            {formatCurrency(item.blindBox?.price)}
-                          </div>
-                          {item.blindBox?.isSpecial && (
-                            <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                              Đặc biệt
-                            </span>
+                          {item.blindBox?.discount > 0 && (
+                            <div className="mt-2">
+                              <span className="text-sm text-gray-500 line-through">
+                                {formatCurrency(item.blindBox?.price)}
+                              </span>
+                              <span className="ml-2 text-sm text-green-600">
+                                -{item.blindBox?.discount}%
+                              </span>
+                            </div>
+                          )}
+                          {/* Features Section */}
+                          {item.blindBox?.features?.$values?.length > 0 && (
+                            <div className="mt-4 pt-4 border-t">
+                              <h4 className="text-sm font-medium text-gray-700 mb-2">
+                                Đặc điểm:
+                              </h4>
+                              <div className="flex flex-wrap gap-2">
+                                {item.blindBox.features.$values.map(
+                                  (feature) => (
+                                    <span
+                                      key={feature.featureId}
+                                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                                    >
+                                      {feature.description}
+                                    </span>
+                                  )
+                                )}
+                              </div>
+                            </div>
                           )}
                         </div>
                       </div>
+                    ))}
+                  </div>
+
+                  {/* Inventory Pagination */}
+                  {inventoryPagination.totalPages > 1 && (
+                    <div className="flex justify-center mt-6">
+                      <nav className="flex items-center">
+                        <button
+                          disabled={inventoryPagination.currentPage === 1}
+                          onClick={() =>
+                            setInventoryPagination((prev) => ({
+                              ...prev,
+                              currentPage: prev.currentPage - 1,
+                            }))
+                          }
+                          className="px-3 py-1 rounded border mr-2 disabled:opacity-50"
+                        >
+                          Trước
+                        </button>
+
+                        {[...Array(inventoryPagination.totalPages).keys()].map(
+                          (page) => (
+                            <button
+                              key={page}
+                              onClick={() =>
+                                setInventoryPagination((prev) => ({
+                                  ...prev,
+                                  currentPage: page + 1,
+                                }))
+                              }
+                              className={`px-3 py-1 rounded border mx-1 ${
+                                inventoryPagination.currentPage === page + 1
+                                  ? "bg-pink-500 text-white"
+                                  : ""
+                              }`}
+                            >
+                              {page + 1}
+                            </button>
+                          )
+                        )}
+
+                        <button
+                          disabled={
+                            inventoryPagination.currentPage ===
+                            inventoryPagination.totalPages
+                          }
+                          onClick={() =>
+                            setInventoryPagination((prev) => ({
+                              ...prev,
+                              currentPage: prev.currentPage + 1,
+                            }))
+                          }
+                          className="px-3 py-1 rounded border ml-2 disabled:opacity-50"
+                        >
+                          Tiếp
+                        </button>
+                      </nav>
                     </div>
-                  ))}
-                </div>
+                  )}
+                </>
               ) : (
                 <div className="p-8 text-center bg-gray-50 rounded-lg">
                   <FaBox className="mx-auto text-gray-300 text-5xl mb-4" />
                   <p className="text-gray-600">
                     Bạn chưa có món đồ nào trong bộ sưu tập.
                   </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Transactions Tab */}
+          {activeTab === "transactions" && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6">Lịch sử giao dịch</h2>
+
+              {/* Filter Section */}
+              <div className="mb-6 bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="text-lg font-medium mb-4">Bộ lọc</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Loại giao dịch
+                    </label>
+                    <select
+                      value={transactionFilters.type}
+                      onChange={(e) => {
+                        setTransactionFilters((prev) => ({
+                          ...prev,
+                          type: e.target.value,
+                        }));
+                        setTransactionPagination((prev) => ({
+                          ...prev,
+                          currentPage: 1,
+                        }));
+                      }}
+                      className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    >
+                      <option value="">Tất cả</option>
+                      <option value="deposit">Thanh toán bằng ví</option>
+                      <option value="deduction">Thanh toán chuyển khoản</option>
+                      <option value="wallet">Nạp tiền vào ví</option>
+                      <option value="refund">Hoàn tiền</option>
+                      <option value="blindboxopen">Mở hộp quà</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Số tiền từ
+                    </label>
+                    <input
+                      type="number"
+                      value={transactionFilters.minAmount}
+                      onChange={(e) => {
+                        setTransactionFilters((prev) => ({
+                          ...prev,
+                          minAmount: e.target.value,
+                        }));
+                        setTransactionPagination((prev) => ({
+                          ...prev,
+                          currentPage: 1,
+                        }));
+                      }}
+                      placeholder="Nhập số tiền tối thiểu"
+                      className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Số tiền đến
+                    </label>
+                    <input
+                      type="number"
+                      value={transactionFilters.maxAmount}
+                      onChange={(e) => {
+                        setTransactionFilters((prev) => ({
+                          ...prev,
+                          maxAmount: e.target.value,
+                        }));
+                        setTransactionPagination((prev) => ({
+                          ...prev,
+                          currentPage: 1,
+                        }));
+                      }}
+                      placeholder="Nhập số tiền tối đa"
+                      className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Tìm kiếm
+                    </label>
+                    <input
+                      type="text"
+                      value={transactionFilters.search}
+                      onChange={(e) => {
+                        setTransactionFilters((prev) => ({
+                          ...prev,
+                          search: e.target.value,
+                        }));
+                        setTransactionPagination((prev) => ({
+                          ...prev,
+                          currentPage: 1,
+                        }));
+                      }}
+                      placeholder="Tìm kiếm giao dịch..."
+                      className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-4 flex justify-end">
+                  <button
+                    onClick={() => {
+                      setTransactionFilters({
+                        type: "",
+                        minAmount: "",
+                        maxAmount: "",
+                        search: "",
+                      });
+                      setTransactionPagination((prev) => ({
+                        ...prev,
+                        currentPage: 1,
+                      }));
+                    }}
+                    className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 mr-2"
+                  >
+                    Đặt lại
+                  </button>
+                </div>
+              </div>
+
+              {transactionLoading ? (
+                <div className="flex justify-center items-center h-64">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+                </div>
+              ) : transactions.length > 0 ? (
+                <>
+                  <div className="space-y-4">
+                    {transactions.map((transaction) => (
+                      <div
+                        key={transaction.transactionId}
+                        className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-medium text-gray-900">
+                              {transaction.description}
+                            </h3>
+                            <div className="flex items-center gap-2 mt-1">
+                              <p className="text-sm text-gray-500">
+                                {formatDateTime(transaction.createDate)}
+                              </p>
+                              <span
+                                className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                  transaction.type === "Wallet"
+                                    ? "bg-blue-100 text-blue-800"
+                                    : transaction.type === "Refund"
+                                    ? "bg-orange-100 text-orange-800"
+                                    : transaction.type === "Deposit"
+                                    ? "bg-pink-100 text-pink-800"
+                                    : "bg-red-100 text-red-800"
+                                }`}
+                              >
+                                {getTransactionTypeLabel(transaction.type)}
+                              </span>
+                            </div>
+                          </div>
+                          <div
+                            className={`text-right ${getTransactionTypeStyle(
+                              transaction.type
+                            )}`}
+                          >
+                            <p className="font-medium text-lg">
+                              {getTransactionPrefix(transaction.type)}
+                              {formatCurrency(transaction.amount)}
+                            </p>
+                            {transaction.relatedId > 0 &&
+                              transaction.type !== "Refund" && (
+                                <p className="text-sm text-gray-500">
+                                  Mã đơn hàng: #{transaction.relatedId}
+                                </p>
+                              )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Transaction Pagination */}
+                  {transactionPagination.totalPages > 1 && (
+                    <div className="flex justify-center mt-6">
+                      <nav className="flex items-center">
+                        <button
+                          disabled={transactionPagination.currentPage === 1}
+                          onClick={() =>
+                            setTransactionPagination((prev) => ({
+                              ...prev,
+                              currentPage: prev.currentPage - 1,
+                            }))
+                          }
+                          className="px-3 py-1 rounded border mr-2 disabled:opacity-50"
+                        >
+                          Trước
+                        </button>
+
+                        {[
+                          ...Array(transactionPagination.totalPages).keys(),
+                        ].map((page) => (
+                          <button
+                            key={page}
+                            onClick={() =>
+                              setTransactionPagination((prev) => ({
+                                ...prev,
+                                currentPage: page + 1,
+                              }))
+                            }
+                            className={`px-3 py-1 rounded border mx-1 ${
+                              transactionPagination.currentPage === page + 1
+                                ? "bg-pink-500 text-white"
+                                : ""
+                            }`}
+                          >
+                            {page + 1}
+                          </button>
+                        ))}
+
+                        <button
+                          disabled={
+                            transactionPagination.currentPage ===
+                            transactionPagination.totalPages
+                          }
+                          onClick={() =>
+                            setTransactionPagination((prev) => ({
+                              ...prev,
+                              currentPage: prev.currentPage + 1,
+                            }))
+                          }
+                          className="px-3 py-1 rounded border ml-2 disabled:opacity-50"
+                        >
+                          Tiếp
+                        </button>
+                      </nav>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="p-8 text-center bg-gray-50 rounded-lg">
+                  <FaWallet className="mx-auto text-gray-300 text-5xl mb-4" />
+                  <p className="text-gray-600">Bạn chưa có giao dịch nào.</p>
                 </div>
               )}
             </div>
